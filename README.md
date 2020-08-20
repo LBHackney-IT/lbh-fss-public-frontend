@@ -8,6 +8,10 @@ In the project directory, you can run:
 
 Runs the Storybook environment locally.
 
+### `yarn dev`
+
+Runs the mock-api environment along with the create react app environment locally.
+
 ### `yarn build`
 
 Build components with Webpack.

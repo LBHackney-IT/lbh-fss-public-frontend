@@ -9,12 +9,17 @@
     "test:watch": "react-scripts test --env=jsdom-fourteen",
     "test:coverage": "react-scripts test --env=jsdom-fourteen --coverage",
     "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "mock-api": "node ./mock-api/app.js",
     "dev": "run-p start mock-api",
-    "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
+    "mock-gen:categories": "node ./scripts/generateMockCategories.js",
+    "mock-gen:demographic": "node ./scripts/generateMockDemographic.js",
+    "mock-gen:services": "node ./scripts/generateMockServices.js"
   },
   "dependencies": {
+    "@reach/router": "^1.3.4",
+    "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "http-proxy-middleware": "^1.0.5",
     "lodash": "^4.17.20",
@@ -40,6 +45,7 @@
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "connect-api-mocker": "^1.9.0",
+    "cors": "^2.8.5",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard-react": "^9.2.0",
