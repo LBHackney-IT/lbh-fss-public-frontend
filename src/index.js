@@ -2,9 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { QueryParamProvider } from 'use-query-params';
+import history from './history';
 
 ReactDOM.render(
-    <App />,
+    <QueryParamProvider history={history}>
+        <App />
+    </QueryParamProvider>,
     document.getElementById("root")
 );
 
