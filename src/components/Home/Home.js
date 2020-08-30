@@ -8,25 +8,29 @@ import AppLoading from "../../AppLoading";
 import UrlContext from "../../context/UrlContext/UrlContext";
 
 const Home = () => {
-    const {url, setUrl} = useContext(UrlContext);
+    const [url, setUrl] = useState("");
+    const {urlParams, setUrlParams} = useContext(UrlContext);
     const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
 
     const storeQuery = (e) => {
         let paramObj = {};
-        const currentQueryString = window.location.search;
-        if (currentQueryString) {
-          const params = new URLSearchParams(window.location.search); 
-          for (const [key, value] of params.entries()) {
-            if (paramsArray.includes(key)) {
-              if (value) {
-                paramObj[key] = key;
-                paramObj[value] = value;
+        const currentSearch = window.location.search;
+        if (currentSearch) {
+          setUrl(currentSearch); // ?postcode&service=7&service_search=1
+  
+          const queryParts = currentSearch.substring(1).split(/[&;]/g);
+          const arrayLength = queryParts.length;
+          for (let i = 0; i < arrayLength; i++) {
+            const queryKeyValue = queryParts[i].split("=");
+            if (paramsArray.includes(queryKeyValue[0])) {
+              if (queryKeyValue[1]) {
+                paramObj[queryKeyValue[0]] = queryKeyValue[1];
               }
-            }
+            } 
           }
-          setUrl(paramObj);
+          setUrlParams(paramObj);
         }
         setIsLoading(false);
     }

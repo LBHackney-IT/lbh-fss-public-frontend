@@ -12,36 +12,37 @@ import AppLoading from './AppLoading';
 import history from './history';
 
 function App() {
-  const urlState = useState(false);
-  const [url, setUrl] = useState({});
-  const urlValue = useMemo(() => ({ url, setUrl }), [url, setUrl]);
+  const [url, setUrl] = useState("");
+  const [urlParams, setUrlParams] = useState({});
+  const urlValue = useMemo(() => ({ urlParams, setUrlParams }), [urlParams, setUrlParams]);
   const [isLoading, setIsLoading] = useState(true);
   const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
   // console.log("Start App");
-
+  
   useEffect(() => {
     async function storeQuery() {
       let paramObj = {};
-      const currentQueryString = window.location.search;
-      if (currentQueryString) {
-        const params = new URLSearchParams(window.location.search); 
-        for (const [key, value] of params.entries()) {
-          if (paramsArray.includes(key)) {
-            if (value) {
-              paramObj[key] = key;
-              paramObj[value] = value;
+      const currentSearch = window.location.search;
+      if (currentSearch) {
+        setUrl(currentSearch); // ?postcode&service=7&service_search=1
+
+        const queryParts = currentSearch.substring(1).split(/[&;]/g);
+        const arrayLength = queryParts.length;
+        for (let i = 0; i < arrayLength; i++) {
+          const queryKeyValue = queryParts[i].split("=");
+          if (paramsArray.includes(queryKeyValue[0])) {
+            if (queryKeyValue[1]) {
+              paramObj[queryKeyValue[0]] = queryKeyValue[1];
             }
-          }
+          } 
         }
-        setUrl(paramObj);
+        setUrlParams(paramObj);
       }
       setIsLoading(false);
     }
-    console.log("App useEffect");
+    // console.log("App useEffect");
     storeQuery();
-  }, [setUrl, setIsLoading]);
-
-  
+  }, [setUrlParams, setIsLoading]);
 
   // console.log("App.js");
   return (
@@ -49,7 +50,7 @@ function App() {
     (
       <div className="App">
         <UrlContext.Provider value={urlValue}>
-          { (Object.keys(urlValue.url).length !== 0) ? <RouteContainer /> : <Home />  }
+          { (Object.keys(urlValue.urlParams).length !== 0) ? <RouteContainer /> : <Home />  }
           <GlobalStyle />
         </UrlContext.Provider>
       </div>
