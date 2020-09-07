@@ -3,7 +3,7 @@ var faker = require("faker");
 
 let categories = [];
 
-const category = ["Benefits advice", "Chat and check-in", "Debt advice", "Employment advice", "Exercise and brain", "Faith-led activities", "Families", "Feeling anxious", "Food and shopping", "Get active", "Housing advice", "Stay safe and healthy"];
+const category = ["Loneliness or isolation", "Anxiety or mental health", "Safe and healthy body", "Exercise and wellbeing", "Arts and creativity", "Food or shopping", "Faith-led activities", "Money advice", "Employment advice", "Housing advice", "Immigration advice"];
 
 for (let i = 0; i < category.length; i++) {
   const newCategory = {
@@ -11,6 +11,7 @@ for (let i = 0; i < category.length; i++) {
     name: category[i],
     description: faker.lorem.sentences(),
     vocabulary: "category",
+    weight: faker.random.number(),
   };
 
   categories.push(newCategory);

@@ -2,18 +2,22 @@ import axios from "axios";
 
 const GetCategories = {
   async retrieveCategories({
-    sort = "name",
+    sort = "weight",
     direction = "asc",
-    offset = 0,
-    limit = 10,
-    search = "",
+    id = "",
   }) {
     try {
       const response = await axios.get("http://localhost:9000/api/taxonomy/category", {
-        
+        params: {
+          sort,
+          direction,
+          id,
+        },
       });
-
-      return response.data.entries;
+      
+      let data = null;
+      (id) ? data = response.data.entries.filter(obj => obj.id === id) : data = response.data.entries;
+      return data;
     } catch (error) {
       console.error(error);
 
