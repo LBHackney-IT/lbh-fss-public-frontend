@@ -8,6 +8,7 @@ import openSansV17LatinRegularTtf from "../../fonts/open-sans-v17-latin/open-san
 import openSansV17LatinRegularWoff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff";
 import openSansV17LatinRegularWoff2 from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff2";
 import { darken } from "polished";
+import breakpoint from 'styled-components-breakpoint';
 
 export const GlobalStyle = createGlobalStyle`
 ${normalize()}
@@ -24,6 +25,7 @@ body {
   font-family: ${defaultTheme.primaryFont};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 @font-face {
@@ -46,8 +48,8 @@ body {
     url(${openSansV17Latin700Ttf}) format('truetype');
 }
 
-h1 {
-  font-size: 24px;
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
 }
 
 a {
@@ -56,6 +58,31 @@ a {
   &:hover {
     color: ${darken(0.1, blue[400])};
   }
+}
+
+ul.ul-no-style {
+  list-style: none;
+  padding-left: 0;
+  li {
+    + li {
+      margin-top: 15px;
+    }
+  }
+}
+
+hr {
+  border: 2px solid #000000;
+  margin: 30px 0;
+}
+
+.App {
+  position: relative;
+  ${breakpoint('sm')`
+      
+  `}
+  ${breakpoint('md')`
+    padding: 20px;
+  `}
 }
 
 `;
