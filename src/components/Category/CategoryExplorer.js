@@ -1,44 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import GetServices from "../../services/GetServices/GetServices";
+import GetCategories from "../../services/GetCategories/GetCategories";
+import { CardContainer } from "../../util/styled-components/CardContainer";
+import ServiceCard from "../Service/ServiceCard";
+import CategoryCard from "../Category/CategoryCard";
+import Header from "../Header/Header";
+import MapView from "../MapView/MapView";
+import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 
-const CategoryExplorer = ({category_explorer}) => {
+const CategoryExplorer = ({ category, onClick }) => {
   const [data, setData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const {urlParams} = useContext(UrlParamsContext);
 
   useEffect(() => {
     async function fetchData() {
-      const getServices = await GetServices.retrieveServices({});
-
+      let categoryId = "";
+      if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
+        categoryId = parseInt(Object.entries(urlParams)[0][1]);
+      }
+      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category - TODO
+      const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
       setData(getServices || []);
+      // call retrieveCategories with categoryId param passed to return the category name and description - working
+      const getCategories = await GetCategories.retrieveCategories({id: categoryId});
+      setCategoryData(getCategories || []);
       setIsLoading(false);
     }
-
     fetchData();
-  }, [setData, setIsLoading]);
+
+  }, [setData, setCategoryData, setIsLoading]);
 
   if (isLoading) {
     return <span>Loading</span>;
   }
 
-  return(
-    <div className="">
-      <h2>Get services by ID with a header: {category_explorer}</h2>
-      -- CategoryCard component goes here --
-      -- View toggle component goes here --
-      {/* <CategoryCard
-        key={category.id}
-        id={category.id}
-        name={category.name}
-        description={category.description}
-        category={category.id}
-        onSelect={onSelect}
-      /> */}
+  const select = e => {
+    onClick(e);
+  }
 
-      -- List all services here --
-      -- List all services here --
-      -- List all services here --
+  return(
+    <div>
+      {!data.length ? (
+        <h2>No data Found</h2>
+      ) : (
+        <div>
+          <div>
+            <Header />
+          </div>
+          <div>
+            {`{Filters}`}
+          </div>
+          <CategoryCard
+            key={categoryData[0].id}
+            category={categoryData[0]}
+          />
+          <CardContainer>
+            <MapView />
+            {data.map(service => {
+              return (
+                <div>
+                  <ServiceCard service={service} onClick={select} />
+                </div>
+              );
+            })}
+          </CardContainer>
+        </div>
+      )}
     </div>
-    
   );
 
 }

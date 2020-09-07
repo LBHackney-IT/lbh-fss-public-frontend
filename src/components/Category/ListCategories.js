@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import GetCategories from "../../services/GetCategories/GetCategories";
 import CategoryCard from "./CategoryCard";
+import { CardContainer } from "../../util/styled-components/CardContainer";
 
 const ListCategories = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -30,17 +31,20 @@ const ListCategories = ({ categories = [], onClick }) => {
       {!data.length ? (
         <h2>No data Found</h2>
       ) : (
-        data.map(category => {
-          return (
-            <div>
-            <CategoryCard
-              key={category.id}
-              category={category}
-              onClick={select}
-            />
-            </div>
-          );
-        })
+        <CardContainer>
+          <h3>Explore categories</h3>
+          {data.map(category => {
+            return (
+              <div>
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  onClick={select}
+                />
+              </div>
+            );
+          })}
+        </CardContainer>
       )}
     </div>
   );
