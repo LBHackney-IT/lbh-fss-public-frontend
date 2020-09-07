@@ -20,7 +20,7 @@ const CategoryExplorer = ({ category, onClick }) => {
       if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
-      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category - TODO
+      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category - working
       const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
       setData(getServices || []);
       // call retrieveCategories with categoryId param passed to return the category name and description - working
