@@ -3,6 +3,7 @@ let mockCategories = require("./mockCategories.json");
 module.exports = (req, res) => {
   const sort = req.query.sort || "weight";
   const direction = req.query.direction || "asc";
+  const id = req.query.id || "";
 
   const categories = [...mockCategories]
     .sort(function (a, b) {
@@ -11,6 +12,7 @@ module.exports = (req, res) => {
 
   return res.status(200).send({
     entries: categories,
+    id: id,
     order: [
       {
         by: sort,

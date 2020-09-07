@@ -5,6 +5,7 @@ module.exports = (req, res) => {
   const direction = req.query.direction || "asc";
   const search = req.query.search || "";
   const offset = req.query.offset || 0;
+  const taxonomyId = req.query.taxonomyId || "";
   const limit = req.query.limit || 10;
 
   const cleanString = (input) => input.trim().toLowerCase();
@@ -23,6 +24,7 @@ module.exports = (req, res) => {
     entries: services,
     limit,
     offset,
+    taxonomyId,
     search,
     order: [
       {

@@ -55,11 +55,11 @@ for (let i = 0; i < count; i++) {
         latitude: faker.address.latitude(),
         longitude: faker.address.longitude(),
         uprn: faker.random.number(),
-        address_1: faker.address.streetAddress(),
-        address_2: faker.address.streetAddress(),
+        address1: faker.address.streetAddress(),
+        address2: faker.address.streetAddress(),
         city: faker.address.city(),
-        state_province: faker.address.state(),
-        postal_code: faker.address.zipCode(),
+        stateProvince: faker.address.state(),
+        postalCode: faker.address.zipCode(),
         country: faker.address.country()
       }
     ],
