@@ -7,6 +7,26 @@ import CategoryCard from "../Category/CategoryCard";
 import Header from "../Header/Header";
 import MapView from "../MapView/MapView";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import styled from "styled-components";
+import { pink } from "../../settings/colors";
+import arrowRight from "../../assets/arrow-right.svg";
+import breakpoint from 'styled-components-breakpoint';
+
+export const CategoryCardContainer = styled.div`
+  .card {
+    box-shadow: none;
+    border: 0;
+    cursor: auto;
+    .card--container {
+      &::after {
+          content: none;
+      }
+    }
+    .card--content {
+      margin-right: 0;
+    }
+  }
+`;
 
 const CategoryExplorer = ({ category, onClick }) => {
   const [data, setData] = useState([]);
@@ -20,10 +40,10 @@ const CategoryExplorer = ({ category, onClick }) => {
       if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
-      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category - working
+      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
       setData(getServices || []);
-      // call retrieveCategories with categoryId param passed to return the category name and description - working
+      // call retrieveCategories with categoryId param passed to return the category name and description
       const getCategories = await GetCategories.retrieveCategories({id: categoryId});
       setCategoryData(getCategories || []);
       setIsLoading(false);
@@ -52,10 +72,12 @@ const CategoryExplorer = ({ category, onClick }) => {
           <div>
             {`{Filters}`}
           </div>
-          <CategoryCard
-            key={categoryData[0].id}
-            category={categoryData[0]}
-          />
+          <CategoryCardContainer>
+            <CategoryCard
+              key={categoryData[0].id}
+              category={categoryData[0]}
+            />
+          </CategoryCardContainer>
           <CardContainer>
             <MapView />
             {data.map(service => {

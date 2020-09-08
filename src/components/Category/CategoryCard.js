@@ -15,11 +15,13 @@ const CategoryCard = ({ category, onClick }) => {
         }
     }
 
+    const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
+
     return (
         <Card modifiers="categoryCard" id={category.id} className="card" onClick={select}>
-            <div className="card--container">
+            <div className="card--container" data-category-icon={categoryIconName}>
                 <div className="icon-container">
-                    <i className="fa fa-camera-retro"></i><span className="hideVisually">{`Icon for ${category.name} `}</span>
+                    <i></i><span className="hideVisually">{`Icon for ${category.name} `}</span>
                     </div>
                 <div className="card--content">
                     <h4>{category.name}</h4>
