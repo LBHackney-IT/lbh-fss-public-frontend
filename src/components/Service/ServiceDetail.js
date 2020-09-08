@@ -6,6 +6,7 @@ import { darken } from "polished";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import Address from "../Address/Address";
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -34,6 +35,24 @@ export const DetailContainer = styled.div`
 
 const GreyInnerContainer = styled(InnerContainer)`
     background: #F8F8F8;
+<<<<<<< Updated upstream
+=======
+    margin-bottom: 15px;
+    &.info {
+        h2 {
+            margin-bottom: 10px;
+        }
+        h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 16px;
+            color: #525A5B;
+            margin-top: 0;
+        }
+    }
+>>>>>>> Stashed changes
 `;
 
 const ServiceDetail = () => {
@@ -60,7 +79,6 @@ const ServiceDetail = () => {
         hero = data.images.medium;
     }
   
-    console.log(data);
     return isLoading ? (
             <AppLoading />
         ) : (
@@ -108,14 +126,8 @@ const ServiceDetail = () => {
             <InnerContainer>
                 <h3>Address</h3>
                 <ul className="ul-no-style">
-                    {/* TODO - a href */}
                     {data.locations.map(location =>
-                    <li>
-                        <a href={`geo:${location.latitude},${location.longitude}`} target="_blank">
-                            {location.address1}<br></br>
-                            {location.address2}, {location.city}, {location.stateProvince}, {location.postalCode}
-                        </a>
-                    </li>
+                        <Address address={location} />
                     )}
                 </ul>
             </InnerContainer>
