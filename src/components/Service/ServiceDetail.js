@@ -30,10 +30,38 @@ export const DetailContainer = styled.div`
             background-color: ${darken(0.1, "#00664F")};
         }
     }
+    .fas, .fab {
+        &::before {
+            margin-right: 10px;
+        }
+    }
+    h3 {
+        font-size: 19px;
+        margin-bottom: 15px;
+    }
+    ul {
+        li {
+            font-size: 19px;
+        }
+    }
 `;
 
 const GreyInnerContainer = styled(InnerContainer)`
     background: #F8F8F8;
+    &.info {
+        h2 {
+            margin-bottom: 10px;
+        }
+        h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 16px;
+            color: #525A5B;
+            margin-top: 0;
+        }
+    }
 `;
 
 const ServiceDetail = () => {
@@ -74,9 +102,9 @@ const ServiceDetail = () => {
                 <h2>{data.name}</h2>
                 <p>{data.description}</p>
                 <h3>This is for:</h3>
-                <div>
+                <p>
                     {data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
-                </div>
+                </p>
             </GreyInnerContainer>
             <InnerContainer>
                 <div>   
@@ -93,16 +121,15 @@ const ServiceDetail = () => {
                 <ul className="ul-no-style">
                     {/* TODO */}
                     <li><a className="link-button" href={data.contact.website} target="_blank">Visit website</a></li>
-                    <li><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
-                    <li><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
+                    <li className="fas fa-phone"><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
+                    <li className="fas fa-envelope"><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
                 </ul>
             </InnerContainer>
             <InnerContainer>
                 <h3>Referral details</h3>
                 <ul className="ul-no-style">
-                    {/* TODO */}
-                    <li><a href={data.referral.website} target="_blank">Visit website</a></li>
-                    <li><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
+                    <li className="fas external-link-square-alt"><a href={data.referral.website} target="_blank">Visit website</a></li>
+                    <li className="fas fa-envelope"><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
                 </ul>
             </InnerContainer>
             <InnerContainer>
@@ -134,10 +161,10 @@ const ServiceDetail = () => {
                 <h3>Follow {data.name}</h3>
                 <ul className="ul-no-style">
                     {/* TODO */}
-                    <li><a href={data.social.facebook} target="_blank">Facebook</a></li>
-                    <li><a href={data.social.twitter} target="_blank">Twitter</a></li>
-                    <li><a href={data.social.instagram} target="_blank">Instagram</a></li>
-                    <li><a href={data.social.linkedin} target="_blank">LinkedIn</a></li>
+                    <li className="fab fa-facebook-square"><a href={data.social.facebook} target="_blank">Facebook</a></li>
+                    <li className="fab fa-twitter-square"><a href={data.social.twitter} target="_blank">Twitter</a></li>
+                    <li className="fab fa-instagram-square"><a href={data.social.instagram} target="_blank">Instagram</a></li>
+                    <li className="fab fa-linkedin"><a href={data.social.linkedin} target="_blank">LinkedIn</a></li>
                 </ul>
             </InnerContainer>
         </DetailContainer>
