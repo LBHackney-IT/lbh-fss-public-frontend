@@ -105,6 +105,7 @@ const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const {urlParams} = useContext(UrlParamsContext);
+    const [isToOpenAll, setIsToOpenAll] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -146,6 +147,7 @@ const ServiceDetail = () => {
                 <AccordionContainer>
                     <div className="category-header">   
                         <h3>We can help with:</h3>
+                        <button onClick={() => setIsToOpenAll(!isToOpenAll) }>{(isToOpenAll) ? (`Open all`) : (`Close all`)}</button>
                     </div>
                     <Accordion allowMultipleExpanded preExpanded={['hidden']}>
                         {data.categories.map((category) => {
