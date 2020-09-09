@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "name": "Loneliness or isolation",
+    "description": "For a friendly chat or advice on everyday living.",
+    "vocabulary": "category",
+    "weight": 2
+  },
+  {
+    "id": 2,
+    "name": "Anxiety or mental health",
+    "description": "For any mental health issues you or your loved ones are facing.",
+    "vocabulary": "category",
+    "weight": 4
+  },
+  {
+    "id": 3,
+    "name": "Safe and healthy body",
+    "description": "For medical conditions, addictions or safety concerns.",
+    "vocabulary": "category",
+    "weight": 5
+  },
+  {
+    "id": 4,
+    "name": "Exercise and wellbeing",
+    "description": "For getting fit and healthy through exercise that works for you.",
+    "vocabulary": "category",
+    "weight": 6
+  },
+  {
+    "id": 5,
+    "name": "Arts and creativity",
+    "description": "For classes and education that improve emotional wellbeing. ",
+    "vocabulary": "category",
+    "weight": 8
+  },
+  {
+    "id": 6,
+    "name": "Food or shopping",
+    "description": "For foodbanks, hot food or grocery provision.",
+    "vocabulary": "category",
+    "weight": 10
+  },
+  {
+    "id": 7,
+    "name": "Faith-led activities",
+    "description": "For activites and groups focussing on religion or spirituality.",
+    "vocabulary": "category",
+    "weight": 12
+  },
+  {
+    "id": 8,
+    "name": "Money advice",
+    "description": "For information and guiance on debt, benefits and finances.",
+    "vocabulary": "category",
+    "weight": 14
+  },
+  {
+    "id": 9,
+    "name": "Employment advice",
+    "description": "For help with finding a job, careers and employment rights.",
+    "vocabulary": "category",
+    "weight": 16
+  },
+  {
+    "id": 10,
+    "name": "Housing advice",
+    "description": "For advice on tenancy rights, accommodation and homelessness.",
+    "vocabulary": "category",
+    "weight": 18
+  },
+  {
+    "id": 11,
+    "name": "Immigration advice",
+    "description": "For help and advice on immigration, asylum and refugee status.",
+    "vocabulary": "category",
+    "weight": 0
+  }
+]
