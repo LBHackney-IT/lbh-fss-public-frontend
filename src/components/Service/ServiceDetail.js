@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect  } from "react";
+import React, {useState, useContext, useEffect} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import styled from "styled-components";
@@ -6,6 +6,13 @@ import { darken } from "polished";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemButton,
+    AccordionItemPanel,
+} from 'react-accessible-accordion';
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -36,6 +43,64 @@ const GreyInnerContainer = styled(InnerContainer)`
     background: #F8F8F8;
 `;
 
+export const AccordionContainer = styled.div`
+    .category-header {
+        margin-bottom: 20px;
+    }
+    h3 {
+        font-size: 16px;
+        color: #525A5B;
+        margin-bottom: 0;
+    }
+    .accordion__item {
+        + .accordion__item {
+            margin-top: 15px;
+        }
+        &.hidden-item {
+            margin: 0;
+        }
+    }
+    .accordion__button {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 19px;
+        font-weight: bold;
+        &::after {
+            content: '+';
+            margin-left: auto;
+        }
+        &[aria-expanded="true"] {
+            &::after {
+                content: '-';
+            }
+        }
+        i {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+            &::before {
+                font-size: 19px;
+            }
+        }
+    }
+    .accordion__panel {
+        margin-left: 35px;
+        position: relative;
+        font-size: 16px;
+        color: #525A5B;
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -20px;
+            width: 1px;
+            height: calc(100% - 5px);
+            background: #BFC1C3;
+        }
+    }
+`;
+
 const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +125,6 @@ const ServiceDetail = () => {
         hero = data.images.medium;
     }
   
-    console.log(data);
     return isLoading ? (
             <AppLoading />
         ) : (
@@ -79,14 +143,30 @@ const ServiceDetail = () => {
                 </div>
             </GreyInnerContainer>
             <InnerContainer>
-                <div>   
-                    <h3>We can help with:</h3>
-                    {/* TODO */}
-                    {`<Open all>`}
-                </div>
-                {/* TODO */}
-                {`{data.categories}`}
-                {/* {data.categories} */}
+                <AccordionContainer>
+                    <div className="category-header">   
+                        <h3>We can help with:</h3>
+                    </div>
+                    <Accordion allowMultipleExpanded preExpanded={['hidden']}>
+                        {data.categories.map((category) => {
+                            const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
+                            return (
+                                <AccordionItem key={category.id}>
+                                    <AccordionItemHeading className="category-icons" data-category-icon={categoryIconName}>
+                                        <AccordionItemButton>
+                                            <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
+                                            {category.name}
+                                        </AccordionItemButton>
+                                    </AccordionItemHeading>
+                                    <AccordionItemPanel>
+                                        {category.description}
+                                    </AccordionItemPanel>
+                                </AccordionItem>
+                            );
+                        })}
+                        <AccordionItem key="hidden" uuid="hidden" className="hidden-item" />
+                    </Accordion>
+                </AccordionContainer>
             </InnerContainer>
             <InnerContainer>
                 <h3>Contact us</h3>

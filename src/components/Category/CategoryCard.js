@@ -19,9 +19,9 @@ const CategoryCard = ({ category, onClick }) => {
 
     return (
         <Card modifiers="categoryCard" id={category.id} className="card" onClick={select}>
-            <div className="card--container" data-category-icon={categoryIconName}>
+            <div className="card--container category-icons" data-category-icon={categoryIconName}>
                 <div className="icon-container">
-                    <i></i><span className="hideVisually">{`Icon for ${category.name} `}</span>
+                    <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
                     </div>
                 <div className="card--content">
                     <h4>{category.name}</h4>
