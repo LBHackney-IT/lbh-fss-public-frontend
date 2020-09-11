@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import AppLoading from "../../AppLoading";
 import ListCategories from "../Category/ListCategories";
+import UrlContext from "../../context/UrlContext/UrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import FormInput from "../FormInput/FormInput";
 import FormInputSubmit from "../FormInputSubmit/FormInputSubmit";
@@ -9,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { useQueryParams, NumberParam } from 'use-query-params';
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
+import history from '../../history';
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
@@ -21,16 +23,15 @@ const HomeHeader = styled.div`
         margin-bottom: 15px;
     }
 `;
-const StyledButton = styled(Button)`
-  width: 100%;
-`;
+
 const Home = () => {
-    const [url, setUrl] = useState("");
+    const {url, setUrl} = useContext(UrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
     const { register, handleSubmit, errors, reset } = useForm();
+    const postcodeRef = useRef();
 
     const storeQuery = (e) => {
         let paramObj = {};
@@ -63,27 +64,25 @@ const Home = () => {
     };
 
     async function submitForm({ postcode, service_search }) {
-        console.log('submitForm');
         if (isLoading) return;
-    
-        setIsLoading(true);
 
-        // console.log("postcode:" + postcode);
-        // check postcode is valid
         const validPostcode = postcodeValidator(postcode, 'UK');
-        // console.log(validPostcode);
-        // if (postcode) set in storage
         if (validPostcode) {
             localStorage.setItem("postcode", postcode);
-        }
+            if (url) {
+                history.push(url + "&postcode=" + postcode + "&service_search");
+            } else {
+                history.push("?postcode=" + postcode + "&service_search");
+            }
 
-        setIsLoading(false);
+            setUrlParams({postcode: postcode, service_search: undefined});
+        // TODO add keyword search
+        } else {
+            postcodeRef.current.focus();
+        }
     
     }
-    // console.log('storage val');
-    // console.log(localStorage.getItem("postcode"));
 
-    // console.log(category_explorer);
     // console.log('Home');
     return (
         isLoading ? (
@@ -98,18 +97,17 @@ const Home = () => {
                             label="Enter a postcode"
                             placeholder="Set your postcode e.g E8 1DY"
                             name="postcode"
-                            // inputRef={emailRef}
+                            inputRef={postcodeRef}
                             register={register}
-                            // required
-                            // validate={{
-                            //     pattern: (value) => {
-                            //         return (
-                            //             value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i) ||
-                            //             "Enter a valid e-mail address"
-                            //         );
-                            //     },
-                            // }}
-                            // error={errors.postcode}
+                            validate={{
+                                pattern: (value) => {
+                                    return (
+                                        postcodeValidator(value, 'UK') ||
+                                        "Enter a valid UK postcode"
+                                    );
+                                },
+                            }}
+                            error={errors.postcode}
                         />
                         <FormInputSubmit
                             label="Search for a service"
@@ -117,13 +115,9 @@ const Home = () => {
                             name="service_search"
                             type="text"
                             register={register}
-                            // error={errors.password}
-                            // required
                         />
-                        {/* <StyledButton type="submit" label="Login" disabled={isLoading} /> */}
                     </form>
                 </HomeHeader>
-                {/* <ListCategories category={category} onClick={handleEvent} /> */}
                 <ListCategories onClick={handleEvent} />
             </div>
             </>

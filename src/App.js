@@ -53,6 +53,7 @@ function App() {
     storeQuery();
   }, [setUrl, setUrlParams, setIsLoading]);
   
+  console.log("url");
   console.log(url);
   console.log("urlParams");
   console.log(urlParams);
