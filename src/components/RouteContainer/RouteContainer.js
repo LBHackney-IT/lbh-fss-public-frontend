@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import CategoryExplorer from "../Category/CategoryExplorer";
 import ListServices from "../Service/ListServices";
 import ServiceDetail from "../Service/ServiceDetail";
@@ -22,20 +22,20 @@ const RouteContainer = (props) => {
         async function checkQuery() {
             for (const [key, value] of Object.entries(urlParams)) {
                 if (key == "category_explorer" && value !== "") {
-                    console.log("CategoryExplorer");
+                    // console.log("CategoryExplorer");
                     setPage("CategoryExplorer");
                 } else if (key == "service" && value !== "") {
-                    console.log("ServiceDetail");
+                    // console.log("ServiceDetail");
                     setPage("ServiceDetail");
                 } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
-                    console.log("ListServices");
+                    // console.log("ListServices");
                     setPage("ListServices");
                 }
             }
         }
         checkQuery();
         setIsLoading(false);
-    }, [setPage, setIsLoading]);
+    });
 
     const handleEvent = e => {
         const serviceArray = [];
@@ -62,6 +62,9 @@ const RouteContainer = (props) => {
     };
 
     // console.log("RouteContainer");
+    // console.log(back);
+    // console.log(backValue);
+    // console.log("/RouteContainer");
     return (
         isLoading ? ( <AppLoading /> ) :
         (
@@ -69,7 +72,7 @@ const RouteContainer = (props) => {
             ( page == "ServiceDetail" ) ? <ServiceDetail service={service} /> :
             ( page == "ListServices") ? <ListServices onClick={ handleEvent} /> :
             <Home />
-        )
+        )   
     )
 }
 

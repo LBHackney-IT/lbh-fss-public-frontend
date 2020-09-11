@@ -14,6 +14,7 @@ import {
     AccordionItemPanel,
 } from 'react-accessible-accordion';
 import Address from "../Address/Address";
+import Header from "../Header/Header";
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -166,6 +167,7 @@ const ServiceDetail = () => {
             <AppLoading />
         ) : (
         <DetailContainer>
+            <Header />
             {hero.length ? (
                 <div className="image-container">
                     <img src={hero} alt={data.name} />

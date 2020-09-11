@@ -63,9 +63,7 @@ const CategoryExplorer = ({ category, onClick }) => {
         <h2>No data Found</h2>
       ) : (
         <div>
-          <div>
-            <Header />
-          </div>
+          <Header />
           <div>
             {`{Filters}`}
           </div>

@@ -10,7 +10,7 @@ const HeaderContainer = styled.div`
     border-bottom: 1px solid #7FB2A7;
 `;
 
-const Header = () => {
+const Header = () => {  
     return (
         <HeaderContainer>
             <Back />
