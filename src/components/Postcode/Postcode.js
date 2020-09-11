@@ -17,8 +17,13 @@ const PostcodeButton = styled.button`
 
 
 const Postcode = () => {
+    const storedPostcode = localStorage.getItem("postcode");
+
+    let p = 'Set your postcode';
+    if (storedPostcode) p = storedPostcode;
+
     return (
-        <PostcodeButton>Postcode</PostcodeButton>
+        <PostcodeButton>{p}</PostcodeButton>
     );
 }
 
