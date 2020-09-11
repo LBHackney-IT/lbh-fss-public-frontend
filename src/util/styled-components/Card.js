@@ -7,123 +7,16 @@ import breakpoint from 'styled-components-breakpoint';
 
 export const CARD_MODIFIERS = {
     categoryCard: () => `
-        [data-category-icon="loneliness-or-isolation"] {
-            i {
-                background-color: #DF1995;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="anxiety-or-mental-health"] {
-            i {
-                background-color: #FF6A13;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="safe-and-healthy-body"] {
-            i {
-                background-color: #84BD00;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="exercise-and-wellbeing"] {
-            i {
-                background-color: #E03C31;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="arts-and-creativity"] {
-            i {
-                background-color: #025EA6;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="food-or-shopping"] {
-            i {
-                background-color: #328472;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="faith-led-activities"] {
-            i {
-                background-color: #0085CA;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="money-advice"] {
-            i {
-                background-color: #81312F;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="employment-advice"] {
-            i {
-                background-color: #8031A7;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="housing-advice"] {
-            i {
-                background-color: #2B8CC4;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-        [data-category-icon="immigration-advice"] {
-            i {
-                background-color: #00664F;
-                &::before {
-                    content: "\f007";
-                }
-            }
-        }
-
         i {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background-color: ${pink[200]};
             height: 50px;
             width: 50px;
-            padding: 5px;
-            border-radius: 100%;
-            margin-right: 10px;
-            opacity: 0.75;
             &::before {
                 font-family: "Font Awesome 5 Free";
                 content: "\f007";
                 font-size: 30px;
                 color: #fff;
             }
-        }
-        .hideVisually {
-            border: 0;
-            clip: rect(0 0 0 0);
-            height: 1px;
-            margin: -1px;
-            overflow: hidden;
-            padding: 0;
-            position: absolute;
-            whiteSpace: nowrap;
-            width: 1px;
         }
         .card--container {
             display: flex;

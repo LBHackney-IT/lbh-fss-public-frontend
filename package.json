@@ -28,6 +28,7 @@
     "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
+    "react-accessible-accordion": "^3.3.3",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.5.1",
     "react-share": "^4.2.1",
