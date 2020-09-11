@@ -75,6 +75,14 @@ hr {
   margin: 30px 0;
 }
 
+.fas, .fab {
+  &::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f007";
+  }
+}
+
 .App {
   position: relative;
   ${breakpoint('sm')`
