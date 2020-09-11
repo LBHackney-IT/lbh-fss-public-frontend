@@ -59,7 +59,6 @@ function App() {
     storeQuery();
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
   
-  // console.log(url);
   console.log("url");
   console.log(url);
   console.log("prevUrl");

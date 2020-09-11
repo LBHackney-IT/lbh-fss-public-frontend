@@ -4,6 +4,7 @@ import styled from "styled-components";
 const StyledError = styled.span`
   display: block;
   margin-bottom: 20px;
+  color: #fff;
 `;
 
 const FormError = ({ error }) => {
