@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from "styled-components";
 import { Card } from "../../util/styled-components/Card";
 
 const ServiceCard = ({ service, onClick }) => {

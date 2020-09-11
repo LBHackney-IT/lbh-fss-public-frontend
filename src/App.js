@@ -2,13 +2,9 @@ import React, { useEffect, useState, useMemo } from 'react';
 import RouteContainer from "./components/RouteContainer/RouteContainer";
 import Home from "./components/Home/Home";
 import { GlobalStyle } from "./helpers/GlobalStyle/GlobalStyle";
-// import { ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-// import { ModalProvider } from "styled-react-modal";
 import UrlContext from "./context/UrlContext/UrlContext";
 import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
 import AppLoading from './AppLoading';
-import Footer from './components/Footer/Footer';
 import Map from './components/Map/Map';
 import { SidebarContainer } from "./util/styled-components/SidebarContainer"
 import {ThemeProvider} from 'styled-components';
@@ -72,7 +68,6 @@ function App() {
                 { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home />  }
               </SidebarContainer>
               <Map />
-              {/* <Footer /> */}
               <GlobalStyle />
             </UrlContext.Provider>
           </UrlParamsContext.Provider>

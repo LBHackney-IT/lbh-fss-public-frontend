@@ -38,11 +38,9 @@ const ListServices = ({ categories = [], onClick }) => {
           <div>{`{Categories | Filters}`}</div>
           <CardContainer>
             <div>View as: {`{List | Map}`}</div>
-            {data.map(service => {
+            {data.map((service, index) => {
               return (
-                <div>
-                <ServiceCard service={service} onClick={select} />
-                </div>
+                <ServiceCard key={index} service={service} onClick={select} />
               );
             })}
           </CardContainer>

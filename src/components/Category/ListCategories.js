@@ -35,13 +35,11 @@ const ListCategories = ({ categories = [], onClick }) => {
           <h3>Explore categories</h3>
           {data.map(category => {
             return (
-              <div>
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  onClick={select}
-                />
-              </div>
+              <CategoryCard
+                key={category.id}
+                category={category}
+                onClick={select}
+              />
             );
           })}
         </CardContainer>

@@ -8,9 +8,6 @@ import Header from "../Header/Header";
 import MapView from "../MapView/MapView";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import styled from "styled-components";
-import { pink } from "../../settings/colors";
-import arrowRight from "../../assets/arrow-right.svg";
-import breakpoint from 'styled-components-breakpoint';
 
 export const CategoryCardContainer = styled.div`
   .card {
@@ -80,11 +77,9 @@ const CategoryExplorer = ({ category, onClick }) => {
           </CategoryCardContainer>
           <CardContainer>
             <MapView />
-            {data.map(service => {
+            {data.map((service, index) => {
               return (
-                <div>
-                  <ServiceCard service={service} onClick={select} />
-                </div>
+                <ServiceCard key={index} service={service} onClick={select} />
               );
             })}
           </CardContainer>

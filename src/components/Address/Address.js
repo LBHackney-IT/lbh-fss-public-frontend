@@ -17,7 +17,7 @@ const Address = (props) => {
 
     return(
         <AddressList key={address.uprn}>
-            <a href={`https://maps.google.com/?q=${address.address1}%20${address.address2}%20${address.city}%20${address.stateProvince}%20${address.postalCode}`} target="_blank">
+            <a href={`https://maps.google.com/?q=${address.address1}%20${address.address2}%20${address.city}%20${address.stateProvince}%20${address.postalCode}`} target="_blank" rel="noopener noreferrer">
                 {address.address1}<br></br>
                 {address.address2 ? address.address2 + ", " : ""}
                 {address.city ? address.city + ", " : ""}

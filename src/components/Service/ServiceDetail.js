@@ -209,7 +209,7 @@ const ServiceDetail = () => {
                 <h3>Contact us</h3>
                 <ul className="ul-no-style">
                     {/* TODO */}
-                    <li><a className="link-button" href={data.contact.website} target="_blank">Visit website</a></li>
+                    <li><a className="link-button" href={data.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
                     <li className="fas fa-phone"><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
                     <li className="fas fa-envelope"><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
                 </ul>
@@ -217,7 +217,7 @@ const ServiceDetail = () => {
             <InnerContainer>
                 <h3>Referral details</h3>
                 <ul className="ul-no-style">
-                    <li className="fas external-link-square-alt"><a href={data.referral.website} target="_blank">Visit website</a></li>
+                    <li className="fas external-link-square-alt"><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
                     <li className="fas fa-envelope"><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
                 </ul>
             </InnerContainer>
@@ -244,10 +244,10 @@ const ServiceDetail = () => {
                 <h3>Follow {data.name}</h3>
                 <ul className="ul-no-style">
                     {/* TODO */}
-                    <li className="fab fa-facebook-square"><a href={data.social.facebook} target="_blank">Facebook</a></li>
-                    <li className="fab fa-twitter-square"><a href={data.social.twitter} target="_blank">Twitter</a></li>
-                    <li className="fab fa-instagram-square"><a href={data.social.instagram} target="_blank">Instagram</a></li>
-                    <li className="fab fa-linkedin"><a href={data.social.linkedin} target="_blank">LinkedIn</a></li>
+                    <li className="fab fa-facebook-square"><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li className="fab fa-twitter-square"><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                    <li className="fab fa-instagram-square"><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                    <li className="fab fa-linkedin"><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 </ul>
             </InnerContainer>
         </DetailContainer>

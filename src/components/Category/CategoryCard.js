@@ -1,10 +1,9 @@
 import React, {useContext} from 'react';
-import styled from "styled-components";
 import { Card } from "../../util/styled-components/Card"
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 
 const CategoryCard = ({ category, onClick }) => {
-    const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {urlParams} = useContext(UrlParamsContext);
     const urlParamsArray = Object.entries(urlParams);
     
     const select = e => {
