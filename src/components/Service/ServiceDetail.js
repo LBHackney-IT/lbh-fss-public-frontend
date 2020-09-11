@@ -35,8 +35,6 @@ export const DetailContainer = styled.div`
 
 const GreyInnerContainer = styled(InnerContainer)`
     background: #F8F8F8;
-<<<<<<< Updated upstream
-=======
     margin-bottom: 15px;
     &.info {
         h2 {
@@ -52,7 +50,6 @@ const GreyInnerContainer = styled(InnerContainer)`
             margin-top: 0;
         }
     }
->>>>>>> Stashed changes
 `;
 
 const ServiceDetail = () => {
@@ -92,9 +89,9 @@ const ServiceDetail = () => {
                 <h2>{data.name}</h2>
                 <p>{data.description}</p>
                 <h3>This is for:</h3>
-                <div>
+                <p>
                     {data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
-                </div>
+                </p>
             </GreyInnerContainer>
             <InnerContainer>
                 <div>   
@@ -126,8 +123,8 @@ const ServiceDetail = () => {
             <InnerContainer>
                 <h3>Address</h3>
                 <ul className="ul-no-style">
-                    {data.locations.map(location =>
-                        <Address address={location} />
+                    {data.locations.map((location, index) =>
+                        <Address key={index} address={location} />
                     )}
                 </ul>
             </InnerContainer>
