@@ -83,6 +83,12 @@ export const AccordionContainer = styled.div`
         margin-bottom: 0;
     }
     .accordion__item {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
         + .accordion__item {
             margin-top: 15px;
         }
@@ -116,6 +122,7 @@ export const AccordionContainer = styled.div`
     }
     .accordion__panel {
         margin-left: 35px;
+        margin-top: 5px;
         position: relative;
         font-size: 16px;
         color: #525A5B;
