@@ -55,8 +55,8 @@ const GetServices = {
         const isCategory = o => isMatch(o, {id: taxonomyId});
         const allServices = filter(response.data.entries, ({categories}) => categories.some(isCategory));
 
-        console.log("allServices");
-        console.log(allServices);
+        // console.log("allServices");
+        // console.log(allServices);
         data = allServices;
       } else {
         data = response.data.entries;

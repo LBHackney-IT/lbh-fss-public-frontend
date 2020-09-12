@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import AppLoading from "../../AppLoading";
 import ListCategories from "../Category/ListCategories";
 import UrlContext from "../../context/UrlContext/UrlContext";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import FormInput from "../FormInput/FormInput";
 import FormInputSubmit from "../FormInputSubmit/FormInputSubmit";
@@ -26,10 +27,11 @@ const HomeHeader = styled.div`
 
 const Home = () => {
     const {url, setUrl} = useContext(UrlContext);
+    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
     const { register, handleSubmit, errors, reset } = useForm();
     const postcodeRef = useRef();
 
@@ -61,6 +63,19 @@ const Home = () => {
     const handleEvent = e => {
         setQuery({ category_explorer: ~~ e }, 'pushIn')
         storeQuery();
+        const currentSearch = window.location.search;
+        if (currentSearch) {
+            setUrl(currentSearch); // ?postcode&service=7&service_search=1
+            let arr = [url];
+            console.log("home.js handleevent url");
+            console.log(url);
+            console.log("home.js handleevent arr");
+            console.log(arr);
+            console.log("home.js handleevent currentSearch");
+            console.log(currentSearch);
+            arr.push(currentSearch);
+            setPrevUrl(arr);
+        }
     };
 
     async function submitForm({ postcode, service_search }) {

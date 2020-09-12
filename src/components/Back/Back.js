@@ -3,6 +3,7 @@ import styled from "styled-components";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import history from '../../history';
 
 const BackButton = styled.button`
@@ -24,45 +25,66 @@ const Back = ({onClick}) => {
     const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+
+    console.log("prevUrl back.js");
+    console.log(prevUrl); // array
+    // on ?zello_world=2&postcode=GL14%201RE&service_search
+    // ["", "?zello_world"]
+    const arrayLast = prevUrl[prevUrl.length - 1];
+    console.log(arrayLast);
 
     const select = e => {
-        console.log('back');
-        console.log(urlParams);
-        let push = '/?';
+        // console.log('back');
+        // console.log(urlParams);
+        let push = "/?";
         let params = {};
 
-        console.log("history");
-        console.log("push");
-        console.log(push);
-        console.log("url");
-        console.log(url); // string of current url
-        console.log("prevUrl back.js");
-        console.log(prevUrl); // array
+        // console.log("history");
+        // console.log("push");
+        // console.log(push);
+        // console.log("url");
+        // console.log(url); // string of current url
+        // console.log("prevUrl back.js onclick");
+        // console.log(prevUrl); // array
         const currentSearch = window.location.search;
-        // prevUrl.push("samwong");
-        // console.log("prevUrl pushed");
-        // console.log(prevUrl);
 
-        if (prevUrl[0] == "") { // if there is no previous route then set default
-            for (const [key, value] of Object.entries(urlParams)) {
-                if (key == "service" && value !== "") {
-                    // need to check if postcode is set else go back to Home
-                    push = "?postcode=1&service_search"; //placeholder
+        // if service
+            // if prevUrl exists
+                // go back to prevUrl
+            // else
+                // if has postcode
+                    // postcode={localstorage}&service_search
+                // else
+                    // default ? Home.js?
+
+        // anything else will go back to Home.js
+
+        for (const [key, value] of Object.entries(urlParams)) {
+            if (key == "service" && value !== "") {
+                // need to check if postcode is set else go back to Home
+                console.log("prevUrl.length");
+                console.log(prevUrl.length);
+                if (prevUrl.length !== 0) {
+                    push = prevUrl[0];
+                    params = prevUrlParams;
                 } else {
-                    // category_explorer & service listing will use default
+                    const storedPostcode = localStorage.getItem("postcode");
+                    if (storedPostcode) {
+                        push = "?postcode="+storedPostcode+"&service_search";
+                        params = {"postcode": storedPostcode, "search_service": undefined};
+                    }
                 }
             }
-            history.push(push);
-            setUrlParams(params);
-        } else {
-            // history.push back an array item
-            history.push(prevUrl[0]);
-            // setUrlParams to relevant page going back to
         }
+        console.log("push");
+        console.log(push);
+        console.log("params");
+        console.log(params);
         
-        // prevUrl.push(currentSearch);
-        
-        setPrevUrl(prevUrl); // ["", "?postcode&service=7&service_search=1"]
+        history.push(push);
+        setUrl(push);
+        // setPrevUrl(prevUrl); // ["", "?postcode&service=7&service_search=1"]
         setUrlParams(params);
         // setPrevUrl(prevUrl.push(url));
         // history.push(push);

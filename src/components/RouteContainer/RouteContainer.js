@@ -4,7 +4,9 @@ import ListServices from "../Service/ListServices";
 import ServiceDetail from "../Service/ServiceDetail";
 import AppLoading from "../../AppLoading";
 import UrlContext from "../../context/UrlContext/UrlContext";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import Home from "../Home/Home";
 import { useQueryParams, NumberParam } from 'use-query-params';
 import history from '../../history';
@@ -12,11 +14,14 @@ import history from '../../history';
 const RouteContainer = (props) => {
     // const { url } = props;
     const {url, setUrl} = useContext(UrlContext);
+    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(null);
     const [{ service }, setQuery] = useQueryParams({ service: NumberParam });
-    const removeQuery = ["category_explorer", "postcode", "service_search"];
+    const removeQuery = ["category_explorer", "postcode", "service_search", "categories", "demographic"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
 
     useEffect(() => {
         async function checkQuery() {
@@ -28,7 +33,7 @@ const RouteContainer = (props) => {
                     // console.log("ServiceDetail");
                     setPage("ServiceDetail");
                 } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
-                    // console.log("ListServices");
+                    console.log("ListServices");
                     setPage("ListServices");
                 }
             }
@@ -52,7 +57,26 @@ const RouteContainer = (props) => {
             }
         }
 
+        const currentSearch = window.location.search;
+        if (currentSearch) {
+            setUrl(currentSearch);
+            let arr = [url];
+            let paramObj = {};
+            const queryParts = currentSearch.substring(1).split(/[&;]/g);
+            const arrayLength = queryParts.length;
+            for (let i = 0; i < arrayLength; i++) {
+                const queryKeyValue = queryParts[i].split("=");
+                if (paramsArray.includes(queryKeyValue[0])) {
+                    paramObj[queryKeyValue[0]] = queryKeyValue[1];
+                } 
+            }
+            setPrevUrl(arr);
+            setPrevUrlParams(paramObj);
+        }
+
+
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
+        console.log(newServiceUrl);
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
         const updatedUrl = "?service=" + e + newServiceUrl;
         history.push(updatedUrl);

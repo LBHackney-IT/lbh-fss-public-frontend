@@ -5,6 +5,7 @@ import { GlobalStyle } from "./helpers/GlobalStyle/GlobalStyle";
 import UrlContext from "./context/UrlContext/UrlContext";
 import PrevUrlContext from "./context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "./context/PrevUrlParamsContext/PrevUrlParamsContext";
 import AppLoading from './AppLoading';
 import Map from './components/Map/Map';
 import { SidebarContainer } from "./util/styled-components/SidebarContainer"
@@ -17,8 +18,10 @@ function App() {
   const prevUrlValue = useMemo(() => ({ prevUrl, setPrevUrl }), [prevUrl, setPrevUrl]);
   const [urlParams, setUrlParams] = useState({});
   const urlParamValue = useMemo(() => ({ urlParams, setUrlParams }), [urlParams, setUrlParams]);
+  const [prevUrlParams, setPrevUrlParams] = useState([]);
+  const prevUrlParamsValue = useMemo(() => ({ prevUrlParams, setPrevUrlParams }), [prevUrlParams, setPrevUrlParams]);
   const [isLoading, setIsLoading] = useState(true);
-  const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
+  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   // console.log("Start App");
 
   const theme = {
@@ -37,9 +40,9 @@ function App() {
       const currentSearch = window.location.search;
       if (currentSearch) {
         setUrl(currentSearch); // ?postcode&service=7&service_search=1
-        let arr = [url];
-        arr.push(currentSearch);
-        setPrevUrl(arr); // ["", "?postcode&service=7&service_search=1"]
+        // let arr = [url];
+        // arr.push(currentSearch);
+        // setPrevUrl(arr); // ["", "?postcode&service=7&service_search=1"]
 
         const queryParts = currentSearch.substring(1).split(/[&;]/g);
         const arrayLength = queryParts.length;
@@ -59,10 +62,14 @@ function App() {
     storeQuery();
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
   
-  console.log("url");
-  console.log(url);
-  console.log("prevUrl");
+  // console.log("url");
+  // console.log(url);
+  console.log("App.js prevUrl");
   console.log(prevUrl);
+  console.log("App.js urlParams");
+  console.log(urlParams);
+  console.log("App.js prevUrlParams");
+  console.log(prevUrlParams);
   // console.log("App.js");
   return (
     isLoading ? <AppLoading /> :
@@ -72,11 +79,13 @@ function App() {
           <UrlParamsContext.Provider value={urlParamValue}>
             <UrlContext.Provider value={urlValue}>
               <PrevUrlContext.Provider value={prevUrlValue}>
-                <SidebarContainer>
-                  { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home />  }
-                </SidebarContainer>
-                <Map />
-                <GlobalStyle />
+                <PrevUrlParamsContext.Provider value={prevUrlParamsValue}>
+                  <SidebarContainer>
+                    { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home />  }
+                  </SidebarContainer>
+                  <Map />
+                  <GlobalStyle />
+                </PrevUrlParamsContext.Provider>
               </PrevUrlContext.Provider>
             </UrlContext.Provider>
           </UrlParamsContext.Provider>
