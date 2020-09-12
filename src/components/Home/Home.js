@@ -34,6 +34,7 @@ const Home = () => {
     const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
     const { register, handleSubmit, errors, reset } = useForm();
     const postcodeRef = useRef();
+    const currentSearch = window.location.search;
 
     const storeQuery = (e) => {
         let paramObj = {};
@@ -56,6 +57,15 @@ const Home = () => {
         setIsLoading(false);
     }
 
+    const setUrls = (currentSearch) => {
+        if (currentSearch) {
+            setUrl(currentSearch);
+            let arr = [url];
+            arr.push(currentSearch);
+            setPrevUrl(arr);
+        }
+    }
+
     useEffect(() => {
         setIsLoading(false);
     }, [setIsLoading]);
@@ -63,19 +73,7 @@ const Home = () => {
     const handleEvent = e => {
         setQuery({ category_explorer: ~~ e }, 'pushIn')
         storeQuery();
-        const currentSearch = window.location.search;
-        if (currentSearch) {
-            setUrl(currentSearch); // ?postcode&service=7&service_search=1
-            let arr = [url];
-            console.log("home.js handleevent url");
-            console.log(url);
-            console.log("home.js handleevent arr");
-            console.log(arr);
-            console.log("home.js handleevent currentSearch");
-            console.log(currentSearch);
-            arr.push(currentSearch);
-            setPrevUrl(arr);
-        }
+        setUrls(currentSearch);
     };
 
     async function submitForm({ postcode, service_search }) {
@@ -89,7 +87,8 @@ const Home = () => {
             } else {
                 history.push("?postcode=" + postcode + "&service_search");
             }
-
+            const currentSearch = window.location.search;
+            setUrls(currentSearch);
             setUrlParams({postcode: postcode, service_search: undefined});
         // TODO add keyword search
         } else {

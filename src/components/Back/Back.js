@@ -63,24 +63,27 @@ const Back = ({onClick}) => {
         for (const [key, value] of Object.entries(urlParams)) {
             if (key == "service" && value !== "") {
                 // need to check if postcode is set else go back to Home
-                console.log("prevUrl.length");
-                console.log(prevUrl.length);
+                // console.log("prevUrl");
+                // console.log(prevUrl);
                 if (prevUrl.length !== 0) {
                     push = prevUrl[0];
-                    params = prevUrlParams;
+                    params = prevUrlParams; // ["postcode=GL543ND", "service_search", "categories=1+2", "demographic=3"]
+                    // console.log('test1');
                 } else {
                     const storedPostcode = localStorage.getItem("postcode");
+                    // console.log('test2');
                     if (storedPostcode) {
                         push = "?postcode="+storedPostcode+"&service_search";
                         params = {"postcode": storedPostcode, "search_service": undefined};
+                        // console.log('test3');
                     }
                 }
             }
         }
-        console.log("push");
-        console.log(push);
-        console.log("params");
-        console.log(params);
+        // console.log("push");
+        // console.log(push);
+        // console.log("params");
+        // console.log(params);
         
         history.push(push);
         setUrl(push);
