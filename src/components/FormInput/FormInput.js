@@ -24,6 +24,7 @@ const FormInput = ({
   label,
   placeholder,
   register,
+  defaultValue,
   required,
   maxLength,
   minLength,
@@ -45,6 +46,7 @@ const FormInput = ({
           register(e, { required, minLength, maxLength, validate });
           if (inputRef) inputRef.current = e;
         }}
+        defaultValue={defaultValue}
         aria-invalid={error ? "true" : "false"}
       />
       {error && error.type === "required" && (
@@ -71,6 +73,7 @@ FormInput.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   register: PropTypes.func,
+  defaultValue: PropTypes.string,
   required: PropTypes.bool,
   maxLength: PropTypes.number,
   minLength: PropTypes.number,

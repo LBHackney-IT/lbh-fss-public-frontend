@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useMemo } from "react";
 import CategoryExplorer from "../Category/CategoryExplorer";
 import ListServices from "../Service/ListServices";
 import ServiceDetail from "../Service/ServiceDetail";
+import SetPostcode from "../Postcode/SetPostcode";
 import AppLoading from "../../AppLoading";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -12,7 +13,6 @@ import { useQueryParams, NumberParam } from 'use-query-params';
 import history from '../../history';
 
 const RouteContainer = (props) => {
-    // const { url } = props;
     const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
@@ -27,14 +27,17 @@ const RouteContainer = (props) => {
         async function checkQuery() {
             for (const [key, value] of Object.entries(urlParams)) {
                 if (key == "category_explorer" && value !== "") {
-                    // console.log("CategoryExplorer");
                     setPage("CategoryExplorer");
                 } else if (key == "service" && value !== "") {
-                    // console.log("ServiceDetail");
                     setPage("ServiceDetail");
                 } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
-                    console.log("ListServices");
                     setPage("ListServices");
+                } else if (key == "set_postcode" && value == "true") {
+                    setPage("SetPostcode");
+                } else if (key == "select_categories" && value == "true") {
+                    setPage("SelectCategories");
+                } else if (key == "select_demographics" && value == "true") {
+                    setPage("SelectDemographics");
                 }
             }
         }
@@ -42,7 +45,7 @@ const RouteContainer = (props) => {
         setIsLoading(false);
     });
 
-    const handleEvent = e => {
+    const ServiceCardEvent = e => {
         const serviceArray = [];
         const urlArray = url.substring(1).split(/[&;]/g);
         for (const [key, value] of Object.entries(urlParams)) {
@@ -76,7 +79,6 @@ const RouteContainer = (props) => {
 
 
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
-        console.log(newServiceUrl);
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
         const updatedUrl = "?service=" + e + newServiceUrl;
         history.push(updatedUrl);
@@ -86,15 +88,15 @@ const RouteContainer = (props) => {
     };
 
     // console.log("RouteContainer");
-    // console.log(back);
-    // console.log(backValue);
-    // console.log("/RouteContainer");
     return (
         isLoading ? ( <AppLoading /> ) :
         (
-            ( page == "CategoryExplorer" ) ? <CategoryExplorer onClick={ handleEvent} /> :
+            ( page == "CategoryExplorer" ) ? <CategoryExplorer onClick={ ServiceCardEvent} /> :
             ( page == "ServiceDetail" ) ? <ServiceDetail service={service} /> :
-            ( page == "ListServices") ? <ListServices onClick={ handleEvent} /> :
+            ( page == "ListServices") ? <ListServices onClick={ ServiceCardEvent} /> :
+            ( page == "SetPostcode") ? <SetPostcode /> :
+            // ( page == "SelectCategories") ? <SelectCategories /> :
+            // ( page == "SelectDemographics") ? <SelectDemographics /> :
             <Home />
         )   
     )

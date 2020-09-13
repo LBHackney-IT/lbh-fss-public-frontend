@@ -1,9 +1,13 @@
 import React, {useContext, useEffect} from "react";
 import styled from "styled-components";
+import UrlContext from "../../context/UrlContext/UrlContext";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
+import history from '../../history';
 
-const PostcodeButton = styled.button`
+const PostcodeButtonContainer = styled.button`
     background: #005E48;
     color: #fff;
     border: 0;
@@ -18,11 +22,23 @@ const PostcodeButton = styled.button`
     }
 `;
 
-
-const Postcode = () => {
+const PostcodeButton = () => {
+    const {url, setUrl} = useContext(UrlContext);
+    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     let postcode = "Set your postcode";
-    
+    const path = "?set_postcode=true";
+
+    const handleEvent = e => {
+        setPrevUrl([url]);
+        setPrevUrlParams(urlParams);
+
+        history.push(path);
+        setUrl(path);
+        setUrlParams({"set_postcode": "true"});
+    };
+
     // check if url has valid postcode
     for (const [key, value] of Object.entries(urlParams)) {
         if (key == "postcode" && value !== "") {
@@ -38,8 +54,10 @@ const Postcode = () => {
     if (storedPostcode) postcode = storedPostcode;
 
     return (
-        <PostcodeButton>{postcode}</PostcodeButton>
+        <PostcodeButtonContainer onClick={handleEvent}>
+            {postcode}
+        </PostcodeButtonContainer>
     );
 }
 
-export default Postcode;
+export default PostcodeButton;

@@ -39,6 +39,7 @@
     "styled-components-breakpoint": "^3.0.0-preview.20",
     "styled-components-modifiers": "^1.2.5",
     "styled-react-modal": "^2.0.1",
+    "url-search-params-polyfill": "^8.1.0",
     "use-query-params": "^1.1.6"
   },
   "browserslist": "> 1%,last 2 versions",

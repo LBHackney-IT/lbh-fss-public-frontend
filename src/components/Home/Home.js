@@ -117,7 +117,7 @@ const Home = () => {
                                 pattern: (value) => {
                                     return (
                                         postcodeValidator(value, 'UK') ||
-                                        "Enter a valid UK postcode"
+                                        "Please enter a valid postcode"
                                     );
                                 },
                             }}

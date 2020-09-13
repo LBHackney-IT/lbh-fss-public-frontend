@@ -12,7 +12,7 @@ import { SidebarContainer } from "./util/styled-components/SidebarContainer"
 import {ThemeProvider} from 'styled-components';
 
 function App() {
-  const [url, setUrl] = useState(""); // "" // ?hello_world=1 // ?category_explorer=5&somethingelse=1
+  const [url, setUrl] = useState("");
   const urlValue = useMemo(() => ({ url, setUrl }), [url, setUrl]);
   const [prevUrl, setPrevUrl] = useState([]);
   const prevUrlValue = useMemo(() => ({ prevUrl, setPrevUrl }), [prevUrl, setPrevUrl]);
@@ -21,8 +21,7 @@ function App() {
   const [prevUrlParams, setPrevUrlParams] = useState([]);
   const prevUrlParamsValue = useMemo(() => ({ prevUrlParams, setPrevUrlParams }), [prevUrlParams, setPrevUrlParams]);
   const [isLoading, setIsLoading] = useState(true);
-  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
-  // console.log("Start App");
+  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic", "set_postcode", "select_categories", "select_demographics"];
 
   const theme = {
     breakpoints: { 
@@ -39,38 +38,25 @@ function App() {
       let paramObj = {};
       const currentSearch = window.location.search;
       if (currentSearch) {
-        setUrl(currentSearch); // ?postcode&service=7&service_search=1
-        // let arr = [url];
-        // arr.push(currentSearch);
-        // setPrevUrl(arr); // ["", "?postcode&service=7&service_search=1"]
+        setUrl(currentSearch);
 
         const queryParts = currentSearch.substring(1).split(/[&;]/g);
         const arrayLength = queryParts.length;
         for (let i = 0; i < arrayLength; i++) {
           const queryKeyValue = queryParts[i].split("=");
           if (paramsArray.includes(queryKeyValue[0])) {
-            // if (queryKeyValue[1]) {
-              paramObj[queryKeyValue[0]] = queryKeyValue[1];
-            // }
-          } 
+            paramObj[queryKeyValue[0]] = queryKeyValue[1];
+          }
         }
         setUrlParams(paramObj);
       }
       setIsLoading(false);
     }
-    // console.log("App useEffect");
     storeQuery();
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
   
-  // console.log("url");
-  // console.log(url);
-  console.log("App.js prevUrl");
-  console.log(prevUrl);
-  console.log("App.js urlParams");
-  console.log(urlParams);
-  console.log("App.js prevUrlParams");
-  console.log(prevUrlParams);
-  // console.log("App.js");
+  // console.log("App.js prevUrl");
+  // console.log(prevUrl);
   return (
     isLoading ? <AppLoading /> :
     (
