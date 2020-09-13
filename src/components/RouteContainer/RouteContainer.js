@@ -21,8 +21,7 @@ const RouteContainer = (props) => {
     const [page, setPage] = useState(null);
     const [{ service }, setQuery] = useQueryParams({ service: NumberParam });
     const removeQuery = ["category_explorer", "postcode", "service_search", "categories", "demographic"];
-    const paramsArray = [...removeQuery];
-    paramsArray.push("service");
+    const paramsArray = [...removeQuery, "service"];
 
     useEffect(() => {
         async function checkQuery() {
