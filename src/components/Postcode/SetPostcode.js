@@ -46,45 +46,58 @@ const SetPostcode = () => {
 
     async function submitForm({ postcode }) {
         if (isLoading) return;
-        let updatePrevUrl = [prevUrl];
         const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
         const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+        console.log("prevUrlParams");
+        console.log(prevUrlParams);
+        console.log("prevUrlParamsArrayLast");
+        console.log(prevUrlParamsArrayLast);
+        // need to check if prev exists
+        
+        // prevUrlArrayLast
+        // ?category_explorer=5
+        // prevUrlParamsArrayLast
+        // {category_explorer: "5"}
         
         const validPostcode = postcodeValidator(postcode, 'UK');
         if (validPostcode) {
             localStorage.setItem("postcode", postcode);
+            let push = "?postcode="+postcode+"&service_search";
+            let params = {"postcode": postcode, "search_service": undefined};
 
-            // replace prevUrlParams.postcode value
-            const urlArray = prevUrl.substring(1).split(/[&;]/g);
-            console.log("urlArray");
-            console.log(urlArray);
-            console.log("prevUrl");
-            console.log(prevUrl);
-            for (const [key, value] of Object.entries(prevUrlParams)) {
-                if (key == "postcode" && value !== "") {
-                    prevUrlParams.postcode = postcode;
-
-
-                    let paramObj = {};
-                    const arrayLength = urlArray.length;
-                    for (let i = 0; i < arrayLength; i++) {
-                        const queryKeyValue = urlArray[i].split("=");
-                        if (queryKeyValue.includes("postcode")) {
-                            queryKeyValue[1] = postcode;
-                        }
-                        paramObj[queryKeyValue[0]] = queryKeyValue[1];
+            if (prevUrl.length !== 0 && prevUrlParams.length !== 0) {
+                push = prevUrlArrayLast;
+                params = prevUrlParamsArrayLast;
+                
+                // if service exists in prevUrlParams
+                const serviceObj = prevUrlParams.find(serviceObj => serviceObj.service);
+                if (serviceObj !== undefined) {
+                    push = "?" + new URLSearchParams(serviceObj).toString();
+                    push = push.replaceAll("=undefined", "");
+                    params = serviceObj;
+                } else {
+                    // if postcode exists in prevUrlParams
+                    let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
+                    if (ListServicesPostcodeObj !== undefined) {
+                        // replace previous postcode with new value
+                        ListServicesPostcodeObj.postcode = postcode;
+                        push = "?" + new URLSearchParams(ListServicesPostcodeObj).toString();
+                        push = push.replaceAll("=undefined", "");
+                        params = ListServicesPostcodeObj;
                     }
-
-                    // convert object to query string and remove =undefined from string
-                    updatePrevUrl = "?" + new URLSearchParams(paramObj).toString();
-                    updatePrevUrl = updatePrevUrl.replaceAll("=undefined", "");
-                    updatePrevUrl = [updatePrevUrl];
+                    // if service_search exists in prevUrlParams
+                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
+                    if (ListServicesSearchObj !== undefined) {
+                        push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
+                        push = push.replaceAll("=undefined", "");
+                        params = ListServicesSearchObj;
+                    }
                 }
             }
 
-            history.push(updatePrevUrl);
-            setUrl(updatePrevUrl);
-            setUrlParams(prevUrlParams);
+            history.push(push);
+            setUrl(push);
+            setUrlParams(params);
         }
     }
 

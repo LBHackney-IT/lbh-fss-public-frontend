@@ -21,10 +21,10 @@ const ListServices = ({ categories = [], onClick }) => {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
     const arrayLength = queryParts.length;
     for (let i = 0; i < arrayLength; i++) {
-        const queryKeyValue = queryParts[i].split("=");
-        if (paramsArray.includes(queryKeyValue[0])) {
-            paramObj[queryKeyValue[0]] = queryKeyValue[1];
-        } 
+      const queryKeyValue = queryParts[i].split("=");
+      if (paramsArray.includes(queryKeyValue[0])) {
+        paramObj[queryKeyValue[0]] = queryKeyValue[1];
+      } 
     }
   }
 
@@ -53,7 +53,6 @@ const ListServices = ({ categories = [], onClick }) => {
       createParamObj(currentSearch, paramsArray);
       prevUrlParamsArray.push(paramObj);
       setPrevUrlParams(prevUrlParamsArray);
-
     }
 
   }, [setData, setIsLoading]);
