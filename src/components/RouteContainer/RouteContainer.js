@@ -47,7 +47,12 @@ const RouteContainer = (props) => {
 
     const ServiceCardEvent = e => {
         const serviceArray = [];
+        console.log("routercontainer servicecardevent url");
+        console.log(url);
         const urlArray = url.substring(1).split(/[&;]/g);
+        let prevUrlArray = prevUrl;
+        let prevUrlParamsArray = prevUrlParams;
+
         for (const [key, value] of Object.entries(urlParams)) {
             if (removeQuery.includes(key)) {
                 if (value) {
@@ -60,31 +65,23 @@ const RouteContainer = (props) => {
             }
         }
 
-        const currentSearch = window.location.search;
-        if (currentSearch) {
-            setUrl(currentSearch);
-            let arr = [url];
-            let paramObj = {};
-            const queryParts = currentSearch.substring(1).split(/[&;]/g);
-            const arrayLength = queryParts.length;
-            for (let i = 0; i < arrayLength; i++) {
-                const queryKeyValue = queryParts[i].split("=");
-                if (paramsArray.includes(queryKeyValue[0])) {
-                    paramObj[queryKeyValue[0]] = queryKeyValue[1];
-                } 
-            }
-            setPrevUrl(arr);
-            setPrevUrlParams(paramObj);
-        }
-
-
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
         const updatedUrl = "?service=" + e + newServiceUrl;
+        const newServiceObj = {service: e.toString()};
         history.push(updatedUrl);
+
         setUrl(updatedUrl);
         setPage("ServiceDetail");
-        setUrlParams({service: e.toString()});
+        setUrlParams(newServiceObj);
+
+        // setPrevUrl
+        prevUrlArray.push(updatedUrl);
+        setPrevUrl(prevUrlArray);
+
+        // setPrevUrlParams
+        prevUrlParamsArray.push(newServiceObj);
+        setPrevUrlParams(prevUrlParamsArray);
     };
 
     // console.log("RouteContainer");

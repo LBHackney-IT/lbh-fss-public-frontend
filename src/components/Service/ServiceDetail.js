@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { darken } from "polished";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import {
     Accordion,
@@ -142,10 +143,25 @@ export const AccordionContainer = styled.div`
 const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams} = useContext(UrlParamsContext);
+    const currentSearch = window.location.search;
+
+    const setUrls = (currentSearch) => {
+        if (currentSearch) {
+            // setUrl(currentSearch);
+            // let arr = prevUrl;
+            // arr.push(currentSearch);
+            // console.log("ServiceDetail arr");
+            // console.log(arr);
+            // setPrevUrl(arr);
+            // setPrevUrlParams(paramObj);
+        }
+    }
 
     useEffect(() => {
         async function fetchData() {
+            setUrls(currentSearch);
             let serviceId = "";
             if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "service" && Object.entries(urlParams)[0][1] !== "") {
                 serviceId = parseInt(Object.entries(urlParams)[0][1]);

@@ -30,9 +30,21 @@ const PostcodeButton = () => {
     let postcode = "Set your postcode";
     const path = "?set_postcode=true";
 
+    // console.log("postcodeButton url");
+    // console.log(url); // ?service=7
+    // console.log("postcodeButton prevUrl");
+    // console.log(prevUrl); // []
+
     const handleEvent = e => {
-        setPrevUrl([url]);
-        setPrevUrlParams(urlParams);
+        let pushedPrevUrl = prevUrl;
+        // pushedPrevUrl.push(prevUrl);
+        console.log("postcodeButton pushedPrevUrl1");
+        console.log(pushedPrevUrl);
+        // pushedPrevUrl = pushedPrevUrl.push(url);
+        // console.log("postcodeButton pushedPrevUrl2");
+        // console.log(pushedPrevUrl);
+        // setPrevUrl(pushedPrevUrl);
+        // setPrevUrlParams(urlParams);
 
         history.push(path);
         setUrl(path);
@@ -41,7 +53,7 @@ const PostcodeButton = () => {
 
     // check if url has valid postcode
     for (const [key, value] of Object.entries(urlParams)) {
-        if (key == "postcode" && value !== "") {
+        if (key == "postcode" && value !== undefined) {
             const postcode = value.replace("%20", " ");
             const validPostcode = postcodeValidator(postcode, 'UK');
             if (validPostcode) {

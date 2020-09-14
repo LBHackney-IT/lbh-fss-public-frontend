@@ -35,6 +35,11 @@ const SetPostcode = () => {
     const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
 
+
+
+    // TODO fix ?service=7 > set_postcode > submit
+
+
     useEffect(() => {
         setIsLoading(false);
     }, [setIsLoading]);
@@ -42,13 +47,19 @@ const SetPostcode = () => {
     async function submitForm({ postcode }) {
         if (isLoading) return;
         let updatePrevUrl = [prevUrl];
-
+        const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+        const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+        
         const validPostcode = postcodeValidator(postcode, 'UK');
         if (validPostcode) {
             localStorage.setItem("postcode", postcode);
 
             // replace prevUrlParams.postcode value
             const urlArray = prevUrl.substring(1).split(/[&;]/g);
+            console.log("urlArray");
+            console.log(urlArray);
+            console.log("prevUrl");
+            console.log(prevUrl);
             for (const [key, value] of Object.entries(prevUrlParams)) {
                 if (key == "postcode" && value !== "") {
                     prevUrlParams.postcode = postcode;

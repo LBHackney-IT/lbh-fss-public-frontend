@@ -4,6 +4,7 @@ import ListCategories from "../Category/ListCategories";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import FormInput from "../FormInput/FormInput";
 import FormInputSubmit from "../FormInputSubmit/FormInputSubmit";
 import Button from "../Button/Button";
@@ -29,6 +30,7 @@ const Home = () => {
     const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
@@ -36,34 +38,45 @@ const Home = () => {
     const postcodeRef = useRef();
     const currentSearch = window.location.search;
     const storedPostcode = localStorage.getItem("postcode");
+    let prevUrlArray = [""];
+    let paramObj = {};
+    let prevUrlParamsArray = [{}];
 
-    const storeQuery = (e) => {
-        let paramObj = {};
-        const currentSearch = window.location.search;
-        if (currentSearch) {
-          setUrl(currentSearch);
-  
-          const queryParts = currentSearch.substring(1).split(/[&;]/g);
-          const arrayLength = queryParts.length;
-          for (let i = 0; i < arrayLength; i++) {
+    function createParamObj(currentSearch, paramsArray) {
+        const queryParts = currentSearch.substring(1).split(/[&;]/g);
+        const arrayLength = queryParts.length;
+        for (let i = 0; i < arrayLength; i++) {
             const queryKeyValue = queryParts[i].split("=");
             if (paramsArray.includes(queryKeyValue[0])) {
-              if (queryKeyValue[1]) {
                 paramObj[queryKeyValue[0]] = queryKeyValue[1];
-              }
             } 
-          }
-          setUrlParams(paramObj);
+        }
+    }
+
+    const storeQuery = (e) => {
+        const currentSearch = window.location.search;
+        if (currentSearch) {
+            setUrl(currentSearch);
+            createParamObj(currentSearch, paramsArray);
+            
+            setUrlParams(paramObj);
         }
         setIsLoading(false);
     }
 
-    const setUrls = (currentSearch) => {
+    const setPreviousUrls = (currentSearch) => {
         if (currentSearch) {
             setUrl(currentSearch);
-            let arr = [url];
-            arr.push(currentSearch);
-            setPrevUrl(arr);
+
+            // setPrevUrl
+            prevUrlArray.push(currentSearch); // (2) ["", "?postcode=GL543ND&service_search"] // PUSHING NEWLY LOADED URL TO prevUrlArray
+            setPrevUrl(prevUrlArray);
+
+            // setPrevUrlParams
+            createParamObj(currentSearch, paramsArray);
+            prevUrlParamsArray.push(paramObj);
+            setPrevUrlParams(prevUrlParamsArray);
+            
         }
     }
 
@@ -72,9 +85,11 @@ const Home = () => {
     }, [setIsLoading]);
 
     const handleEvent = e => {
-        setQuery({ category_explorer: ~~ e }, 'pushIn')
+        setQuery({ category_explorer: ~~ e }, 'pushIn');
         storeQuery();
-        setUrls(currentSearch);
+        const currentSearch = window.location.search;
+        setPreviousUrls(currentSearch);
+        
     };
 
     async function submitForm({ postcode, service_search }) {
@@ -89,7 +104,7 @@ const Home = () => {
                 history.push("?postcode=" + postcode + "&service_search");
             }
             const currentSearch = window.location.search;
-            setUrls(currentSearch);
+            setPreviousUrls(currentSearch);
             setUrlParams({postcode: postcode, service_search: undefined});
         // TODO add keyword search
         } else {
