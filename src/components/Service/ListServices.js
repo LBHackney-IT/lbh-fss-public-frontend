@@ -39,7 +39,7 @@ const ListServices = ({ categories = [], onClick }) => {
     }
     fetchData();
 
-    if (prevUrl == 0 && prevUrlParams == 0) {
+    if (prevUrl.length == 0 && prevUrlParams.length == 0) {
       let prevUrlArray = [""];
       let prevUrlParamsArray = [{}];
 
