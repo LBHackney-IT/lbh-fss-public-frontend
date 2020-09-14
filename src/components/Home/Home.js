@@ -35,6 +35,7 @@ const Home = () => {
     const { register, handleSubmit, errors, reset } = useForm();
     const postcodeRef = useRef();
     const currentSearch = window.location.search;
+    const storedPostcode = localStorage.getItem("postcode");
 
     const storeQuery = (e) => {
         let paramObj = {};
@@ -113,6 +114,7 @@ const Home = () => {
                             name="postcode"
                             inputRef={postcodeRef}
                             register={register}
+                            defaultValue={storedPostcode}
                             validate={{
                                 pattern: (value) => {
                                     return (
