@@ -65,7 +65,7 @@ const RouteContainer = (props) => {
 
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
-        const updatedUrl = "?service=" + e + newServiceUrl;
+        const updatedUrl = "?service=" + e;
         const newServiceObj = {service: e.toString()};
         history.push(updatedUrl);
 
@@ -73,7 +73,6 @@ const RouteContainer = (props) => {
         setPage("ServiceDetail");
         setUrlParams(newServiceObj);
 
-        // setPrevUrl
         prevUrlArray.push(updatedUrl);
         setPrevUrl(prevUrlArray);
 

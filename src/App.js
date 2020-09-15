@@ -54,7 +54,7 @@ function App() {
     }
     storeQuery();
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
-  
+
   return (
     isLoading ? <AppLoading /> :
     (
