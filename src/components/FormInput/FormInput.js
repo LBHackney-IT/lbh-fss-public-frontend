@@ -35,20 +35,6 @@ const FormInput = ({
 }) => {
   return (
     <>
-      <StyledLabel htmlFor={name}>{label}</StyledLabel>
-      {help ? <StyledHelp>{help}</StyledHelp> : ""}
-      <StyledInput
-        aria-label={name}
-        name={name}
-        placeholder={placeholder}
-        type={type}
-        ref={(e) => {
-          register(e, { required, minLength, maxLength, validate });
-          if (inputRef) inputRef.current = e;
-        }}
-        defaultValue={defaultValue}
-        aria-invalid={error ? "true" : "false"}
-      />
       {error && error.type === "required" && (
         <FormError error={`${label} is required.`} />
       )}
@@ -63,6 +49,20 @@ const FormInput = ({
         />
       )}
       {error && error.message && <FormError error={error.message} />}
+      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      {help ? <StyledHelp>{help}</StyledHelp> : ""}
+      <StyledInput
+        aria-label={name}
+        name={name}
+        placeholder={placeholder}
+        type={type}
+        ref={(e) => {
+          register(e, { required, minLength, maxLength, validate });
+          if (inputRef) inputRef.current = e;
+        }}
+        defaultValue={defaultValue}
+        aria-invalid={error ? "true" : "false"}
+      />
     </>
   );
 };

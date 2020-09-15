@@ -47,8 +47,6 @@ const RouteContainer = (props) => {
 
     const ServiceCardEvent = e => {
         const serviceArray = [];
-        console.log("routercontainer servicecardevent url");
-        console.log(url);
         const urlArray = url.substring(1).split(/[&;]/g);
         let prevUrlArray = prevUrl;
         let prevUrlParamsArray = prevUrlParams;

@@ -62,6 +62,20 @@ const FormInputSubmit = ({
 }) => {
   return (
     <>
+      {error && error.type === "required" && (
+        <FormError error={`${label} is required.`} />
+      )}
+      {error && error.type === "maxLength" && (
+        <FormError error="Max length exceeded." />
+      )}
+      {error && error.type === "minLength" && (
+        <FormError
+          error={`${label} must be at least ${minLength} ${
+            type === "number" ? "digits" : "characters"
+          }.`}
+        />
+      )}
+      {error && error.message && <FormError error={error.message} />}
       <StyledLabel htmlFor={name}>{label}</StyledLabel>
       {help ? <StyledHelp>{help}</StyledHelp> : ""}
       <StyledInputContainer>
@@ -79,20 +93,6 @@ const FormInputSubmit = ({
         {/* <StyledButton type="submit" label="Login" disabled={isLoading} /> */}
         <StyledButton type="submit" label="Submit" />
       </StyledInputContainer>
-      {error && error.type === "required" && (
-        <FormError error={`${label} is required.`} />
-      )}
-      {error && error.type === "maxLength" && (
-        <FormError error="Max length exceeded." />
-      )}
-      {error && error.type === "minLength" && (
-        <FormError
-          error={`${label} must be at least ${minLength} ${
-            type === "number" ? "digits" : "characters"
-          }.`}
-        />
-      )}
-      {error && error.message && <FormError error={error.message} />}
     </>
   );
 };

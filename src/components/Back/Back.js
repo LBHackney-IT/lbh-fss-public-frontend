@@ -27,7 +27,7 @@ const Back = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const storedPostcode = localStorage.getItem("postcode");
-
+    
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
@@ -48,41 +48,43 @@ const Back = () => {
             // go back to prevUrl (?category_explorer || ?postcode&service_search || ?service) lastArray object
         // else ?category_explorer && ?postcode&service_search will go back to Home.js
 
-        for (const [key, value] of Object.entries(urlParams)) {
-            // if service detail page
-            if (key == "service" && value !== "") {
-                if (prevUrl.length !== 0) {
-                    // if category_explorer exists in prevUrlParams
-                    const categoryExplorerObj = prevUrlParams.find(categoryExplorerObj => categoryExplorerObj.category_explorer);
-                    if (categoryExplorerObj !== undefined) {
-                        push = "?" + new URLSearchParams(categoryExplorerObj).toString();
-                        params = categoryExplorerObj;
+        if (prevUrl.length !== 0 && prevUrlParams !== 0) {
+            for (const [key, value] of Object.entries(urlParams)) {
+                // if service detail page
+                if (key == "service" && value !== "") {
+                    if (prevUrl.length !== 0) {
+                        // if category_explorer exists in prevUrlParams
+                        const categoryExplorerObj = prevUrlParams.find(categoryExplorerObj => categoryExplorerObj.category_explorer);
+                        if (categoryExplorerObj !== undefined) {
+                            push = "?" + new URLSearchParams(categoryExplorerObj).toString();
+                            params = categoryExplorerObj;
+                        }
+                        // if postcode exists in prevUrlParams
+                        const ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
+                        if (ListServicesPostcodeObj !== undefined) {
+                            push = "?" + new URLSearchParams(ListServicesPostcodeObj).toString();
+                            params = ListServicesPostcodeObj;
+                        }
+                        // if service_search exists in prevUrlParams
+                        const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
+                        if (ListServicesSearchObj !== undefined) {
+                            push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
+                            params = ListServicesSearchObj;
+                        }
+                        push = push.replaceAll("=undefined", "");
+                    } else {
+                        if (storedPostcode) {
+                            push = "?postcode="+storedPostcode+"&service_search";
+                            params = {"postcode": storedPostcode, "search_service": undefined};
+                        }
                     }
-                    // if postcode exists in prevUrlParams
-                    const ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
-                    if (ListServicesPostcodeObj !== undefined) {
-                        push = "?" + new URLSearchParams(ListServicesPostcodeObj).toString();
-                        params = ListServicesPostcodeObj;
-                    }
-                    // if service_search exists in prevUrlParams
-                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
-                    if (ListServicesSearchObj !== undefined) {
-                        push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
-                        params = ListServicesSearchObj;
-                    }
-                    push = push.replaceAll("=undefined", "");
-                } else {
-                    if (storedPostcode) {
-                        push = "?postcode="+storedPostcode+"&service_search";
-                        params = {"postcode": storedPostcode, "search_service": undefined};
-                    }
+                // else if a middlelayer page i.e. setting postcode, selecting categories or demographics
+                } else if ((key == "set_postcode" || key == "select_categories" || key == "select_demographics") && value == "true") {
+                    push = prevUrlArrayLast;
+                    params = prevUrlParamsArrayLast;
                 }
-            // else if a middlelayer page i.e. setting postcode, selecting categories or demographics
-            } else if ((key == "set_postcode" || key == "select_categories" || key == "select_demographics") && value == "true") {
-                push = prevUrlArrayLast;
-                params = prevUrlParamsArrayLast;
+                // anything else (category explorer / list services) will use default route
             }
-            // anything else (category explorer / list services) will use default route
         }
         
         history.push(push);

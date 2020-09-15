@@ -15,13 +15,29 @@ import history from '../../history';
 
 export const SetPostcodeContainer = styled.div`
     padding: 20px 15px;
+    h2 {
+        font-size: 27px;
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
+    p {
+        font-size: 19px;
+        color: #525A5B;
+    }
+    input[name=postcode] {
+        border: 2px solid #0B0C0C;
+        box-sizing: border-box;
+        border-radius: 3px;
+    }
     span[role=alert] {
-        colour: #BE3A34;
+        color: #BE3A34;
     }
 `;
 
 const StyledButton = styled(Button)`
     width: 100%;
+    border-radius: 3px;
+    border-bottom: 2px solid #000;
 `;
 
 const SetPostcode = () => {
@@ -29,16 +45,10 @@ const SetPostcode = () => {
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    // const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
     const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
-
-
-
-    // TODO fix ?service=7 > set_postcode > submit
-
 
     useEffect(() => {
         setIsLoading(false);
@@ -48,16 +58,6 @@ const SetPostcode = () => {
         if (isLoading) return;
         const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
         const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
-        console.log("prevUrlParams");
-        console.log(prevUrlParams);
-        console.log("prevUrlParamsArrayLast");
-        console.log(prevUrlParamsArrayLast);
-        // need to check if prev exists
-        
-        // prevUrlArrayLast
-        // ?category_explorer=5
-        // prevUrlParamsArrayLast
-        // {category_explorer: "5"}
         
         const validPostcode = postcodeValidator(postcode, 'UK');
         if (validPostcode) {

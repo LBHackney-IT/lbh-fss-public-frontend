@@ -147,21 +147,8 @@ const ServiceDetail = () => {
     const {urlParams} = useContext(UrlParamsContext);
     const currentSearch = window.location.search;
 
-    const setUrls = (currentSearch) => {
-        if (currentSearch) {
-            // setUrl(currentSearch);
-            // let arr = prevUrl;
-            // arr.push(currentSearch);
-            // console.log("ServiceDetail arr");
-            // console.log(arr);
-            // setPrevUrl(arr);
-            // setPrevUrlParams(paramObj);
-        }
-    }
-
     useEffect(() => {
         async function fetchData() {
-            setUrls(currentSearch);
             let serviceId = "";
             if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "service" && Object.entries(urlParams)[0][1] !== "") {
                 serviceId = parseInt(Object.entries(urlParams)[0][1]);

@@ -65,10 +65,7 @@ const ListServices = ({ categories = [], onClick }) => {
   const select = e => {
     onClick(e);
   }
-  // console.log("ListServices urlParams");
-  // console.log(urlParams);
 
-  // console.log("ListServices.js");
   return(
     <div>
       {!data.length ? (
