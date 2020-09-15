@@ -3,6 +3,8 @@ import CategoryExplorer from "../Category/CategoryExplorer";
 import ListServices from "../Service/ListServices";
 import ServiceDetail from "../Service/ServiceDetail";
 import SetPostcode from "../Postcode/SetPostcode";
+import SelectCategories from "../SelectCategories/SelectCategories";
+import SelectDemographics from "../SelectDemographics/SelectDemographics";
 import AppLoading from "../../AppLoading";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -89,8 +91,8 @@ const RouteContainer = (props) => {
             ( page == "ServiceDetail" ) ? <ServiceDetail service={service} /> :
             ( page == "ListServices") ? <ListServices onClick={ ServiceCardEvent} /> :
             ( page == "SetPostcode") ? <SetPostcode /> :
-            // ( page == "SelectCategories") ? <SelectCategories /> :
-            // ( page == "SelectDemographics") ? <SelectDemographics /> :
+            ( page == "SelectCategories") ? <SelectCategories /> :
+            ( page == "SelectDemographics") ? <SelectDemographics /> :
             <Home />
         )   
     )

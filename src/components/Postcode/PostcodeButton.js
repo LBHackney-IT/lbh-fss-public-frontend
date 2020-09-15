@@ -11,7 +11,7 @@ const PostcodeButtonContainer = styled.button`
     background: #005E48;
     color: #fff;
     border: 0;
-    padding: 10px 15px;
+    padding: 20px 15px;
     cursor: pointer;
     text-transform: uppercase;
     &::before {

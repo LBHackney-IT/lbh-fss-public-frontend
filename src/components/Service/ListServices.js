@@ -6,6 +6,7 @@ import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import Header from "../Header/Header";
+import ServiceFilter from '../ServiceFilter/ServiceFilter';
 
 const ListServices = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -73,7 +74,7 @@ const ListServices = ({ categories = [], onClick }) => {
       ) : (
         <div>
           <Header />
-          <div>{`{Categories | Filters}`}</div>
+          <ServiceFilter />
           <CardContainer>
             <div>View as: {`{List | Map}`}</div>
             {data.map((service, index) => {

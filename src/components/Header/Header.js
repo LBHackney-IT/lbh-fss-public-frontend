@@ -12,6 +12,7 @@ const HeaderContainer = styled.div`
     background: #00664F;
     justify-content: space-between;
     border-bottom: 1px solid #7FB2A7;
+    height: 60px;
 `;
 
 const Header = () => {  

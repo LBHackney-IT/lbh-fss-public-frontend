@@ -10,6 +10,7 @@ import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import styled from "styled-components";
+import ServiceFilter from '../ServiceFilter/ServiceFilter';
 
 export const CategoryCardContainer = styled.div`
   .card {
@@ -97,9 +98,7 @@ const CategoryExplorer = ({ category, onClick }) => {
       ) : (
         <div>
           <Header />
-          <div>
-            {`{Filters}`}
-          </div>
+          <ServiceFilter />
           <CategoryCardContainer>
             <CategoryCard
               key={categoryData[0].id}
