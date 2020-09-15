@@ -11,9 +11,17 @@ const PostcodeButtonContainer = styled.button`
     background: #005E48;
     color: #fff;
     border: 0;
-    padding: 20px 15px;
+    padding: 10px 15px;
     cursor: pointer;
-    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    width: 130px;
+    text-align: left;
+    &.postcode-set {
+        background: #005E48;
+        padding: 20px 15px;
+        text-transform: uppercase;
+    }
     &::before {
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
@@ -29,6 +37,7 @@ const PostcodeButton = () => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     let postcode = "Set your postcode";
     const path = "?set_postcode=true";
+    let buttonModifier = "";
 
     const handleEvent = e => {
         history.push(path);
@@ -48,10 +57,13 @@ const PostcodeButton = () => {
     }
 
     const storedPostcode = localStorage.getItem("postcode");
-    if (storedPostcode) postcode = storedPostcode;
+    if (storedPostcode) {
+        postcode = storedPostcode;
+        buttonModifier = 'postcode-set';
+    }
 
     return (
-        <PostcodeButtonContainer onClick={handleEvent}>
+        <PostcodeButtonContainer className={buttonModifier} onClick={handleEvent}>
             {postcode}
         </PostcodeButtonContainer>
     );
