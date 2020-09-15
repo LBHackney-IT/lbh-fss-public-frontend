@@ -72,9 +72,7 @@ const SetPostcode = () => {
                 // if service exists in prevUrlParams
                 const serviceObj = prevUrlParams.find(serviceObj => serviceObj.service);
                 if (serviceObj !== undefined) {
-                    push = "?" + new URLSearchParams(serviceObj).toString();
-                    push = push.replaceAll("=undefined", "");
-                    params = serviceObj;
+                    //
                 } else {
                     // if postcode exists in prevUrlParams
                     let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
