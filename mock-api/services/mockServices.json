@@ -380,8 +380,8 @@
     },
     "locations": [
       {
-        "latitude": "-28.5286",
-        "longitude": "-66.7379",
+        "latitude": "51.540730",
+        "longitude": "-0.067119", 
         "uprn": 96511,
         "address1": "6255 Kohler Courts",
         "address2": "30840 Waelchi Freeway",
@@ -1383,8 +1383,8 @@
     },
     "locations": [
       {
-        "latitude": "85.2515",
-        "longitude": "-48.3989",
+        "latitude": "51.550337",
+        "longitude": "-0.078277",
         "uprn": 71725,
         "address1": "847 Winnifred Loaf",
         "address2": "31957 Romaguera Island",
@@ -3483,8 +3483,8 @@
     },
     "locations": [
       {
-        "latitude": "31.7430",
-        "longitude": "24.1775",
+        "latitude": "51.552472",
+        "longitude": "-0.067119",
         "uprn": 96654,
         "address1": "0407 Stracke Mills",
         "address2": "504 Vance Unions",
@@ -5254,8 +5254,8 @@
     },
     "locations": [
       {
-        "latitude": "42.1154",
-        "longitude": "-162.4746",
+        "latitude": "51.552210",
+        "longitude": "-0.051590",
         "uprn": 14497,
         "address1": "1767 Damon Fields",
         "address2": "858 Royce Stravenue",
@@ -9258,8 +9258,8 @@
     },
     "locations": [
       {
-        "latitude": "-52.3935",
-        "longitude": "156.1129",
+        "latitude": "51.519230",
+        "longitude": "-0.041700",
         "uprn": 66867,
         "address1": "60978 Amalia Hollow",
         "address2": "7096 Ruecker Parks",
