@@ -13,4 +13,7 @@ export const StyledInput = styled.input`
         max-width: 438px;
 
     `}
+    &[aria-invalid="true"] {
+        border-color: #BE3A34 !important;
+    }
 `;

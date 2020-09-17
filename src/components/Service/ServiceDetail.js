@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { darken } from "polished";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import {
     Accordion,
     AccordionItem,
@@ -14,6 +16,7 @@ import {
     AccordionItemPanel,
 } from 'react-accessible-accordion';
 import Address from "../Address/Address";
+import Header from "../Header/Header";
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -142,6 +145,22 @@ const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const {urlParams} = useContext(UrlParamsContext);
+    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+    const currentSearch = window.location.search;
+    let paramObj = {};
+
+    function createParamObj(currentSearch, paramsArray) {
+        const queryParts = currentSearch.substring(1).split(/[&;]/g);
+        const arrayLength = queryParts.length;
+        for (let i = 0; i < arrayLength; i++) {
+            const queryKeyValue = queryParts[i].split("=");
+            if (paramsArray.includes(queryKeyValue[0])) {
+                paramObj[queryKeyValue[0]] = queryKeyValue[1];
+            } 
+        }
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -155,6 +174,22 @@ const ServiceDetail = () => {
         }
         fetchData();
 
+        if (prevUrl.length == 0 && prevUrlParams.length == 0) {
+            let prevUrlArray = [""];
+            let prevUrlParamsArray = [{}];
+      
+            // setPrevUrl
+            if (currentSearch) {
+                prevUrlArray.push(currentSearch);
+                setPrevUrl(prevUrlArray);
+            }
+      
+            // setPrevUrlParams
+            createParamObj(currentSearch, paramsArray);
+            prevUrlParamsArray.push(paramObj);
+            setPrevUrlParams(prevUrlParamsArray);
+        }
+
     }, [setData, setIsLoading]);
 
     let hero = "";
@@ -166,6 +201,7 @@ const ServiceDetail = () => {
             <AppLoading />
         ) : (
         <DetailContainer>
+            <Header />
             {hero.length ? (
                 <div className="image-container">
                     <img src={hero} alt={data.name} />

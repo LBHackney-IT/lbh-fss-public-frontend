@@ -6,8 +6,11 @@ import ServiceCard from "../Service/ServiceCard";
 import CategoryCard from "../Category/CategoryCard";
 import Header from "../Header/Header";
 import MapView from "../MapView/MapView";
+import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import styled from "styled-components";
+import ServiceFilter from '../ServiceFilter/ServiceFilter';
 
 export const CategoryCardContainer = styled.div`
   .card {
@@ -30,7 +33,22 @@ const CategoryExplorer = ({ category, onClick }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {urlParams} = useContext(UrlParamsContext);
+  const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+  const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+  const currentSearch = window.location.search;
+  let paramObj = {};
 
+  function createParamObj(currentSearch, paramsArray) {
+    const queryParts = currentSearch.substring(1).split(/[&;]/g);
+    const arrayLength = queryParts.length;
+    for (let i = 0; i < arrayLength; i++) {
+      const queryKeyValue = queryParts[i].split("=");
+      if (paramsArray.includes(queryKeyValue[0])) {
+        paramObj[queryKeyValue[0]] = queryKeyValue[1];
+      } 
+    }
+  }
   useEffect(() => {
     async function fetchData() {
       let categoryId = "";
@@ -46,6 +64,22 @@ const CategoryExplorer = ({ category, onClick }) => {
       setIsLoading(false);
     }
     fetchData();
+
+    if (prevUrl.length == 0 && prevUrlParams.length == 0) {
+      let prevUrlArray = [""];
+      let prevUrlParamsArray = [{}];
+
+      // setPrevUrl
+      if (currentSearch) {
+        prevUrlArray.push(currentSearch);
+        setPrevUrl(prevUrlArray);
+      }
+
+      // setPrevUrlParams
+      createParamObj(currentSearch, paramsArray);
+      prevUrlParamsArray.push(paramObj);
+      setPrevUrlParams(prevUrlParamsArray);
+    }
 
   }, [setData, setCategoryData, setIsLoading]);
 
@@ -63,12 +97,8 @@ const CategoryExplorer = ({ category, onClick }) => {
         <h2>No data Found</h2>
       ) : (
         <div>
-          <div>
-            <Header />
-          </div>
-          <div>
-            {`{Filters}`}
-          </div>
+          <Header />
+          <ServiceFilter />
           <CategoryCardContainer>
             <CategoryCard
               key={categoryData[0].id}
