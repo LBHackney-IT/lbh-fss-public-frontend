@@ -78,11 +78,19 @@ const Back = () => {
                             push = "?" + new URLSearchParams(categoryExplorerObj).toString();
                             params = categoryExplorerObj;
                         } else if (listServicesSearchObj !== undefined) {
-                            // if service_search exists in prevUrlParams
+                        // if service_search exists in prevUrlParams
+                            // if user has set a postcode
+                            if (storedPostcode) {
+                                listServicesSearchObj.postcode = storedPostcode;
+                            }
                             push = "?" + new URLSearchParams(listServicesSearchObj).toString();
                             params = listServicesSearchObj;
                         } else if (listServicesPostcodeObj !== undefined) {
-                            // if postcode exists in prevUrlParams
+                        // if postcode exists in prevUrlParams
+                            // if user has set a postcode
+                            if (storedPostcode) {
+                                listServicesPostcodeObj.postcode = storedPostcode;
+                            }
                             push = "?" + new URLSearchParams(listServicesPostcodeObj).toString();
                             params = listServicesPostcodeObj;
                         } else {

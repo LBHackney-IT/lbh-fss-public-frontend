@@ -68,27 +68,28 @@ const SetPostcode = () => {
             if (prevUrl.length !== 0 && prevUrlParams.length !== 0) {
                 push = prevUrlArrayLast;
                 params = prevUrlParamsArrayLast;
-                
-                // if service exists in prevUrlParams
-                const serviceObj = prevUrlParams.find(serviceObj => serviceObj.service);
-                if (serviceObj !== undefined) {
+
+                // checking if previous page is service
+                if (prevUrlParamsArrayLast.service !== undefined) {
                     //
                 } else {
-                    // if postcode exists in prevUrlParams
+                // catch all for list services
+                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
                     let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
-                    if (ListServicesPostcodeObj !== undefined) {
+                    if (ListServicesSearchObj !== undefined) {
+                    // if service_search exists in prevUrlParams
+                        // replace previous postcode with new value
+                        ListServicesSearchObj.postcode = postcode;
+                        push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
+                        push = push.replaceAll("=undefined", "");
+                        params = ListServicesSearchObj;
+                    } else if (ListServicesPostcodeObj !== undefined) {
+                    // if postcode exists in prevUrlParams
                         // replace previous postcode with new value
                         ListServicesPostcodeObj.postcode = postcode;
                         push = "?" + new URLSearchParams(ListServicesPostcodeObj).toString();
                         push = push.replaceAll("=undefined", "");
                         params = ListServicesPostcodeObj;
-                    }
-                    // if service_search exists in prevUrlParams
-                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
-                    if (ListServicesSearchObj !== undefined) {
-                        push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
-                        push = push.replaceAll("=undefined", "");
-                        params = ListServicesSearchObj;
                     }
                 }
             }
