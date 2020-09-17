@@ -65,9 +65,8 @@ function App() {
               <PrevUrlContext.Provider value={prevUrlValue}>
                 <PrevUrlParamsContext.Provider value={prevUrlParamsValue}>
                   <SidebarContainer>
-                    { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home />  }
+                    { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home /> }
                   </SidebarContainer>
-                  <Map />
                   <GlobalStyle />
                 </PrevUrlParamsContext.Provider>
               </PrevUrlContext.Provider>

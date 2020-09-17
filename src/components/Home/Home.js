@@ -13,6 +13,8 @@ import { useQueryParams, NumberParam } from 'use-query-params';
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
+import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import {MapContainer} from "../../util/styled-components/MapContainer";
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
@@ -41,6 +43,7 @@ const Home = () => {
     let prevUrlArray = [""];
     let paramObj = {};
     let prevUrlParamsArray = [{}];
+    const position = [51.517787, -0.097059];
 
     function createParamObj(currentSearch, paramsArray) {
         const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -113,7 +116,6 @@ const Home = () => {
     
     }
 
-    // console.log('Home');
     return (
         isLoading ? (
             <AppLoading />
@@ -150,6 +152,15 @@ const Home = () => {
                     </form>
                 </HomeHeader>
                 <ListCategories onClick={handleEvent} />
+                <MapContainer>
+                <Map center={position} zoom={14} zoomControl={false}>
+                    <ZoomControl position='topright' />
+                    <TileLayer
+                        attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
+                        url="https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q"
+                    />
+                    </Map>
+                </MapContainer>
             </div>
             </>
         )

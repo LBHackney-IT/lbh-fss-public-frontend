@@ -11,6 +11,10 @@ import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import styled from "styled-components";
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
+import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import {MapContainer} from "../../util/styled-components/MapContainer";
+import { renderToStaticMarkup } from "react-dom/server";
+import { divIcon } from "leaflet";
 
 export const CategoryCardContainer = styled.div`
   .card {
@@ -38,6 +42,7 @@ const CategoryExplorer = ({ category, onClick }) => {
   const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
+  const position = [51.517787, -0.097059];
 
   function createParamObj(currentSearch, paramsArray) {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -113,6 +118,46 @@ const CategoryExplorer = ({ category, onClick }) => {
               );
             })}
           </CardContainer>
+          <MapContainer>
+            <Map center={position} zoom={14} zoomControl={false}>
+              <ZoomControl position='topright' />
+              {/* <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+              /> */}
+              <TileLayer
+                  attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
+                  url="https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q"
+              />
+              {
+                data.map((service, index) => {
+                  const point = [parseFloat(service['locations'][0]['latitude']), parseFloat(service['locations'][0]['longitude'])];
+
+                  const categoriesSorted = service["categories"].sort(function (a, b) {
+                    return a.weight - b.weight;
+                  });
+                  const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                  const iconMarkup = renderToStaticMarkup(
+                    <div className="hackney-map-marker">
+                      <i className=" fa fa-map-marker-alt fa-3x" data-category-icon={categoryIconName} />
+                      <i className=" fa fa-map-marker fa-3x" />
+                    </div>
+                  );
+                  const customMarkerIcon = divIcon({
+                    html: iconMarkup
+                  });
+
+                  return (
+                    <Marker position={point} key={service['id']} icon={customMarkerIcon} >
+                      <Popup>
+                        <ServiceCard key={index} service={service} onClick={select} />
+                      </Popup>
+                    </Marker>
+                  )
+                })
+              }
+            </Map>
+          </MapContainer>
         </div>
       )}
     </div>

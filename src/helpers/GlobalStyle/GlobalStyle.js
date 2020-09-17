@@ -97,7 +97,7 @@ hr {
       
   `}
   ${breakpoint('md')`
-    padding: 20px;
+    
   `}
 }
 
@@ -124,6 +124,11 @@ hr {
 }
 
 [data-category-icon] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #DF1995;
+    }
+  }
   i {
       background-color: #DF1995;
       &::before {
@@ -132,6 +137,11 @@ hr {
   }
 }
 [data-category-icon="loneliness-or-isolation"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #DF1995;
+    }
+  }
   i {
       background-color: #DF1995;
       &::before {
@@ -140,6 +150,11 @@ hr {
   }
 }
 [data-category-icon="anxiety-or-mental-health"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #FF6A13;
+    }
+  }
   i {
       background-color: #FF6A13;
       &::before {
@@ -148,6 +163,11 @@ hr {
   }
 }
 [data-category-icon="safe-and-healthy-body"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #84BD00;
+    }
+  }
   i {
       background-color: #84BD00;
       &::before {
@@ -156,6 +176,11 @@ hr {
   }
 }
 [data-category-icon="exercise-and-wellbeing"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #E03C31;
+    }
+  }
   i {
       background-color: #E03C31;
       &::before {
@@ -164,6 +189,11 @@ hr {
   }
 }
 [data-category-icon="arts-and-creativity"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #025EA6;
+    }
+  }
   i {
       background-color: #025EA6;
       &::before {
@@ -172,6 +202,11 @@ hr {
   }
 }
 [data-category-icon="food-or-shopping"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #328472;
+    }
+  }
   i {
       background-color: #328472;
       &::before {
@@ -180,6 +215,11 @@ hr {
   }
 }
 [data-category-icon="faith-led-activities"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #0085CA;
+    }
+  }
   i {
       background-color: #0085CA;
       &::before {
@@ -188,6 +228,11 @@ hr {
   }
 }
 [data-category-icon="money-advice"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #81312F;
+    }
+  }
   i {
       background-color: #81312F;
       &::before {
@@ -196,6 +241,11 @@ hr {
   }
 }
 [data-category-icon="employment-advice"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #8031A7;
+    }
+  }
   i {
       background-color: #8031A7;
       &::before {
@@ -204,6 +254,11 @@ hr {
   }
 }
 [data-category-icon="housing-advice"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #2B8CC4;
+    }
+  }
   i {
       background-color: #2B8CC4;
       &::before {
@@ -212,11 +267,64 @@ hr {
   }
 }
 [data-category-icon="immigration-advice"] {
+  &.fa-map-marker-alt {
+    &::before {
+      color: #00664F;
+    }
+  }
   i {
       background-color: #00664F;
       &::before {
           content: "\f129 ";
       }
+  }
+}
+
+/**
+ * Leaflet map styles
+ */
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+  .leaflet-div-icon {
+    background: transparent;
+    border: 0;
+  }
+  .hackney-map-marker {
+    position: relative;
+    left: -10px;
+  }
+  i.fa-map-marker {
+    position: absolute;
+    top: -3px;
+    left: -2px;
+    z-index: -1;
+    color: #fff;
+    font-size: 42px;
+  }
+}
+
+.leaflet-popup {
+  .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    border: 0;
+  }
+  .leaflet-popup-content {
+    ${breakpoint('md')`
+      background: transparent;
+      margin: 0 !important;
+      border: 0;
+    `};
+  }
+  .leaflet-popup-tip-container {
+    display: none;
+  }
+  .card {
+    margin-bottom: 0;
+    border: 0;
   }
 }
 
