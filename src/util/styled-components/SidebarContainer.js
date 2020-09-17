@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import breakpoint from 'styled-components-breakpoint';
+import { light } from "../../settings";
 
 export const SidebarContainer = styled.div`
-    background: #fff;
+    background: ${light["white"]};
     border-radius: 3px;
     width: 100%;
     ${breakpoint('md')`

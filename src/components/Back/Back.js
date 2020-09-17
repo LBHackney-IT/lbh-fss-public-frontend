@@ -5,12 +5,13 @@ import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import history from '../../history';
+import { light } from "../../settings";
 
 const BackButton = styled.button`
     border: 0;
     padding: 10px 15px;
     background: transparent;
-    color: #fff;
+    color: ${light["white"]};
     font-size: 24px;
     cursor: pointer;
     display: flex;

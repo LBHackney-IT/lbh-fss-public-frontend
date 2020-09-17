@@ -3,6 +3,7 @@ import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import styled from "styled-components";
 import { darken } from "polished";
+import { green, light, dark } from "../../settings";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -33,14 +34,14 @@ export const DetailContainer = styled.div`
         }
     }
     .link-button {
-        background: #00664F;
+        background: ${green["main"]};
         border-radius: 3px;
         padding: 15px 30px;
         display: inline-block;
-        color: #fff;
+        color: ${light["white"]};
         text-decoration: none;
         &:hover {
-            background-color: ${darken(0.1, "#00664F")};
+            background-color: ${darken(0.1, green["main"])};
         }
     }
     h3 {
@@ -55,7 +56,7 @@ export const DetailContainer = styled.div`
 `;
 
 const GreyInnerContainer = styled(InnerContainer)`
-    background: #F8F8F8;
+    background: ${light["grey"]};
     margin-bottom: 15px;
     &.info {
         h2 {
@@ -67,7 +68,7 @@ const GreyInnerContainer = styled(InnerContainer)`
         }
         p {
             font-size: 16px;
-            color: #525A5B;
+            color: ${dark["grey"]};
             margin-top: 0;
         }
     }
@@ -79,7 +80,7 @@ export const AccordionContainer = styled.div`
     }
     h3 {
         font-size: 16px;
-        color: #525A5B;
+        color: ${dark["grey"]};
         margin-bottom: 0;
     }
     .accordion__item {
@@ -133,7 +134,7 @@ export const AccordionContainer = styled.div`
         margin-top: 5px;
         position: relative;
         font-size: 16px;
-        color: #525A5B;
+        color: ${dark["grey"]};
         &::before {
             content: '';
             position: absolute;
@@ -141,7 +142,7 @@ export const AccordionContainer = styled.div`
             left: -20px;
             width: 1px;
             height: calc(100% - 5px);
-            background: #BFC1C3;
+            background: ${green["ghost"]};
         }
     }
 `;

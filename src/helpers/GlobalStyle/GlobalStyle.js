@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { defaultTheme, blue } from "../../settings";
+import { defaultTheme, blue, green, dark, light, category } from "../../settings";
 import { normalize } from "polished";
 import openSansV17Latin700Ttf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.ttf";
 import openSansV17Latin700Woff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff";
@@ -54,10 +54,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: ${blue[400]};
+  color: ${blue["link"]};
 
   &:hover {
-    color: ${darken(0.1, blue[400])};
+    color: ${darken(0.1, blue["link"])};
   }
 }
 
@@ -75,7 +75,7 @@ ul.ul-no-style {
 }
 
 hr {
-  border: 2px solid #000000;
+  border: 2px solid ${dark["black"]};
   margin: 30px 0;
 }
 
@@ -118,7 +118,7 @@ hr {
     }
     svg {
       font-size: 30px;
-      color: #fff;
+      color: ${light["white"]};
     }
   }
 }
@@ -126,11 +126,11 @@ hr {
 [data-category-icon] {
   &.fa-map-marker-alt {
     &::before {
-      color: #DF1995;
+      color: ${category["pink"]};
     }
   }
   i {
-      background-color: #DF1995;
+      background-color: ${category["pink"]};
       &::before {
           content: "\f086";
       }
@@ -139,11 +139,11 @@ hr {
 [data-category-icon="loneliness-or-isolation"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #DF1995;
+      color: ${category["pink"]};
     }
   }
   i {
-      background-color: #DF1995;
+      background-color: ${category["pink"]};
       &::before {
         content: "\f086";
       }
@@ -152,11 +152,11 @@ hr {
 [data-category-icon="anxiety-or-mental-health"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #FF6A13;
+      color: ${category["orange"]};
     }
   }
   i {
-      background-color: #FF6A13;
+      background-color: ${category["orange"]};
       &::before {
           content: "\f808";
       }
@@ -165,11 +165,11 @@ hr {
 [data-category-icon="safe-and-healthy-body"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #84BD00;
+      color: ${category["greenLight"]};
     }
   }
   i {
-      background-color: #84BD00;
+      background-color: ${category["greenLight"]};
       &::before {
           content: "\f21e";
       }
@@ -178,11 +178,11 @@ hr {
 [data-category-icon="exercise-and-wellbeing"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #E03C31;
+      color: ${category["red"]};
     }
   }
   i {
-      background-color: #E03C31;
+      background-color: ${category["red"]};
       &::before {
           content: "\f554";
       }
@@ -191,11 +191,11 @@ hr {
 [data-category-icon="arts-and-creativity"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #025EA6;
+      color: ${category["blueDark"]};
     }
   }
   i {
-      background-color: #025EA6;
+      background-color: ${category["blueDark"]};
       &::before {
           content: "\f53f";
       }
@@ -204,11 +204,11 @@ hr {
 [data-category-icon="food-or-shopping"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #328472;
+      color: ${category["green"]};
     }
   }
   i {
-      background-color: #328472;
+      background-color: ${category["green"]};
       &::before {
           content: "\f5d1";
       }
@@ -217,11 +217,11 @@ hr {
 [data-category-icon="faith-led-activities"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #0085CA;
+      color: ${category["blue"]};
     }
   }
   i {
-      background-color: #0085CA;
+      background-color: ${category["blue"]};
       &::before {
           content: "\f4be";
       }
@@ -230,11 +230,11 @@ hr {
 [data-category-icon="money-advice"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #81312F;
+      color: ${category["brown"]};
     }
   }
   i {
-      background-color: #81312F;
+      background-color: ${category["brown"]};
       &::before {
           content: "\f154";
       }
@@ -243,11 +243,11 @@ hr {
 [data-category-icon="employment-advice"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #8031A7;
+      color: ${category["purple"]};
     }
   }
   i {
-      background-color: #8031A7;
+      background-color: ${category["purple"]};
       &::before {
           content: "\f0f2";
       }
@@ -256,11 +256,11 @@ hr {
 [data-category-icon="housing-advice"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #2B8CC4;
+      color: ${category["blueLight"]};
     }
   }
   i {
-      background-color: #2B8CC4;
+      background-color: ${category["blueLight"]};
       &::before {
           content: "";
       }
@@ -269,11 +269,11 @@ hr {
 [data-category-icon="immigration-advice"] {
   &.fa-map-marker-alt {
     &::before {
-      color: #00664F;
+      color: ${category["greenDark"]};
     }
   }
   i {
-      background-color: #00664F;
+      background-color: ${category["greenDark"]};
       &::before {
           content: "\f129 ";
       }
@@ -300,7 +300,7 @@ hr {
     top: -3px;
     left: -2px;
     z-index: -1;
-    color: #fff;
+    color: ${light["white"]};
     font-size: 42px;
   }
 }

@@ -6,13 +6,14 @@ import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import styled from "styled-components";
+import { green } from "../../settings";
 
 const HeaderContainer = styled.div`
     display: flex;
-    background: #00664F;
+    background: ${green["main"]};
     justify-content: space-between;
-    border-bottom: 1px solid #7FB2A7;
     height: 60px;
+    border-bottom: 1px solid ${green["light"]};
 `;
 
 const Header = () => {  

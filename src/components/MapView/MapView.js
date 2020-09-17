@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { applyStyleModifiers } from 'styled-components-modifiers';
 import Button from "../Button/Button";
 import { darken } from "polished";
+import { green, light } from "../../settings";
 
 const MapViewContainer = styled.div`
     display: flex;
@@ -18,15 +19,15 @@ const MapViewContainer = styled.div`
 
 export const BUTTON_MODIFIERS = {
     ghostButton: () => `
-        border: 1px solid #BFC1C3;
+        border: 1px solid ${green["ghost"]};
         border-radius: 5px;
-        color: #00664F;
+        color: ${green["main"]};
         span {
             &::before {
                 content: "\f3c5";
             }
             svg {
-                color: #00664F;
+                color: ${green["main"]};
             }
         }
     `
@@ -35,17 +36,17 @@ export const BUTTON_MODIFIERS = {
     // ${applyStyleModifiers(BUTTON_MODIFIERS)};
 
 const StyledButton = styled(Button)`
-    background: #00664F;
-    border: 1px solid #BFC1C3;
+    background: ${green["main"]};
+    border: 1px solid ${green["ghost"]};
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     margin-left: 10px;
     margin-bottom: 0;
     padding: 10px 5px;
-    color: #fff;
+    color: ${light["white"]};
     &:hover {
-        background-color: ${darken(0.1, "#A4D65E")};
+        background-color: ${darken(0.1, green["bright"])};
     }
     &::before {
         display: none;
