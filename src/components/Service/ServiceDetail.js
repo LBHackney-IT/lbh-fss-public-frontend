@@ -17,6 +17,8 @@ import {
 } from 'react-accessible-accordion';
 import Address from "../Address/Address";
 import Header from "../Header/Header";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -39,11 +41,6 @@ export const DetailContainer = styled.div`
         text-decoration: none;
         &:hover {
             background-color: ${darken(0.1, "#00664F")};
-        }
-    }
-    .fas, .fab {
-        &::before {
-            margin-right: 10px;
         }
     }
     h3 {
@@ -106,20 +103,28 @@ export const AccordionContainer = styled.div`
         font-size: 19px;
         font-weight: bold;
         &::after {
-            content: '+';
+            display: none;
+            font-family: "Font Awesome 5 Pro";
+            font-weight: 900;
+            content: '\f067';
+        }
+        svg {
             margin-left: auto;
+            color: #525A5B;
+            font-size: 17px;
         }
         &[aria-expanded="true"] {
             &::after {
-                content: '-';
+                content: '\f068';
             }
         }
         i {
             width: 30px;
             height: 30px;
             margin-right: 5px;
-            &::before {
-                font-size: 19px;
+            svg {
+                font-size: 16px;
+                color: #fff;
             }
         }
     }
@@ -246,15 +251,15 @@ const ServiceDetail = () => {
                 <ul className="ul-no-style">
                     {/* TODO */}
                     <li><a className="link-button" href={data.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                    <li className="fas fa-phone"><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
-                    <li className="fas fa-envelope"><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
+                    <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
+                    <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
                 </ul>
             </InnerContainer>
             <InnerContainer>
                 <h3>Referral details</h3>
                 <ul className="ul-no-style">
-                    <li className="fas external-link-square-alt"><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                    <li className="fas fa-envelope"><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
+                    <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                    <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
                 </ul>
             </InnerContainer>
             <InnerContainer>
@@ -280,10 +285,10 @@ const ServiceDetail = () => {
                 <h3>Follow {data.name}</h3>
                 <ul className="ul-no-style">
                     {/* TODO */}
-                    <li className="fab fa-facebook-square"><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                    <li className="fab fa-twitter-square"><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
-                    <li className="fab fa-instagram-square"><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li className="fab fa-linkedin"><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 </ul>
             </InnerContainer>
         </DetailContainer>

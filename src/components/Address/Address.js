@@ -5,9 +5,12 @@ export const AddressList = styled.li`
     display: flex;
     align-items: center;
     &::before {
-        // TODO
-        font-family: "Font Awesome 5 Free";
-        content: "\f007";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
+        font-weight: 900;
+        content: "\f3c5";
+    }
+    svg {
         margin-right: 10px;
     }
 `;

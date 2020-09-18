@@ -23,7 +23,9 @@ export const BUTTON_MODIFIERS = {
         color: #00664F;
         span {
             &::before {
-                content: "\f007";
+                content: "\f3c5";
+            }
+            svg {
                 color: #00664F;
             }
         }
@@ -46,9 +48,10 @@ const StyledButton = styled(Button)`
         background-color: ${darken(0.1, "#A4D65E")};
     }
     &::before {
-        font-family: "Font Awesome 5 Free";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
         font-weight: 900;
-        content: "\f007";
+        content: "\f0c9";
     }
 `;
 

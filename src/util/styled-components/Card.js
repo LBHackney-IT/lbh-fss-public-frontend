@@ -12,8 +12,11 @@ export const CARD_MODIFIERS = {
             height: 50px;
             width: 50px;
             &::before {
-                font-family: "Font Awesome 5 Free";
-                content: "\f007";
+                display: none;
+                font-family: "Font Awesome 5 Pro";
+                content: "\f086";
+            }
+            svg {
                 font-size: 30px;
                 color: #fff;
             }

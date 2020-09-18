@@ -22,9 +22,12 @@ const FilterButton = styled.button`
     cursor: pointer;
     background: transparent;
     &::before {
-        font-family: "Font Awesome 5 Free";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
         font-weight: 900;
-        content: "\f007";
+        content: "\f03a";
+    }
+    svg {
         margin-right: 10px;
     }
 `;

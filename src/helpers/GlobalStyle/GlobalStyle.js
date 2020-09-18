@@ -9,6 +9,7 @@ import openSansV17LatinRegularWoff from "../../fonts/open-sans-v17-latin/open-sa
 import openSansV17LatinRegularWoff2 from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff2";
 import { darken } from "polished";
 import breakpoint from 'styled-components-breakpoint';
+import "@fortawesome/fontawesome-pro/js/all";
 
 export const GlobalStyle = createGlobalStyle`
 ${normalize()}
@@ -67,6 +68,9 @@ ul.ul-no-style {
     + li {
       margin-top: 15px;
     }
+    svg {
+      margin-right: 5px;
+    }
   }
 }
 
@@ -85,14 +89,6 @@ hr {
   position: absolute;
   whiteSpace: nowrap;
   width: 1px;
-}
-
-.fas, .fab {
-  &::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f007";
-  }
 }
 
 .App {
@@ -115,8 +111,12 @@ hr {
     padding: 5px;
     opacity: 0.75;
     &::before {
-      font-family: "Font Awesome 5 Free";
-      content: "\f007";
+      display: none;
+      font-family: "Font Awesome 5 Pro";
+      font-weight: 900;
+      content: "\f086";
+    }
+    svg {
       font-size: 30px;
       color: #fff;
     }
@@ -127,7 +127,7 @@ hr {
   i {
       background-color: #DF1995;
       &::before {
-          content: "\f007";
+          content: "\f086";
       }
   }
 }
@@ -135,7 +135,7 @@ hr {
   i {
       background-color: #DF1995;
       &::before {
-          content: "\f007";
+        content: "\f086";
       }
   }
 }
@@ -143,7 +143,7 @@ hr {
   i {
       background-color: #FF6A13;
       &::before {
-          content: "\f007";
+          content: "\f808";
       }
   }
 }
@@ -151,7 +151,7 @@ hr {
   i {
       background-color: #84BD00;
       &::before {
-          content: "\f007";
+          content: "\f21e";
       }
   }
 }
@@ -159,7 +159,7 @@ hr {
   i {
       background-color: #E03C31;
       &::before {
-          content: "\f007";
+          content: "\f554";
       }
   }
 }
@@ -167,7 +167,7 @@ hr {
   i {
       background-color: #025EA6;
       &::before {
-          content: "\f007";
+          content: "\f53f";
       }
   }
 }
@@ -175,7 +175,7 @@ hr {
   i {
       background-color: #328472;
       &::before {
-          content: "\f007";
+          content: "\f5d1";
       }
   }
 }
@@ -183,7 +183,7 @@ hr {
   i {
       background-color: #0085CA;
       &::before {
-          content: "\f007";
+          content: "\f4be";
       }
   }
 }
@@ -191,7 +191,7 @@ hr {
   i {
       background-color: #81312F;
       &::before {
-          content: "\f007";
+          content: "\f154";
       }
   }
 }
@@ -199,7 +199,7 @@ hr {
   i {
       background-color: #8031A7;
       &::before {
-          content: "\f007";
+          content: "\f0f2";
       }
   }
 }
@@ -207,7 +207,7 @@ hr {
   i {
       background-color: #2B8CC4;
       &::before {
-          content: "\f007";
+          content: "";
       }
   }
 }
@@ -215,7 +215,7 @@ hr {
   i {
       background-color: #00664F;
       &::before {
-          content: "\f007";
+          content: "\f129 ";
       }
   }
 }

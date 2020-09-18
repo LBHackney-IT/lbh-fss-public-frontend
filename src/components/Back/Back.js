@@ -13,11 +13,17 @@ const BackButton = styled.button`
     color: #fff;
     font-size: 24px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
     &::before {
-        font-family: "Font Awesome 5 Free";
+        display: none;
+        font-family: "Font Awesome 5 Pro";
         font-weight: 900;
-        content: "\f007";
+        content: "\f060";
+    }
+    svg {
         margin-right: 10px;
+        font-size: 16px;
     }
 `;
 

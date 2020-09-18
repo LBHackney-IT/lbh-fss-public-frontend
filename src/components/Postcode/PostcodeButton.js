@@ -23,11 +23,24 @@ const PostcodeButtonContainer = styled.button`
         text-transform: uppercase;
     }
     &::before {
-        font-family: "Font Awesome 5 Free";
+        display: none;
+        font-family: "Font Awesome 5 Duotone";
         font-weight: 900;
-        content: "\f007";
+        content: "\f3c5";
         margin-right: 10px;
     }
+    svg {
+        margin-right: 10px;
+        font-size: 24px;
+        path.fa-secondary {
+            color: #A4D65E;
+            opacity: 1;
+        }
+        path.fa-primary {
+            color: #fff;
+        }
+    }
+
 `;
 
 const PostcodeButton = () => {

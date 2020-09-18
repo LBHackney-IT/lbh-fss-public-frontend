@@ -26,9 +26,13 @@ const StyledButton = styled(Button)`
   }
 
   &::before {
-    font-family: "Font Awesome 5 Free";
+    display: none;
+    font-family: "Font Awesome 5 Pro";
     font-weight: 900;
-    content: "\f007";
+    content: "\f002";
+  }
+  svg {
+    color: #000;
   }
 
   span {
