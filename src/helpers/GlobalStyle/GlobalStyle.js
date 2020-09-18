@@ -124,10 +124,8 @@ hr {
 }
 
 [data-category-icon] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["pink"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["pink"]};
   }
   i {
       background-color: ${category["pink"]};
@@ -137,10 +135,8 @@ hr {
   }
 }
 [data-category-icon="loneliness-or-isolation"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["pink"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["pink"]};
   }
   i {
       background-color: ${category["pink"]};
@@ -150,10 +146,8 @@ hr {
   }
 }
 [data-category-icon="anxiety-or-mental-health"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["orange"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["orange"]};
   }
   i {
       background-color: ${category["orange"]};
@@ -163,10 +157,8 @@ hr {
   }
 }
 [data-category-icon="safe-and-healthy-body"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["greenLight"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["greenLight"]};
   }
   i {
       background-color: ${category["greenLight"]};
@@ -176,10 +168,8 @@ hr {
   }
 }
 [data-category-icon="exercise-and-wellbeing"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["red"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["red"]};
   }
   i {
       background-color: ${category["red"]};
@@ -189,10 +179,8 @@ hr {
   }
 }
 [data-category-icon="arts-and-creativity"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["blueDark"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["blueDark"]};
   }
   i {
       background-color: ${category["blueDark"]};
@@ -202,10 +190,8 @@ hr {
   }
 }
 [data-category-icon="food-or-shopping"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["green"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["green"]};
   }
   i {
       background-color: ${category["green"]};
@@ -215,10 +201,8 @@ hr {
   }
 }
 [data-category-icon="faith-led-activities"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["blue"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["blue"]};
   }
   i {
       background-color: ${category["blue"]};
@@ -228,10 +212,8 @@ hr {
   }
 }
 [data-category-icon="money-advice"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["brown"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["brown"]};
   }
   i {
       background-color: ${category["brown"]};
@@ -241,10 +223,8 @@ hr {
   }
 }
 [data-category-icon="employment-advice"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["purple"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["purple"]};
   }
   i {
       background-color: ${category["purple"]};
@@ -254,10 +234,8 @@ hr {
   }
 }
 [data-category-icon="housing-advice"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["blueLight"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["blueLight"]};
   }
   i {
       background-color: ${category["blueLight"]};
@@ -267,10 +245,8 @@ hr {
   }
 }
 [data-category-icon="immigration-advice"] {
-  &.fa-map-marker-alt {
-    &::before {
-      color: ${category["greenDark"]};
-    }
+  svg.fa-map-marker-alt {
+    color: ${category["greenDark"]};
   }
   i {
       background-color: ${category["greenDark"]};
@@ -295,7 +271,7 @@ hr {
     position: relative;
     left: -10px;
   }
-  i.fa-map-marker {
+  svg.fa-map-marker {
     position: absolute;
     top: -3px;
     left: -2px;

@@ -12,6 +12,7 @@ import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ListServices = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -109,9 +110,9 @@ const ListServices = ({ categories = [], onClick }) => {
                   });
                   const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
                   const iconMarkup = renderToStaticMarkup(
-                    <div className="hackney-map-marker">
-                      <i className=" fa fa-map-marker-alt fa-3x" data-category-icon={categoryIconName} />
-                      <i className=" fa fa-map-marker fa-3x" />
+                    <div className="hackney-map-marker" data-category-icon={categoryIconName}>
+                      <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
+                      <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
                     </div>
                   );
                   const customMarkerIcon = divIcon({
