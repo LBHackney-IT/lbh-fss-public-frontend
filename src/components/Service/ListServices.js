@@ -14,6 +14,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from "lodash";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+
 
 const ListServices = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -118,13 +120,19 @@ const ListServices = ({ categories = [], onClick }) => {
             })}
           </CardContainer>
           <MapContainer>
-            <Map center={position} zoom={14} zoomControl={false}>
+            <Map className="markercluster-map"
+              center={position}
+              zoom={14}
+              maxZoom={18}
+              zoomControl={false}
+            >
               <ZoomControl position='topright' />
               <TileLayer
                   attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
                   url="https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q" // CARTO
                   // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+              <MarkerClusterGroup>
               {
                 newService(data).map((service, index) => {
                   
@@ -155,8 +163,8 @@ const ListServices = ({ categories = [], onClick }) => {
                     </Marker>
                   )
                 })
-                
               }
+              </MarkerClusterGroup>
             </Map>
           </MapContainer>
         </div>
