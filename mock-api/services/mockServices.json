@@ -3413,10 +3413,32 @@
     },
     "locations": [
       {
-        "latitude": "39.1442",
-        "longitude": "40.9214",
+        "latitude": "51.517787",
+        "longitude": "-0.099059",
         "uprn": 5306,
-        "address1": "457 Kuhn Center",
+        "address1": "457a Kuhn Center",
+        "address2": "90571 Alexa Place",
+        "city": "Glovermouth",
+        "stateProvince": "Nebraska",
+        "postalCode": "85828-2513",
+        "country": "Senegal"
+      },
+      {
+        "latitude": "51.517787",
+        "longitude": "-0.097059",
+        "uprn": 5307,
+        "address1": "457b Kuhn Center",
+        "address2": "90571 Alexa Place",
+        "city": "Glovermouth",
+        "stateProvince": "Nebraska",
+        "postalCode": "85828-2513",
+        "country": "Senegal"
+      },
+      {
+        "latitude": "51.517787",
+        "longitude": "-0.095059",
+        "uprn": 5308,
+        "address1": "457c Kuhn Center",
         "address2": "90571 Alexa Place",
         "city": "Glovermouth",
         "stateProvince": "Nebraska",
@@ -4967,8 +4989,8 @@
     },
     "locations": [
       {
-        "latitude": "-38.4787",
-        "longitude": "-88.3286",
+        "latitude": "51.517787",
+        "longitude": "-0.087059",
         "uprn": 47398,
         "address1": "561 Zita Bypass",
         "address2": "5827 Dahlia Ridges",
@@ -5257,7 +5279,18 @@
         "latitude": "51.552210",
         "longitude": "-0.051590",
         "uprn": 14497,
-        "address1": "1767 Damon Fields",
+        "address1": "1767A Damon Fields",
+        "address2": "858 Royce Stravenue",
+        "city": "Kubtown",
+        "stateProvince": "Colorado",
+        "postalCode": "11445",
+        "country": "Croatia"
+      },
+      {
+        "latitude": "51.552210",
+        "longitude": "-0.061590",
+        "uprn": 14498,
+        "address1": "1767B Damon Fields",
         "address2": "858 Royce Stravenue",
         "city": "Kubtown",
         "stateProvince": "Colorado",
@@ -10098,8 +10131,8 @@
     },
     "locations": [
       {
-        "latitude": "-74.3389",
-        "longitude": "-50.7598",
+        "latitude": "52.517787",
+        "longitude": "-0.097059",
         "uprn": 84610,
         "address1": "043 Valerie Canyon",
         "address2": "081 Crona Inlet",

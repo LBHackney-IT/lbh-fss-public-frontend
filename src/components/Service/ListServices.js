@@ -13,6 +13,7 @@ import {MapContainer} from "../../util/styled-components/MapContainer";
 import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as _ from "lodash";
 
 const ListServices = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -74,6 +75,39 @@ const ListServices = ({ categories = [], onClick }) => {
     onClick(e);
   }
 
+  const newService = data => {
+    let duplicateService = [...data];
+
+    let i = 0;
+    while (i < data.length) {
+      // check if any services have multiple locations
+      if (data[i].locations.length > 1) {
+
+        // store the locations for the specific service
+        const locationsArray = data[i].locations;
+
+        // iterate through each locationsArray and push to thisService.locations
+        // then push thisService into duplicateService
+
+        for (const [key, value] of Object.entries(locationsArray.slice(1))) {
+          // duplicate the specific service
+          let thisService = {...data[i]};
+
+          // reset the specific service locations array to be rewritten
+          thisService.locations = [];
+          thisService.locations.push(value);
+          duplicateService.push(thisService);
+        }
+
+      }
+      
+      i++;
+    }
+
+    return duplicateService;
+    
+  }
+
   return(
     <div>
       {!data.length ? (
@@ -99,16 +133,16 @@ const ListServices = ({ categories = [], onClick }) => {
               /> */}
               <TileLayer
                   attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
-                  url="https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q" // CARTO
+                  // url="https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q" // CARTO
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               {
-                data.map((service, index) => {
-                  const point = [parseFloat(service['locations'][0]['latitude']), parseFloat(service['locations'][0]['longitude'])];
-
-                  const categoriesSorted = service["categories"].sort(function (a, b) {
-                    return a.weight - b.weight;
-                  });
-                  const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                newService(data).map((service, index) => {
+                  // service returns an object with all individual service details
+                  // inside each service detail, I need to loop through 'locations' array (of objects)
+                  // do something
+                  // return an individual service object - there will be duplicates for services with multiple addresses
+                  
                   const iconMarkup = renderToStaticMarkup(
                     <div className="hackney-map-marker" data-category-icon={categoryIconName}>
                       <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
@@ -119,14 +153,25 @@ const ListServices = ({ categories = [], onClick }) => {
                     html: iconMarkup
                   });
 
+                  const categoriesSorted = service["categories"].sort(function (a, b) {
+                    return a.weight - b.weight;
+                  });
+
+                  const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                  let newService = service;
+
+                  const point = [parseFloat(newService["locations"][0]['latitude']), parseFloat(newService["locations"][0]['longitude'])];
+                  
                   return (
-                    <Marker position={point} key={service['id']} icon={customMarkerIcon} >
+                    <Marker position={point} key={index} icon={customMarkerIcon} data-address={newService["locations"][0]["address1"]}>
                       <Popup>
+                        <div>{newService["locations"][0]["address1"]}</div>
                         <ServiceCard key={index} service={service} onClick={select} />
                       </Popup>
                     </Marker>
                   )
                 })
+                
               }
             </Map>
           </MapContainer>
