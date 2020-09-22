@@ -15,7 +15,27 @@ import { divIcon } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from "lodash";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-
+import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
+import {
+  MAX_ZOOM,
+  MIN_ZOOM,
+  CENTER_DESKTOP_LEGEND,
+  CENTER_DESKTOP_LEGEND_FULLSCREEN,
+  CENTER_DESKTOP_NO_LEGEND,
+  CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
+  CENTER_MOBILE,
+  CENTER_MOBILE_FULLSCREEN,
+  DEFAULT_ZOOM_DESKTOP,
+  DEFAULT_ZOOM_MOBILE,
+  MAP_BOUNDS,
+  HACKNEY_BOUNDS_1,
+  HACKNEY_BOUNDS_2,
+  HACKNEY_GEOSERVER_WMS,
+  MAPBOX_TILES_URL,
+  GENERIC_GEOLOCATION_ERROR,
+  GENERIC_OUTSIDE_HACKNEY_ERROR,
+  ATTRIBUTION
+} from "../../helpers/GlobalVariables/GlobalVariables";
 
 const ListServices = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -26,7 +46,6 @@ const ListServices = ({ categories = [], onClick }) => {
   const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
-  const position = [51.517787, -0.097059];
 
   function createParamObj(currentSearch, paramsArray) {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -68,39 +87,12 @@ const ListServices = ({ categories = [], onClick }) => {
 
   }, [setData, setIsLoading]);
 
-
   if (isLoading) {
     return <span>Loading</span>;
   }
 
   const select = e => {
     onClick(e);
-  }
-
-  const newService = data => {
-    let duplicateService = [...data];
-
-    let i = 0;
-    while (i < data.length) {
-      // check if any services have multiple locations
-      if (data[i].locations.length > 1) {
-        // store the locations for the specific service
-        const locationsArray = data[i].locations;
-        // iterate through each locationsArray and push to thisService.locations
-        for (const [key, value] of Object.entries(locationsArray.slice(1))) {
-          // duplicate the specific service
-          let thisService = {...data[i]};
-          // reset the specific service locations array to be rewritten
-          thisService.locations = [];
-          // push specific service location object value into the empty array
-          thisService.locations.push(value);
-          // push thisService into duplicateService
-          duplicateService.push(thisService);
-        }
-      }
-      i++;
-    }
-    return duplicateService;
   }
 
   return(
@@ -121,20 +113,22 @@ const ListServices = ({ categories = [], onClick }) => {
           </CardContainer>
           <MapContainer>
             <Map className="markercluster-map"
-              center={position}
-              zoom={14}
-              maxZoom={18}
+              center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+              zoom={MIN_ZOOM}
+              maxZoom={MAX_ZOOM}
               zoomControl={false}
+              bounds={MAP_BOUNDS}
+              maxBounds={MAP_BOUNDS}
             >
               <ZoomControl position='topright' />
               <TileLayer
-                  attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
-                  url="https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q" // CARTO
-                  // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution={ATTRIBUTION}
+                  // url={MAPBOX_TILES_URL}
+                  url={"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
               />
               <MarkerClusterGroup>
               {
-                newService(data).map((service, index) => {
+                getAllAddresses(data).map((service, index) => {
                   
                   const categoriesSorted = service["categories"].sort(function (a, b) {
                     return a.weight - b.weight;
