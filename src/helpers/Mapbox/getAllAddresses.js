@@ -1,4 +1,7 @@
 const getAllAddresses = data => {
+  if (data.constructor !== Array) {
+    data = [data];
+  }
     let duplicateService = [...data];
 
     let i = 0;

@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
+import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import { darken } from "polished";
 import { green, light, dark } from "../../settings";
@@ -19,7 +20,33 @@ import {
 import Address from "../Address/Address";
 import Header from "../Header/Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import {MapContainer} from "../../util/styled-components/MapContainer";
+import { renderToStaticMarkup } from "react-dom/server";
+import { divIcon, Map as LeafletMap } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
+import { GestureHandling } from 'leaflet-gesture-handling';
+import {
+  MAX_ZOOM,
+  MIN_ZOOM,
+  CENTER_DESKTOP_LEGEND,
+  CENTER_DESKTOP_LEGEND_FULLSCREEN,
+  CENTER_DESKTOP_NO_LEGEND,
+  CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
+  CENTER_MOBILE,
+  CENTER_MOBILE_FULLSCREEN,
+  DEFAULT_ZOOM_DESKTOP,
+  DEFAULT_ZOOM_MOBILE,
+  MAP_BOUNDS,
+  HACKNEY_BOUNDS_1,
+  HACKNEY_BOUNDS_2,
+  HACKNEY_GEOSERVER_WMS,
+  MAPBOX_TILES_URL,
+  GENERIC_GEOLOCATION_ERROR,
+  GENERIC_OUTSIDE_HACKNEY_ERROR,
+  ATTRIBUTION
+} from "../../helpers/GlobalVariables/GlobalVariables";
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -52,6 +79,12 @@ export const DetailContainer = styled.div`
         li {
             font-size: 19px;
         }
+    }
+`;
+
+export const InnerMapContainer = styled.div`
+    .leaflet-container {
+        height: 450px;
     }
 `;
 
@@ -147,8 +180,9 @@ export const AccordionContainer = styled.div`
     }
 `;
 
-const ServiceDetail = () => {
+const ServiceDetail = ({ onClick }) => {
     const [data, setData] = useState([]);
+    const [allData, setAllData] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const {urlParams} = useContext(UrlParamsContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
@@ -176,6 +210,8 @@ const ServiceDetail = () => {
             }
             const getService = await GetServices.getService(serviceId);
             setData(getService || []);
+            const getAllService = await GetServices.retrieveServices({});
+            setAllData(getAllService || []);
             setIsLoading(false);
         }
         fetchData();
@@ -197,6 +233,10 @@ const ServiceDetail = () => {
         }
 
     }, [setData, setIsLoading]);
+
+    const select = e => {
+        onClick(e);
+    }
 
     let hero = "";
     if (data.images && data.images.medium.length) {
@@ -271,10 +311,51 @@ const ServiceDetail = () => {
                     )}
                 </ul>
             </InnerContainer>
-            <div>
-                {/* TODO */}
-                {`<Map>`}
-            </div>
+            <InnerMapContainer>
+                <Map className="markercluster-map"
+                    center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+                    zoom={MIN_ZOOM}
+                    maxZoom={MAX_ZOOM}
+                    zoomControl={false}
+                    // bounds={MAP_BOUNDS}
+                    maxBounds={MAP_BOUNDS}
+                    gestureHandling
+                >
+                    <ZoomControl position='topright' />
+                    <TileLayer
+                        attribution={ATTRIBUTION}
+                        url={MAPBOX_TILES_URL}
+                    />
+                    <MarkerClusterGroup>
+                        {
+                            getAllAddresses(data).map((service, index) => {
+                            
+                                const categoriesSorted = service["categories"].sort(function (a, b) {
+                                    return a.weight - b.weight;
+                                });
+
+                                const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+
+                                const iconMarkup = renderToStaticMarkup(
+                                    <div className="hackney-map-marker" data-category-icon={categoryIconName}>
+                                    <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
+                                    <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
+                                    </div>
+                                );
+                                const customMarkerIcon = divIcon({
+                                    html: iconMarkup
+                                });
+
+                                const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
+                                
+                                return (
+                                    <Marker position={point} key={index} icon={customMarkerIcon} />
+                                )
+                            })
+                        }
+                    </MarkerClusterGroup>
+                </Map>
+            </InnerMapContainer>
             <GreyInnerContainer>
                 <ul className="ul-no-style">
                     {/* TODO */}
@@ -292,6 +373,55 @@ const ServiceDetail = () => {
                     <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 </ul>
             </InnerContainer>
+            <MapContainer>
+                <Map className="markercluster-map"
+                    center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+                    zoom={MIN_ZOOM}
+                    maxZoom={MAX_ZOOM}
+                    zoomControl={false}
+                    // bounds={MAP_BOUNDS}
+                    maxBounds={MAP_BOUNDS}
+                    gestureHandling
+                >
+                <ZoomControl position='topright' />
+                <TileLayer
+                    attribution={ATTRIBUTION}
+                    url={MAPBOX_TILES_URL}
+                />
+                <MarkerClusterGroup>
+                {
+                    getAllAddresses(allData).map((service, index) => {
+                    
+                        const categoriesSorted = service["categories"].sort(function (a, b) {
+                            return a.weight - b.weight;
+                        });
+
+                        const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+
+                        const iconMarkup = renderToStaticMarkup(
+                            <div className="hackney-map-marker" data-category-icon={categoryIconName}>
+                            <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
+                            <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
+                            </div>
+                        );
+                        const customMarkerIcon = divIcon({
+                            html: iconMarkup
+                        });
+
+                        const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
+                        
+                        return (
+                            <Marker position={point} key={index} icon={customMarkerIcon}>
+                            <Popup>
+                                <ServiceCard key={index} service={service} onClick={select} />
+                            </Popup>
+                            </Marker>
+                        )
+                    })
+                }
+              </MarkerClusterGroup>
+            </Map>
+          </MapContainer>
         </DetailContainer>
     );
   };

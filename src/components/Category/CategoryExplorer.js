@@ -14,7 +14,31 @@ import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { renderToStaticMarkup } from "react-dom/server";
-import { divIcon } from "leaflet";
+import { divIcon, Map as LeafletMap } from "leaflet";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
+import { GestureHandling } from 'leaflet-gesture-handling';
+import {
+  MAX_ZOOM,
+  MIN_ZOOM,
+  CENTER_DESKTOP_LEGEND,
+  CENTER_DESKTOP_LEGEND_FULLSCREEN,
+  CENTER_DESKTOP_NO_LEGEND,
+  CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
+  CENTER_MOBILE,
+  CENTER_MOBILE_FULLSCREEN,
+  DEFAULT_ZOOM_DESKTOP,
+  DEFAULT_ZOOM_MOBILE,
+  MAP_BOUNDS,
+  HACKNEY_BOUNDS_1,
+  HACKNEY_BOUNDS_2,
+  HACKNEY_GEOSERVER_WMS,
+  MAPBOX_TILES_URL,
+  GENERIC_GEOLOCATION_ERROR,
+  GENERIC_OUTSIDE_HACKNEY_ERROR,
+  ATTRIBUTION
+} from "../../helpers/GlobalVariables/GlobalVariables";
 
 export const CategoryCardContainer = styled.div`
   .card {
@@ -119,36 +143,44 @@ const CategoryExplorer = ({ category, onClick }) => {
             })}
           </CardContainer>
           <MapContainer>
-            <Map center={position} zoom={14} zoomControl={false}>
+            <Map className="markercluster-map"
+              center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+              zoom={MIN_ZOOM}
+              maxZoom={MAX_ZOOM}
+              zoomControl={false}
+              // bounds={MAP_BOUNDS}
+              maxBounds={MAP_BOUNDS}
+              gestureHandling
+            >
               <ZoomControl position='topright' />
-              {/* <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-              /> */}
               <TileLayer
-                  attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
-                  url="https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q"
+                  attribution={ATTRIBUTION}
+                  url={MAPBOX_TILES_URL}
               />
+              <MarkerClusterGroup>
               {
-                data.map((service, index) => {
-                  const point = [parseFloat(service['locations'][0]['latitude']), parseFloat(service['locations'][0]['longitude'])];
-
+                getAllAddresses(data).map((service, index) => {
+                  
                   const categoriesSorted = service["categories"].sort(function (a, b) {
                     return a.weight - b.weight;
                   });
+
                   const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+
                   const iconMarkup = renderToStaticMarkup(
-                    <div className="hackney-map-marker">
-                      <i className=" fa fa-map-marker-alt fa-3x" data-category-icon={categoryIconName} />
-                      <i className=" fa fa-map-marker fa-3x" />
+                    <div className="hackney-map-marker" data-category-icon={categoryIconName}>
+                      <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
+                      <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
                     </div>
                   );
                   const customMarkerIcon = divIcon({
                     html: iconMarkup
                   });
 
+                  const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
+                  
                   return (
-                    <Marker position={point} key={service['id']} icon={customMarkerIcon} >
+                    <Marker position={point} key={index} icon={customMarkerIcon}>
                       <Popup>
                         <ServiceCard key={index} service={service} onClick={select} />
                       </Popup>
@@ -156,6 +188,7 @@ const CategoryExplorer = ({ category, onClick }) => {
                   )
                 })
               }
+              </MarkerClusterGroup>
             </Map>
           </MapContainer>
         </div>

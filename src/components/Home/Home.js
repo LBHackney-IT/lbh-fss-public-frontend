@@ -16,6 +16,26 @@ import history from '../../history';
 import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { green, light } from "../../settings";
+import {
+    MAX_ZOOM,
+    MIN_ZOOM,
+    CENTER_DESKTOP_LEGEND,
+    CENTER_DESKTOP_LEGEND_FULLSCREEN,
+    CENTER_DESKTOP_NO_LEGEND,
+    CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
+    CENTER_MOBILE,
+    CENTER_MOBILE_FULLSCREEN,
+    DEFAULT_ZOOM_DESKTOP,
+    DEFAULT_ZOOM_MOBILE,
+    MAP_BOUNDS,
+    HACKNEY_BOUNDS_1,
+    HACKNEY_BOUNDS_2,
+    HACKNEY_GEOSERVER_WMS,
+    MAPBOX_TILES_URL,
+    GENERIC_GEOLOCATION_ERROR,
+    GENERIC_OUTSIDE_HACKNEY_ERROR,
+    ATTRIBUTION
+  } from "../../helpers/GlobalVariables/GlobalVariables";
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
@@ -154,12 +174,20 @@ const Home = () => {
                 </HomeHeader>
                 <ListCategories onClick={handleEvent} />
                 <MapContainer>
-                <Map center={position} zoom={14} zoomControl={false}>
-                    <ZoomControl position='topright' />
-                    <TileLayer
-                        attribution='Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://mapbox.com">Mapbox</a>'
-                        url="https://api.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2FtbnVkZ2UiLCJhIjoiY2tmNWU1bm91MG02bzJxcDk1bDc4djEwcSJ9.jXBC4VWPmozpPfOpAbaq4Q"
-                    />
+                    <Map className="markercluster-map"
+                        center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+                        zoom={MIN_ZOOM}
+                        maxZoom={MAX_ZOOM}
+                        zoomControl={false}
+                        // bounds={MAP_BOUNDS}
+                        maxBounds={MAP_BOUNDS}
+                        gestureHandling
+                        >
+                        <ZoomControl position='topright' />
+                        <TileLayer
+                            attribution={ATTRIBUTION}
+                            url={MAPBOX_TILES_URL}
+                        />
                     </Map>
                 </MapContainer>
             </div>

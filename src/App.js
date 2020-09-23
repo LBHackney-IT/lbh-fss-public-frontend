@@ -7,7 +7,6 @@ import PrevUrlContext from "./context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "./context/PrevUrlParamsContext/PrevUrlParamsContext";
 import AppLoading from './AppLoading';
-import Map from './components/Map/Map';
 import { SidebarContainer } from "./util/styled-components/SidebarContainer"
 import {ThemeProvider} from 'styled-components';
 

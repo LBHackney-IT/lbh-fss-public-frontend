@@ -1,7 +1,7 @@
 import MAPBOX_ACCESS_TOKEN from "../Mapbox/Mapbox";
 
 const MAX_ZOOM = 19;
-const MIN_ZOOM = 12;
+const MIN_ZOOM = 13;
 const CENTER_DESKTOP_LEGEND_FULLSCREEN = [51.534, -0.083];
 const CENTER_DESKTOP_LEGEND = [51.548, -0.083];
 const CENTER_DESKTOP_NO_LEGEND_FULLSCREEN = [51.534, -0.06];
@@ -19,7 +19,9 @@ const HACKNEY_BOUNDS_2 = [51.580648, -0.00909];
 
 const HACKNEY_GEOSERVER_WFS = "https://map.hackney.gov.uk/geoserver/ows?service=WFS&version=2.0&request=GetFeature&outputFormat=json&SrsName=EPSG:4326&typeName=";
 const HACKNEY_GEOSERVER_WMS = "https://map.hackney.gov.uk/geoserver/wms";
-const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
+// const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
+const MAPBOX_TILES_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+// const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/hackneygis/ck7ounc2t0cg41imjb3j53dp8/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
 const GENERIC_GEOLOCATION_ERROR =
   "We cannot find your location. Please enable Location Services for your browser in Settings or try again outside of your office as your network may block geolocation.";
 const GENERIC_OUTSIDE_HACKNEY_ERROR = "This map only covers Hackney";

@@ -11,11 +11,11 @@ import styled from "styled-components";
 import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { renderToStaticMarkup } from "react-dom/server";
-import { divIcon } from "leaflet";
+import { divIcon, Map as LeafletMap } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as _ from "lodash";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
+import { GestureHandling } from 'leaflet-gesture-handling';
 import {
   MAX_ZOOM,
   MIN_ZOOM,
@@ -37,7 +37,7 @@ import {
   ATTRIBUTION
 } from "../../helpers/GlobalVariables/GlobalVariables";
 
-const ListServices = ({ categories = [], onClick }) => {
+const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {urlParams, setUrlParams} = useContext(UrlParamsContext);
@@ -46,6 +46,7 @@ const ListServices = ({ categories = [], onClick }) => {
   const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
+  LeafletMap.addInitHook('addHandler', 'gestureHandling', GestureHandling);
 
   function createParamObj(currentSearch, paramsArray) {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -117,14 +118,14 @@ const ListServices = ({ categories = [], onClick }) => {
               zoom={MIN_ZOOM}
               maxZoom={MAX_ZOOM}
               zoomControl={false}
-              bounds={MAP_BOUNDS}
+              // bounds={MAP_BOUNDS}
               maxBounds={MAP_BOUNDS}
+              gestureHandling
             >
               <ZoomControl position='topright' />
               <TileLayer
                   attribution={ATTRIBUTION}
-                  // url={MAPBOX_TILES_URL}
-                  url={"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+                  url={MAPBOX_TILES_URL}
               />
               <MarkerClusterGroup>
               {
@@ -149,9 +150,8 @@ const ListServices = ({ categories = [], onClick }) => {
                   const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
                   
                   return (
-                    <Marker position={point} key={index} icon={customMarkerIcon} data-address={service["locations"][0]["address1"]}>
+                    <Marker position={point} key={index} icon={customMarkerIcon}>
                       <Popup>
-                        <div>{service["locations"][0]["address1"]}</div>
                         <ServiceCard key={index} service={service} onClick={select} />
                       </Popup>
                     </Marker>
