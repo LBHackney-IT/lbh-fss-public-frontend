@@ -9,6 +9,7 @@ You will also need [node and npm installed](https://nodejs.org/en/download/).
 
 1. Copy and rename the `Mapbox.example.js` as `Mapbox.js` in `src/helpers/Mapbox` and replace the token string with your Mapbox token.
 1. Copy and rename the `example.npmrc` as `.npmrc` in the project root and replace the authToken with your Font Awesome pro token.
+1. Run `npm install` from project root to install packages and dependencies.
 
 ## Available Scripts
 
