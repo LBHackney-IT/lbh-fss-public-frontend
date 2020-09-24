@@ -118,7 +118,7 @@ const ToggleView = () => {
         } else {
             setStyle("list-enabled");
         }
-    });
+    }, [mapToggle]);
 
     const listEvent = e => {
         toggleView("false");
