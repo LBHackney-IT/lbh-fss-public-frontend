@@ -95,7 +95,6 @@ const HackneyMap = (data) => {
         setPrevUrlParams(prevUrlParamsArray);
     };
 
-    console.log(isServiceDetail);
  return (
     <Map className="markercluster-map"
         center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
