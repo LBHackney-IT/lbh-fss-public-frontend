@@ -47,6 +47,7 @@ const ToggleViewContainer = styled.div`
             backdrop-filter: blur(3px);
             padding: 3px 5px;
             margin-left: -5px;
+            margin-right: -5px;
         }
         .list-services-button {
             background: ${light["white"]};
@@ -111,6 +112,14 @@ const ToggleView = () => {
     
     let push = url;
     let params = urlParams;
+
+    for (const [key, value] of Object.entries(urlParams)) {
+        if (key == "map_toggle" && value === "true") {
+            params["map_toggle"] = "true";
+            setUrlParams(params);
+            setMapToggle("true");
+        }
+    }
 
     function toggleView(v) {
         params["map_toggle"] = v;
