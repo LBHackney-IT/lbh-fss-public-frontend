@@ -5,47 +5,25 @@ import { CardContainer } from "../../util/styled-components/CardContainer";
 import ServiceCard from "../Service/ServiceCard";
 import CategoryCard from "../Category/CategoryCard";
 import Header from "../Header/Header";
-import MapView from "../MapView/MapView";
+import ToggleView from "../ToggleView/ToggleView";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
+import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
 import styled from "styled-components";
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
-import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import {MapContainer} from "../../util/styled-components/MapContainer";
-import { renderToStaticMarkup } from "react-dom/server";
-import { divIcon, Map as LeafletMap } from "leaflet";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MarkerClusterGroup from "react-leaflet-markercluster";
-import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
-import { GestureHandling } from 'leaflet-gesture-handling';
-import {
-  MAX_ZOOM,
-  MIN_ZOOM,
-  CENTER_DESKTOP_LEGEND,
-  CENTER_DESKTOP_LEGEND_FULLSCREEN,
-  CENTER_DESKTOP_NO_LEGEND,
-  CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
-  CENTER_MOBILE,
-  CENTER_MOBILE_FULLSCREEN,
-  DEFAULT_ZOOM_DESKTOP,
-  DEFAULT_ZOOM_MOBILE,
-  MAP_BOUNDS,
-  HACKNEY_BOUNDS_1,
-  HACKNEY_BOUNDS_2,
-  HACKNEY_GEOSERVER_WMS,
-  MAPBOX_TILES_URL,
-  GENERIC_GEOLOCATION_ERROR,
-  GENERIC_OUTSIDE_HACKNEY_ERROR,
-  ATTRIBUTION
-} from "../../helpers/GlobalVariables/GlobalVariables";
+import HackneyMap from "../HackneyMap/HackneyMap";
+import { useMediaQuery } from 'react-responsive';
 
 export const CategoryCardContainer = styled.div`
   .card {
     box-shadow: none;
     border: 0;
     cursor: auto;
+    margin-bottom: 0;
     .card--container {
+      padding: 20px 15px;
       &::after {
           content: none;
       }
@@ -63,10 +41,22 @@ const CategoryExplorer = ({ category, onClick }) => {
   const {urlParams} = useContext(UrlParamsContext);
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+  const {mapToggle, setMapToggle} = useContext(MapToggleContext);
   const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
-  const position = [51.517787, -0.097059];
+  const [showMap, setShowMap] = useState("false");
+  const [fetchOnce, setfetchOnce] = useState(false);
+
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minWidth: 768 })
+    return isDesktop ? children : null
+  }
+
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxWidth: 767 })
+    return isMobile ? children : null
+  }
 
   function createParamObj(currentSearch, paramsArray) {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -75,9 +65,10 @@ const CategoryExplorer = ({ category, onClick }) => {
       const queryKeyValue = queryParts[i].split("=");
       if (paramsArray.includes(queryKeyValue[0])) {
         paramObj[queryKeyValue[0]] = queryKeyValue[1];
-      } 
+      }
     }
   }
+  
   useEffect(() => {
     async function fetchData() {
       let categoryId = "";
@@ -92,8 +83,11 @@ const CategoryExplorer = ({ category, onClick }) => {
       setCategoryData(getCategories || []);
       setIsLoading(false);
     }
-    fetchData();
-
+    if (fetchOnce == false) {
+      fetchData();
+      setfetchOnce(true);
+    }
+    
     if (prevUrl.length == 0 && prevUrlParams.length == 0) {
       let prevUrlArray = [""];
       let prevUrlParamsArray = [{}];
@@ -110,7 +104,13 @@ const CategoryExplorer = ({ category, onClick }) => {
       setPrevUrlParams(prevUrlParamsArray);
     }
 
-  }, [setData, setCategoryData, setIsLoading]);
+    if (mapToggle === "true") {
+      setShowMap("true");
+    } else {
+      setShowMap("false");
+    }
+
+  });
 
   if (isLoading) {
     return <span>Loading</span>;
@@ -134,63 +134,41 @@ const CategoryExplorer = ({ category, onClick }) => {
               category={categoryData[0]}
             />
           </CategoryCardContainer>
-          <CardContainer>
-            <MapView />
-            {data.map((service, index) => {
-              return (
-                <ServiceCard key={index} service={service} onClick={select} />
-              );
-            })}
-          </CardContainer>
-          <MapContainer>
-            <Map className="markercluster-map"
-              center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
-              zoom={MIN_ZOOM}
-              maxZoom={MAX_ZOOM}
-              zoomControl={false}
-              // bounds={MAP_BOUNDS}
-              maxBounds={MAP_BOUNDS}
-              gestureHandling
-            >
-              <ZoomControl position='topright' />
-              <TileLayer
-                  attribution={ATTRIBUTION}
-                  url={MAPBOX_TILES_URL}
-              />
-              <MarkerClusterGroup>
-              {
-                getAllAddresses(data).map((service, index) => {
-                  
-                  const categoriesSorted = service["categories"].sort(function (a, b) {
-                    return a.weight - b.weight;
-                  });
-
-                  const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
-
-                  const iconMarkup = renderToStaticMarkup(
-                    <div className="hackney-map-marker" data-category-icon={categoryIconName}>
-                      <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
-                      <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
-                    </div>
-                  );
-                  const customMarkerIcon = divIcon({
-                    html: iconMarkup
-                  });
-
-                  const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
-                  
-                  return (
-                    <Marker position={point} key={index} icon={customMarkerIcon}>
-                      <Popup>
-                        <ServiceCard key={index} service={service} onClick={select} />
-                      </Popup>
-                    </Marker>
-                  )
-                })
-              }
-              </MarkerClusterGroup>
-            </Map>
-          </MapContainer>
+          <Mobile>
+            <ToggleView />
+            {
+              ( showMap == "false" ) ?
+                <CardContainer>
+                  {data.map((service, index) => {
+                    return (
+                      <ServiceCard key={index} service={service} onClick={select} />
+                    );
+                  })}
+                </CardContainer> : ""
+            }
+          </Mobile>
+          <Desktop>
+            <CardContainer>
+              {data.map((service, index) => {
+                return (
+                  <ServiceCard key={index} service={service} onClick={select} />
+                );
+              })}
+            </CardContainer>
+          </Desktop>
+          <Mobile>
+          {
+            ( showMap == "true" ) ?
+              <MapContainer>
+                <HackneyMap data={data} />
+              </MapContainer> : ""
+          }
+          </Mobile>
+          <Desktop>
+            <MapContainer>
+              <HackneyMap data={data} />
+            </MapContainer>
+          </Desktop>
         </div>
       )}
     </div>

@@ -13,29 +13,8 @@ import { useQueryParams, NumberParam } from 'use-query-params';
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
-import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
-import {MapContainer} from "../../util/styled-components/MapContainer";
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { green, light } from "../../settings";
-import {
-    MAX_ZOOM,
-    MIN_ZOOM,
-    CENTER_DESKTOP_LEGEND,
-    CENTER_DESKTOP_LEGEND_FULLSCREEN,
-    CENTER_DESKTOP_NO_LEGEND,
-    CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
-    CENTER_MOBILE,
-    CENTER_MOBILE_FULLSCREEN,
-    DEFAULT_ZOOM_DESKTOP,
-    DEFAULT_ZOOM_MOBILE,
-    MAP_BOUNDS,
-    HACKNEY_BOUNDS_1,
-    HACKNEY_BOUNDS_2,
-    HACKNEY_GEOSERVER_WMS,
-    MAPBOX_TILES_URL,
-    GENERIC_GEOLOCATION_ERROR,
-    GENERIC_OUTSIDE_HACKNEY_ERROR,
-    ATTRIBUTION
-  } from "../../helpers/GlobalVariables/GlobalVariables";
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
@@ -64,7 +43,6 @@ const Home = () => {
     let prevUrlArray = [""];
     let paramObj = {};
     let prevUrlParamsArray = [{}];
-    const position = [51.517787, -0.097059];
 
     function createParamObj(currentSearch, paramsArray) {
         const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -173,23 +151,7 @@ const Home = () => {
                     </form>
                 </HomeHeader>
                 <ListCategories onClick={handleEvent} />
-                <MapContainer>
-                    <Map className="markercluster-map"
-                        center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
-                        zoom={MIN_ZOOM}
-                        maxZoom={MAX_ZOOM}
-                        zoomControl={false}
-                        // bounds={MAP_BOUNDS}
-                        maxBounds={MAP_BOUNDS}
-                        gestureHandling
-                        >
-                        <ZoomControl position='topright' />
-                        <TileLayer
-                            attribution={ATTRIBUTION}
-                            url={MAPBOX_TILES_URL}
-                        />
-                    </Map>
-                </MapContainer>
+                <MapPlaceholder />
             </div>
             </>
         )

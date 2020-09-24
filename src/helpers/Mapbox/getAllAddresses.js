@@ -1,6 +1,9 @@
 const getAllAddresses = data => {
-  if (data.constructor !== Array) {
-    data = [data];
+  // check to see if service has multiple locations
+  if (data["data"].constructor !== Array) {
+    data = [data["data"]];
+  } else {
+    data = data["data"];
   }
   let duplicateService = [...data];
 

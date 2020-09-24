@@ -6,9 +6,11 @@ import UrlContext from "./context/UrlContext/UrlContext";
 import PrevUrlContext from "./context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "./context/PrevUrlParamsContext/PrevUrlParamsContext";
+import MapToggleContext from "./context/MapToggleContext/MapToggleContext";
 import AppLoading from './AppLoading';
 import { SidebarContainer } from "./util/styled-components/SidebarContainer"
 import {ThemeProvider} from 'styled-components';
+import "react-leaflet-markercluster/dist/styles.min.css";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -19,8 +21,10 @@ function App() {
   const urlParamValue = useMemo(() => ({ urlParams, setUrlParams }), [urlParams, setUrlParams]);
   const [prevUrlParams, setPrevUrlParams] = useState([]);
   const prevUrlParamsValue = useMemo(() => ({ prevUrlParams, setPrevUrlParams }), [prevUrlParams, setPrevUrlParams]);
+  const [mapToggle, setMapToggle] = useState("false");
+  const mapToggleValue = useMemo(() => ({ mapToggle, setMapToggle }), [mapToggle, setMapToggle]);
   const [isLoading, setIsLoading] = useState(true);
-  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic", "set_postcode", "select_categories", "select_demographics"];
+  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic", "set_postcode", "select_categories", "select_demographics", "map_toggle"];
 
   const theme = {
     breakpoints: { 
@@ -63,10 +67,12 @@ function App() {
             <UrlContext.Provider value={urlValue}>
               <PrevUrlContext.Provider value={prevUrlValue}>
                 <PrevUrlParamsContext.Provider value={prevUrlParamsValue}>
-                  <SidebarContainer>
-                    { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home /> }
-                  </SidebarContainer>
-                  <GlobalStyle />
+                  <MapToggleContext.Provider value={mapToggleValue}>
+                    <SidebarContainer>
+                      { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home /> }
+                    </SidebarContainer>
+                    <GlobalStyle />
+                  </MapToggleContext.Provider>
                 </PrevUrlParamsContext.Provider>
               </PrevUrlContext.Provider>
             </UrlContext.Provider>
