@@ -13,46 +13,55 @@ const ToggleViewContainer = styled.div`
     display: flex;
     padding: 20px 15px 0;
     align-items: center;
+    z-index: 34;
+    position: relative;
     aside {
         font-size: 14px;
     }
+    
     div {
         display: flex;
-        &.list-enabled {
-            .map-services-button {
-                background: transparent;
-                border: 1px solid ${green["ghost"]};
-                border-radius: 5px;
-                color: ${green["main"]};
-                &:hover, &:focus {
-                    background-color: ${darken(0.1, green["bright"])};
-                    color: ${light["white"]};
-                    svg {
-                        color: ${light["white"]};
-                    }
-                }
-                
+    }
+    &.list-enabled {
+        .map-services-button {
+            background: transparent;
+            border: 1px solid ${green["ghost"]};
+            border-radius: 5px;
+            color: ${green["main"]};
+            &:hover, &:focus {
+                background-color: ${darken(0.1, green["bright"])};
+                color: ${light["white"]};
                 svg {
-                    color: ${green["main"]};
+                    color: ${light["white"]};
                 }
             }
-        }
-        &.map-enabled {
-            .list-services-button {
-                background: transparent;
-                border: 1px solid ${green["ghost"]};
-                border-radius: 5px;
+            
+            svg {
                 color: ${green["main"]};
-                &:hover, &:focus {
-                    background-color: ${darken(0.1, green["bright"])};
-                    color: ${light["white"]};
-                    svg {
-                        color: ${light["white"]};
-                    }
-                }
+            }
+        }
+    }
+    &.map-enabled {
+        aside {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(3px);
+            padding: 3px 5px;
+            margin-left: -5px;
+        }
+        .list-services-button {
+            background: ${light["white"]};
+            border: 1px solid ${green["ghost"]};
+            border-radius: 5px;
+            color: ${green["main"]};
+            &:hover, &:focus {
+                background-color: ${darken(0.1, green["bright"])};
+                color: ${light["white"]};
                 svg {
-                    color: ${green["main"]};
+                    color: ${light["white"]};
                 }
+            }
+            svg {
+                color: ${green["main"]};
             }
         }
     }
@@ -130,9 +139,9 @@ const ToggleView = () => {
     };
 
     return (
-        <ToggleViewContainer>
+        <ToggleViewContainer className={style}>
             <aside>View as:</aside>
-            <div className={style}>
+            <div>
                 <StyledButton className="list-services-button" type="button" label="List" onClick={listEvent} />
                 <StyledButton modifiers="mapButton" className="map-services-button" type="button" label="Map" onClick={mapEvent} />
             </div>
