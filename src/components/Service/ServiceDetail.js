@@ -1,8 +1,9 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext, useEffect, useRef, Fragment} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import styled from "styled-components";
 import { darken } from "polished";
+import { blue } from "../../settings";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -18,7 +19,8 @@ import {
 import Address from "../Address/Address";
 import Header from "../Header/Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import ActionSheet from 'actionsheet-react';
+import Share from "../Share/Share";
 
 export const DetailContainer = styled.div`
     ${breakpoint('md')`
@@ -50,6 +52,22 @@ export const DetailContainer = styled.div`
     ul {
         li {
             font-size: 19px;
+        }
+    }
+    .fss--social-share {
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        font-size: 19px;
+        color: ${blue[400]};
+        text-decoration: underline;
+        &:hover {
+            color: ${darken(0.1, blue[400])};
+        }
+        svg {
+            margin-right: 5px;
+            color: #000;
         }
     }
 `;
@@ -146,6 +164,15 @@ export const AccordionContainer = styled.div`
     }
 `;
 
+export const ActionSheetContainer = styled.div`
+    height: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
 const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -200,6 +227,12 @@ const ServiceDetail = () => {
     let hero = "";
     if (data.images && data.images.medium.length) {
         hero = data.images.medium;
+    }
+
+    const ref = useRef();
+ 
+    const handleOpen = () => {
+        ref.current.open();
     }
   
     return isLoading ? (
@@ -277,7 +310,17 @@ const ServiceDetail = () => {
             <GreyInnerContainer>
                 <ul className="ul-no-style">
                     {/* TODO */}
-                    <li>{`<Share>`}</li>
+                    <button onClick={handleOpen} className="fss--social-share">
+                        <FontAwesomeIcon icon={["fas", "share-square"]} />
+                        Share
+                    </button>
+                    <ActionSheet ref={ref}>
+                        <ActionSheetContainer>
+                            <h3>Share</h3>
+                            <Share service={data} />
+                        </ActionSheetContainer>
+                    </ActionSheet>
+                    
                     <li>{`<Print>`}</li>
                 </ul>   
             </GreyInnerContainer>
