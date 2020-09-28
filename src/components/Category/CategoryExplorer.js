@@ -17,18 +17,18 @@ import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
 
 export const CategoryCardContainer = styled.div`
-  .card {
+  .fss--card {
     box-shadow: none;
     border: 0;
     cursor: auto;
     margin-bottom: 0;
-    .card--container {
+    .fss--card--container {
       padding: 20px 15px;
       &::after {
           content: none;
       }
     }
-    .card--content {
+    .fss--card--content {
       margin-right: 0;
     }
   }

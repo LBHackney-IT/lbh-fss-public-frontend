@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import AppLoading from "../../AppLoading";
+import GetCategories from "../../services/GetCategories/GetCategories";
 import Header from "../Header/Header";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -13,6 +14,10 @@ import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
 import { dark, red } from "../../settings";
+import {FilterContainer} from "../../util/styled-components/FilterContainer";
+import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
+import FormCheckbox from "../FormCheckbox/FormCheckbox";
+import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const SetPostcodeContainer = styled.div`
@@ -43,6 +48,7 @@ const StyledButton = styled(Button)`
 `;
 
 const SelectDemographics = () => {
+    const [data, setData] = useState([]);
     const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
@@ -51,54 +57,51 @@ const SelectDemographics = () => {
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
     const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
+    const currentSearch = window.location.search;
+    let paramObj = {};
 
     useEffect(() => {
-        setIsLoading(false);
-    }, [setIsLoading]);
+        async function fetchData() {
+          const getCategories = await GetCategories.retrieveCategories({});
+          setData(getCategories || []);
+          setIsLoading(false);
+        }
+    
+        // if directly accessing this page redirect user back to home
+        // if (prevUrl.length == 0 && prevUrlParams.length == 0) {
+        //     history.push("?");
+        //     setUrl("");
+        //     setUrlParams({});
+        // } else {
+            fetchData();
+        // }
+    
+    }, [setData, setIsLoading]);
+
+    const clearTaxonomiesEvent = e => {
+        // clear all checkboxes
+        console.log('samwong');
+    };
 
     async function submitForm({ postcode }) {
         if (isLoading) return;
+        // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
+        console.log("url");
+        console.log(url);
+        console.log("urlParams");
+        console.log(urlParams);
+        console.log("prevUrl");
+        console.log(prevUrl);
+        console.log("prevUrlParams");
+        console.log(prevUrlParams);
+        // get all selected data-taxonomy-id values
+        // make string separated by +
+        // clear all previous categories in urlParams (or prevUrlParams)
+        // append new categories filter to urlParams
+        // make request
+        // push
         const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
         const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
-        
-        const validPostcode = postcodeValidator(postcode, 'UK');
-        if (validPostcode) {
-            localStorage.setItem("postcode", postcode);
-            let push = "?postcode="+postcode+"&service_search";
-            let params = {"postcode": postcode, "search_service": undefined};
-
-            if (prevUrl.length !== 0 && prevUrlParams.length !== 0) {
-                push = prevUrlArrayLast;
-                params = prevUrlParamsArrayLast;
-                
-                // if service exists in prevUrlParams
-                const serviceObj = prevUrlParams.find(serviceObj => serviceObj.service);
-                if (serviceObj !== undefined) {
-                    //
-                } else {
-                    // if postcode exists in prevUrlParams
-                    let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
-                    if (ListServicesPostcodeObj !== undefined) {
-                        // replace previous postcode with new value
-                        ListServicesPostcodeObj.postcode = postcode;
-                        push = "?" + new URLSearchParams(ListServicesPostcodeObj).toString();
-                        push = push.replaceAll("=undefined", "");
-                        params = ListServicesPostcodeObj;
-                    }
-                    // if service_search exists in prevUrlParams
-                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
-                    if (ListServicesSearchObj !== undefined) {
-                        push = "?" + new URLSearchParams(ListServicesSearchObj).toString();
-                        push = push.replaceAll("=undefined", "");
-                        params = ListServicesSearchObj;
-                    }
-                }
-            }
-
-            history.push(push);
-            setUrl(push);
-            setUrlParams(params);
-        }
     }
 
     return (
@@ -106,11 +109,32 @@ const SelectDemographics = () => {
             <AppLoading />
         ) : (
             <>
-            <div className="">
+            <FilterContainer>
                 <Header />
-                TODO SELECT DEMOGRAPHICS
-                <MapPlaceholder />
-            </div>
+                {/* <ServiceFilter onClick={clearTaxonomiesEvent} /> */},
+                <ServiceFilter />
+                <h2>Select demographics</h2>
+                <form onSubmit={handleSubmit(submitForm)} data-testid="form">
+                    <CheckboxContainer>
+                        {data.map((demographic, index) => {
+                            const demographicName = demographic.name.replaceAll(" ", "-").toLowerCase();
+                            return (
+                                <FormCheckbox
+                                    key={index}
+                                    taxonomyId={demographic.id}
+                                    type="checkbox"
+                                    label={demographic.name}
+                                    name={demographicName}
+                                    register={register}
+                                    required
+                                    error={errors.agreeToTerms}
+                                />
+                            );
+                        })}
+                        <StyledButton type="submit" label="Select demographics" disabled={isLoading} />
+                    </CheckboxContainer>
+                </form>
+            </FilterContainer>
             </>
         )
     )

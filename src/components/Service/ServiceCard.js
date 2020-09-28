@@ -12,13 +12,13 @@ const ServiceCard = ({ service, onClick }) => {
     }
 
     return (
-        <Card modifiers="serviceCard" id={service.id} className="card" onClick={select}>
+        <Card modifiers="serviceCard" id={service.id} className="fss--card" onClick={select}>
             {hero.length ? (
                 <div className="image-container">
                     <img src={hero} alt={service.name} />
                 </div>
             ) : ""}
-            <div className="card--container">
+            <div className="fss--card--container">
                 <h4>{service.name}</h4>
                 <p>{service.description}</p>
                 <p className="service--distance">Distance: <a href="#">TBC</a></p>

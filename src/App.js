@@ -58,6 +58,9 @@ function App() {
     storeQuery();
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
 
+  // console.log(url);
+  // console.log(urlParams);
+
   return (
     isLoading ? <AppLoading /> :
     (

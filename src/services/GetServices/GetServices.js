@@ -46,6 +46,9 @@ const GetServices = {
     }
   },
   async getService(id) {
+    const options = {
+      headers: {'Content-Type': 'application/json', 'x-api-token': 'h6Iu4Ocm1S9ttoJsXBBGl8NpdgEn7sTVRLBfGSZ6'}
+    };
     try {
       const response = await axios.get(`https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/services/${id}`, {
         headers: {"x-api-key": API_KEY}
