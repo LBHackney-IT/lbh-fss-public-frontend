@@ -1,21 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { neutral, green } from "../../settings";
+import { light, green } from "../../settings";
 import { darken } from "polished";
 
 const StyledButton = styled.button`
   display: block;
   margin-bottom: 30px;
-  color: ${neutral[100]};
-  background-color: ${green[400]};
+  color: ${light["white"]};
+  background-color: ${green["main"]};
   border: none;
   padding: 13px 57px;
   font-size: 19px;
   cursor: pointer;
 
   &:hover {
-    background-color: ${darken(0.1, green[400])};
+    background-color: ${darken(0.1, green["main"])};
   }
 `;
 

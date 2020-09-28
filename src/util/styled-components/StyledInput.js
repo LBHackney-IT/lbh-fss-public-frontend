@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import breakpoint from 'styled-components-breakpoint';
+import { red } from "../../settings";
 
 export const StyledInput = styled.input`
     display: block;
@@ -14,6 +15,6 @@ export const StyledInput = styled.input`
 
     `}
     &[aria-invalid="true"] {
-        border-color: #BE3A34 !important;
+        border-color: ${red["error"]} !important;
     }
 `;

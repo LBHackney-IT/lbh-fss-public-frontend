@@ -6,16 +6,17 @@ import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
+import { green, light } from "../../settings";
 
 export const ServiceFilterContainer = styled.div`
-    background: #00664F;
+    background: ${green["main"]};
     opacity: 0.9;
     width: 100%;
     max-height: 60px;
 `;
 
 const FilterButton = styled.button`
-    color: #fff;
+    color: ${light["white"]};
     font-size: 16px;
     border: 0;
     padding: 20px 15px;

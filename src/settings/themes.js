@@ -1,9 +1,9 @@
-import { neutral } from "./colors";
+import { dark, light } from "./colors";
 import { primaryFont } from "./typography";
 
 export const defaultTheme = {
-  textColor: neutral[600],
-  textColorInverted: neutral[100],
+  textColor: dark["black"],
+  textColorInverted: light["white"],
   primaryFont: primaryFont,
-  headerBackgroundColor: neutral[500],
+  headerBackgroundColor: dark["offBlack"],
 };
