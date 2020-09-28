@@ -1,8 +1,10 @@
 import React, {useState, useContext, useEffect} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
+import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import { darken } from "polished";
+import { green, light, dark } from "../../settings";
 import breakpoint from 'styled-components-breakpoint';
 import { InnerContainer } from "../../util/styled-components/InnerContainer";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -18,14 +20,18 @@ import {
 import Address from "../Address/Address";
 import Header from "../Header/Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import {MapContainer} from "../../util/styled-components/MapContainer";
+import HackneyMap from "../HackneyMap/HackneyMap";
+import { useMediaQuery } from 'react-responsive';
 
 export const DetailContainer = styled.div`
-    ${breakpoint('md')`
-        padding-bottom: 40px;
-        overflow-y: scroll;
-        height: 100vh;
-    `}
+    .service-info {
+        ${breakpoint('md')`
+            padding-bottom: 80px;
+            overflow-y: scroll;
+            height: 100vh;
+        `}
+    }
     .image-container {
         img {
             width: 100%;
@@ -33,14 +39,14 @@ export const DetailContainer = styled.div`
         }
     }
     .link-button {
-        background: #00664F;
+        background: ${green["main"]};
         border-radius: 3px;
         padding: 15px 30px;
         display: inline-block;
-        color: #fff;
+        color: ${light["white"]};
         text-decoration: none;
         &:hover {
-            background-color: ${darken(0.1, "#00664F")};
+            background-color: ${darken(0.1, green["main"])};
         }
     }
     h3 {
@@ -54,8 +60,14 @@ export const DetailContainer = styled.div`
     }
 `;
 
+export const InnerMapContainer = styled.div`
+    .leaflet-container {
+        height: 450px;
+    }
+`;
+
 const GreyInnerContainer = styled(InnerContainer)`
-    background: #F8F8F8;
+    background: ${light["grey"]};
     margin-bottom: 15px;
     &.info {
         h2 {
@@ -67,7 +79,7 @@ const GreyInnerContainer = styled(InnerContainer)`
         }
         p {
             font-size: 16px;
-            color: #525A5B;
+            color: ${dark["grey"]};
             margin-top: 0;
         }
     }
@@ -79,7 +91,7 @@ export const AccordionContainer = styled.div`
     }
     h3 {
         font-size: 16px;
-        color: #525A5B;
+        color: ${dark["grey"]};
         margin-bottom: 0;
     }
     .accordion__item {
@@ -133,7 +145,7 @@ export const AccordionContainer = styled.div`
         margin-top: 5px;
         position: relative;
         font-size: 16px;
-        color: #525A5B;
+        color: ${dark["grey"]};
         &::before {
             content: '';
             position: absolute;
@@ -141,12 +153,12 @@ export const AccordionContainer = styled.div`
             left: -20px;
             width: 1px;
             height: calc(100% - 5px);
-            background: #BFC1C3;
+            background: ${green["ghost"]};
         }
     }
 `;
 
-const ServiceDetail = () => {
+const ServiceDetail = ({ onClick }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const {urlParams} = useContext(UrlParamsContext);
@@ -155,6 +167,16 @@ const ServiceDetail = () => {
     const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
     const currentSearch = window.location.search;
     let paramObj = {};
+
+    const Desktop = ({ children }) => {
+        const isDesktop = useMediaQuery({ minWidth: 768 })
+        return isDesktop ? children : null
+    }
+
+    const Mobile = ({ children }) => {
+        const isMobile = useMediaQuery({ maxWidth: 767 })
+        return isMobile ? children : null
+    }
 
     function createParamObj(currentSearch, paramsArray) {
         const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -197,6 +219,10 @@ const ServiceDetail = () => {
 
     }, [setData, setIsLoading]);
 
+    const select = e => {
+        onClick(e);
+    }
+
     let hero = "";
     if (data.images && data.images.medium.length) {
         hero = data.images.medium;
@@ -207,90 +233,98 @@ const ServiceDetail = () => {
         ) : (
         <DetailContainer>
             <Header />
-            {hero.length ? (
-                <div className="image-container">
-                    <img src={hero} alt={data.name} />
-                </div>
-            ) : ""}
-            <GreyInnerContainer className="info">
-                <h2>{data.name}</h2>
-                <p>{data.description}</p>
-                <h3>This is for:</h3>
-                <p>
-                    {data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
-                </p>
-            </GreyInnerContainer>
-            <InnerContainer>
-                <AccordionContainer>
-                    <div className="category-header">   
-                        <h3>We can help with:</h3>
+            <div className="service-info">
+                {hero.length ? (
+                    <div className="image-container">
+                        <img src={hero} alt={data.name} />
                     </div>
-                    <Accordion allowMultipleExpanded preExpanded={['hidden']}>
-                        {data.categories.map((category) => {
-                            const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
-                            return (
-                                <AccordionItem key={category.id}>
-                                    <AccordionItemHeading className="category-icons" data-category-icon={categoryIconName}>
-                                        <AccordionItemButton>
-                                            <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
-                                            {category.name}
-                                        </AccordionItemButton>
-                                    </AccordionItemHeading>
-                                    <AccordionItemPanel>
-                                        {category.description}
-                                    </AccordionItemPanel>
-                                </AccordionItem>
-                            );
-                        })}
-                        <AccordionItem key="hidden" uuid="hidden" className="hidden-item" />
-                    </Accordion>
-                </AccordionContainer>
-            </InnerContainer>
-            <InnerContainer>
-                <h3>Contact us</h3>
-                <ul className="ul-no-style">
-                    {/* TODO */}
-                    <li><a className="link-button" href={data.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                    <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
-                    <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
-                </ul>
-            </InnerContainer>
-            <InnerContainer>
-                <h3>Referral details</h3>
-                <ul className="ul-no-style">
-                    <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                    <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
-                </ul>
-            </InnerContainer>
-            <InnerContainer>
-                <h3>Address</h3>
-                <ul className="ul-no-style">
-                    {data.locations.map((location, index) =>
-                        <Address key={index} address={location} />
-                    )}
-                </ul>
-            </InnerContainer>
-            <div>
-                {/* TODO */}
-                {`<Map>`}
+                ) : ""}
+                <GreyInnerContainer className="info">
+                    <h2>{data.name}</h2>
+                    <p>{data.description}</p>
+                    <h3>This is for:</h3>
+                    <p>
+                        {data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
+                    </p>
+                </GreyInnerContainer>
+                <InnerContainer>
+                    <AccordionContainer>
+                        <div className="category-header">   
+                            <h3>We can help with:</h3>
+                        </div>
+                        <Accordion allowMultipleExpanded preExpanded={['hidden']}>
+                            {data.categories.map((category) => {
+                                const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
+                                return (
+                                    <AccordionItem key={category.id}>
+                                        <AccordionItemHeading className="category-icons" data-category-icon={categoryIconName}>
+                                            <AccordionItemButton>
+                                                <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
+                                                {category.name}
+                                            </AccordionItemButton>
+                                        </AccordionItemHeading>
+                                        <AccordionItemPanel>
+                                            {category.description}
+                                        </AccordionItemPanel>
+                                    </AccordionItem>
+                                );
+                            })}
+                            <AccordionItem key="hidden" uuid="hidden" className="hidden-item" />
+                        </Accordion>
+                    </AccordionContainer>
+                </InnerContainer>
+                <InnerContainer>
+                    <h3>Contact us</h3>
+                    <ul className="ul-no-style">
+                        {/* TODO */}
+                        <li><a className="link-button" href={data.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
+                    </ul>
+                </InnerContainer>
+                <InnerContainer>
+                    <h3>Referral details</h3>
+                    <ul className="ul-no-style">
+                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
+                    </ul>
+                </InnerContainer>
+                <InnerContainer>
+                    <h3>Address</h3>
+                    <ul className="ul-no-style">
+                        {data.locations.map((location, index) =>
+                            <Address key={index} address={location} />
+                        )}
+                    </ul>
+                </InnerContainer>
+                <Mobile>
+                    <InnerMapContainer>
+                        <HackneyMap data={data} />
+                    </InnerMapContainer>
+                </Mobile>
+                <GreyInnerContainer>
+                    <ul className="ul-no-style">
+                        {/* TODO */}
+                        <li>{`<Share>`}</li>
+                        <li>{`<Print>`}</li>
+                    </ul>   
+                </GreyInnerContainer>
+                <InnerContainer>
+                    <h3>Follow {data.name}</h3>
+                    <ul className="ul-no-style">
+                        {/* TODO */}
+                        <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                        <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                        <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                        <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                    </ul>
+                </InnerContainer>
             </div>
-            <GreyInnerContainer>
-                <ul className="ul-no-style">
-                    {/* TODO */}
-                    <li>{`<Share>`}</li>
-                    <li>{`<Print>`}</li>
-                </ul>   
-            </GreyInnerContainer>
-            <InnerContainer>
-                <h3>Follow {data.name}</h3>
-                <ul className="ul-no-style">
-                    {/* TODO */}
-                    <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                </ul>
-            </InnerContainer>
+            <Desktop>
+                <MapContainer>
+                    <HackneyMap data={data} />
+                </MapContainer>
+            </Desktop>
         </DetailContainer>
     );
   };

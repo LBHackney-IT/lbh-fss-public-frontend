@@ -1,7 +1,7 @@
 // import React from 'react';
 import styled from "styled-components";
 import { applyStyleModifiers } from 'styled-components-modifiers';
-import { pink } from "../../settings/colors";
+import { pink, dark, light } from "../../settings";
 import arrowRight from "../../assets/arrow-right.svg";
 import breakpoint from 'styled-components-breakpoint';
 
@@ -18,7 +18,7 @@ export const CARD_MODIFIERS = {
             }
             svg {
                 font-size: 30px;
-                color: #fff;
+                color: ${light["white"]};
             }
         }
         .card--container {
@@ -45,7 +45,7 @@ export const CARD_MODIFIERS = {
         }
         .service--distance {
             margin-top: 15px;
-            color: #000;
+            color: ${dark["black"]};
         }
         img {
             width: 100%;
@@ -55,8 +55,8 @@ export const CARD_MODIFIERS = {
 }
 
 export const Card = styled.div`
-    background: #F8F8F8;
-    border: 1px solid #DEE0E2;
+    background: ${light["grey"]};
+    border: 1px solid ${light["greyBorder"]};
     box-sizing: border-box;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);
     border-radius: 3px;
@@ -77,7 +77,7 @@ export const Card = styled.div`
         margin-top: 0;
         margin-bottom: 0;
         font-size: 14px;
-        color: #525A5B;
+        color: ${dark["grey"]};
     }
 
     ${applyStyleModifiers(CARD_MODIFIERS)};

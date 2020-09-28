@@ -5,18 +5,37 @@ import { CardContainer } from "../../util/styled-components/CardContainer";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
+import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
+import ToggleView from "../ToggleView/ToggleView";
 import Header from "../Header/Header";
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
+import styled from "styled-components";
+import {MapContainer} from "../../util/styled-components/MapContainer";
+import { useMediaQuery } from 'react-responsive';
+import HackneyMap from "../HackneyMap/HackneyMap";
 
-const ListServices = ({ categories = [], onClick }) => {
+const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {urlParams, setUrlParams} = useContext(UrlParamsContext);
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+  const {mapToggle, setMapToggle} = useContext(MapToggleContext);
   const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
+  const [showMap, setShowMap] = useState("false");
+  const [fetchOnce, setfetchOnce] = useState(false);
+
+  const Desktop = ({ children }) => {
+    const isDesktop = useMediaQuery({ minWidth: 768 })
+    return isDesktop ? children : null
+  }
+
+  const Mobile = ({ children }) => {
+    const isMobile = useMediaQuery({ maxWidth: 767 })
+    return isMobile ? children : null
+  }
 
   function createParamObj(currentSearch, paramsArray) {
     const queryParts = currentSearch.substring(1).split(/[&;]/g);
@@ -38,7 +57,10 @@ const ListServices = ({ categories = [], onClick }) => {
       setData(getServices || []);
       setIsLoading(false);
     }
-    fetchData();
+    if (fetchOnce == false) {
+      fetchData();
+      setfetchOnce(true);
+    }
 
     if (prevUrl.length == 0 && prevUrlParams.length == 0) {
       let prevUrlArray = [""];
@@ -56,8 +78,13 @@ const ListServices = ({ categories = [], onClick }) => {
       setPrevUrlParams(prevUrlParamsArray);
     }
 
-  }, [setData, setIsLoading]);
+    if (mapToggle === "true") {
+      setShowMap("true");
+    } else {
+      setShowMap("false");
+    }
 
+  });
 
   if (isLoading) {
     return <span>Loading</span>;
@@ -75,14 +102,42 @@ const ListServices = ({ categories = [], onClick }) => {
         <div>
           <Header />
           <ServiceFilter />
-          <CardContainer>
-            <div>View as: {`{List | Map}`}</div>
-            {data.map((service, index) => {
-              return (
-                <ServiceCard key={index} service={service} onClick={select} />
-              );
-            })}
-          </CardContainer>
+          <Mobile>
+            <ToggleView />
+            {
+              ( showMap == "false" ) ?
+                <CardContainer>
+                  {data.map((service, index) => {
+                    return (
+                      <ServiceCard key={index} service={service} onClick={select} />
+                    );
+                  })}
+                </CardContainer> : ""
+            }
+          </Mobile>
+          <Desktop>
+            <CardContainer>
+              {data.map((service, index) => {
+                return (
+                  <ServiceCard key={index} service={service} onClick={select} />
+                );
+              })}
+            </CardContainer>
+          </Desktop>
+
+          <Mobile>
+          {
+            ( showMap == "true" ) ?
+              <MapContainer>
+                <HackneyMap data={data} />
+              </MapContainer> : ""
+            }
+          </Mobile>
+          <Desktop>
+            <MapContainer>
+              <HackneyMap data={data} />
+            </MapContainer>
+          </Desktop>
         </div>
       )}
     </div>

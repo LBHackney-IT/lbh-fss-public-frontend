@@ -380,10 +380,32 @@
     },
     "locations": [
       {
-        "latitude": "-28.5286",
-        "longitude": "-66.7379",
+        "latitude": "51.540730",
+        "longitude": "-0.067119", 
         "uprn": 96511,
-        "address1": "6255 Kohler Courts",
+        "address1": "6255A Kohler Courts",
+        "address2": "30840 Waelchi Freeway",
+        "city": "East Allisonland",
+        "stateProvince": "Missouri",
+        "postalCode": "03509",
+        "country": "Cuba"
+      },
+      {
+        "latitude": "51.540730",
+        "longitude": "-0.069119", 
+        "uprn": 96511,
+        "address1": "6255B Kohler Courts",
+        "address2": "30840 Waelchi Freeway",
+        "city": "East Allisonland",
+        "stateProvince": "Missouri",
+        "postalCode": "03509",
+        "country": "Cuba"
+      },
+      {
+        "latitude": "51.560730",
+        "longitude": "-0.069119", 
+        "uprn": 96511,
+        "address1": "6255C Kohler Courts",
         "address2": "30840 Waelchi Freeway",
         "city": "East Allisonland",
         "stateProvince": "Missouri",
@@ -1383,8 +1405,8 @@
     },
     "locations": [
       {
-        "latitude": "85.2515",
-        "longitude": "-48.3989",
+        "latitude": "51.550337",
+        "longitude": "-0.078277",
         "uprn": 71725,
         "address1": "847 Winnifred Loaf",
         "address2": "31957 Romaguera Island",
@@ -3413,10 +3435,32 @@
     },
     "locations": [
       {
-        "latitude": "39.1442",
-        "longitude": "40.9214",
+        "latitude": "51.517787",
+        "longitude": "-0.099059",
         "uprn": 5306,
-        "address1": "457 Kuhn Center",
+        "address1": "457a Kuhn Center",
+        "address2": "90571 Alexa Place",
+        "city": "Glovermouth",
+        "stateProvince": "Nebraska",
+        "postalCode": "85828-2513",
+        "country": "Senegal"
+      },
+      {
+        "latitude": "51.517787",
+        "longitude": "-0.097059",
+        "uprn": 5307,
+        "address1": "457b Kuhn Center",
+        "address2": "90571 Alexa Place",
+        "city": "Glovermouth",
+        "stateProvince": "Nebraska",
+        "postalCode": "85828-2513",
+        "country": "Senegal"
+      },
+      {
+        "latitude": "51.517787",
+        "longitude": "-0.095059",
+        "uprn": 5308,
+        "address1": "457c Kuhn Center",
         "address2": "90571 Alexa Place",
         "city": "Glovermouth",
         "stateProvince": "Nebraska",
@@ -3483,8 +3527,8 @@
     },
     "locations": [
       {
-        "latitude": "31.7430",
-        "longitude": "24.1775",
+        "latitude": "51.552472",
+        "longitude": "-0.067119",
         "uprn": 96654,
         "address1": "0407 Stracke Mills",
         "address2": "504 Vance Unions",
@@ -4967,8 +5011,8 @@
     },
     "locations": [
       {
-        "latitude": "-38.4787",
-        "longitude": "-88.3286",
+        "latitude": "51.517787",
+        "longitude": "-0.087059",
         "uprn": 47398,
         "address1": "561 Zita Bypass",
         "address2": "5827 Dahlia Ridges",
@@ -5254,10 +5298,21 @@
     },
     "locations": [
       {
-        "latitude": "42.1154",
-        "longitude": "-162.4746",
+        "latitude": "51.552210",
+        "longitude": "-0.051590",
         "uprn": 14497,
-        "address1": "1767 Damon Fields",
+        "address1": "1767A Damon Fields",
+        "address2": "858 Royce Stravenue",
+        "city": "Kubtown",
+        "stateProvince": "Colorado",
+        "postalCode": "11445",
+        "country": "Croatia"
+      },
+      {
+        "latitude": "51.552210",
+        "longitude": "-0.061590",
+        "uprn": 14498,
+        "address1": "1767B Damon Fields",
         "address2": "858 Royce Stravenue",
         "city": "Kubtown",
         "stateProvince": "Colorado",
@@ -9258,8 +9313,8 @@
     },
     "locations": [
       {
-        "latitude": "-52.3935",
-        "longitude": "156.1129",
+        "latitude": "51.519230",
+        "longitude": "-0.041700",
         "uprn": 66867,
         "address1": "60978 Amalia Hollow",
         "address2": "7096 Ruecker Parks",
@@ -10098,8 +10153,8 @@
     },
     "locations": [
       {
-        "latitude": "-74.3389",
-        "longitude": "-50.7598",
+        "latitude": "52.517787",
+        "longitude": "-0.097059",
         "uprn": 84610,
         "address1": "043 Valerie Canyon",
         "address2": "081 Crona Inlet",

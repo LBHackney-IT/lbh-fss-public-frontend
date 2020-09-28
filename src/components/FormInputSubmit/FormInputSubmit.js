@@ -6,13 +6,14 @@ import Button from "../Button/Button";
 import { darken } from "polished";
 import {StyledInput} from "../../util/styled-components/StyledInput";
 import {StyledLabel} from "../../util/styled-components/StyledLabel";
+import {green} from "../../settings";
 
 const StyledInputContainer = styled.div`
   position: relative;
 `;
 
 const StyledButton = styled(Button)`
-  background: #A4D65E;
+  background: ${green["bright"]};
   position: absolute;
   top: 5px;
   right: 5px;
@@ -22,7 +23,7 @@ const StyledButton = styled(Button)`
   height: 40px;
   margin: 0;
   &:hover {
-    background-color: ${darken(0.1, "#A4D65E")};
+    background-color: ${darken(0.1, green["bright"])};
   }
 
   &::before {

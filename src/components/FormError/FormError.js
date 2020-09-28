@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { light } from "../../settings";
 
 const StyledError = styled.span`
   display: block;
   margin-bottom: 20px;
-  color: #fff;
+  color: ${light["white"]};
 `;
 
 const FormError = ({ error }) => {

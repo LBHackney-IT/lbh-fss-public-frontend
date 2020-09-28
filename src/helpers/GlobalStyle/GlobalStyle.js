@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { defaultTheme, blue } from "../../settings";
+import { defaultTheme, blue, green, dark, light, category } from "../../settings";
 import { normalize } from "polished";
 import openSansV17Latin700Ttf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.ttf";
 import openSansV17Latin700Woff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff";
@@ -54,10 +54,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: ${blue[400]};
+  color: ${blue["link"]};
 
   &:hover {
-    color: ${darken(0.1, blue[400])};
+    color: ${darken(0.1, blue["link"])};
   }
 }
 
@@ -75,7 +75,7 @@ ul.ul-no-style {
 }
 
 hr {
-  border: 2px solid #000000;
+  border: 2px solid ${dark["black"]};
   margin: 30px 0;
 }
 
@@ -97,7 +97,7 @@ hr {
       
   `}
   ${breakpoint('md')`
-    padding: 20px;
+    
   `}
 }
 
@@ -118,106 +118,214 @@ hr {
     }
     svg {
       font-size: 30px;
-      color: #fff;
+      color: ${light["white"]};
     }
   }
 }
 
 [data-category-icon] {
+  svg.fa-map-marker-alt {
+    color: ${category["pink"]};
+  }
   i {
-      background-color: #DF1995;
+      background-color: ${category["pink"]};
       &::before {
           content: "\f086";
       }
   }
 }
 [data-category-icon="loneliness-or-isolation"] {
+  svg.fa-map-marker-alt {
+    color: ${category["pink"]};
+  }
   i {
-      background-color: #DF1995;
+      background-color: ${category["pink"]};
       &::before {
         content: "\f086";
       }
   }
 }
 [data-category-icon="anxiety-or-mental-health"] {
+  svg.fa-map-marker-alt {
+    color: ${category["orange"]};
+  }
   i {
-      background-color: #FF6A13;
+      background-color: ${category["orange"]};
       &::before {
           content: "\f808";
       }
   }
 }
 [data-category-icon="safe-and-healthy-body"] {
+  svg.fa-map-marker-alt {
+    color: ${category["greenLight"]};
+  }
   i {
-      background-color: #84BD00;
+      background-color: ${category["greenLight"]};
       &::before {
           content: "\f21e";
       }
   }
 }
 [data-category-icon="exercise-and-wellbeing"] {
+  svg.fa-map-marker-alt {
+    color: ${category["red"]};
+  }
   i {
-      background-color: #E03C31;
+      background-color: ${category["red"]};
       &::before {
           content: "\f554";
       }
   }
 }
 [data-category-icon="arts-and-creativity"] {
+  svg.fa-map-marker-alt {
+    color: ${category["blueDark"]};
+  }
   i {
-      background-color: #025EA6;
+      background-color: ${category["blueDark"]};
       &::before {
           content: "\f53f";
       }
   }
 }
 [data-category-icon="food-or-shopping"] {
+  svg.fa-map-marker-alt {
+    color: ${category["green"]};
+  }
   i {
-      background-color: #328472;
+      background-color: ${category["green"]};
       &::before {
           content: "\f5d1";
       }
   }
 }
 [data-category-icon="faith-led-activities"] {
+  svg.fa-map-marker-alt {
+    color: ${category["blue"]};
+  }
   i {
-      background-color: #0085CA;
+      background-color: ${category["blue"]};
       &::before {
           content: "\f4be";
       }
   }
 }
 [data-category-icon="money-advice"] {
+  svg.fa-map-marker-alt {
+    color: ${category["brown"]};
+  }
   i {
-      background-color: #81312F;
+      background-color: ${category["brown"]};
       &::before {
           content: "\f154";
       }
   }
 }
 [data-category-icon="employment-advice"] {
+  svg.fa-map-marker-alt {
+    color: ${category["purple"]};
+  }
   i {
-      background-color: #8031A7;
+      background-color: ${category["purple"]};
       &::before {
           content: "\f0f2";
       }
   }
 }
 [data-category-icon="housing-advice"] {
+  svg.fa-map-marker-alt {
+    color: ${category["blueLight"]};
+  }
   i {
-      background-color: #2B8CC4;
+      background-color: ${category["blueLight"]};
       &::before {
           content: "";
       }
   }
 }
 [data-category-icon="immigration-advice"] {
+  svg.fa-map-marker-alt {
+    color: ${category["greenDark"]};
+  }
   i {
-      background-color: #00664F;
+      background-color: ${category["greenDark"]};
       &::before {
           content: "\f129 ";
       }
   }
 }
 
+/**
+ * Leaflet map styles
+ */
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+  .leaflet-div-icon {
+    background: transparent;
+    border: 0;
+  }
+  .hackney-map-marker {
+    position: relative;
+    left: -10px;
+  }
+  svg.fa-map-marker {
+    position: absolute;
+    top: -3px;
+    left: -2px;
+    z-index: -1;
+    color: ${light["white"]};
+    font-size: 42px;
+  }
+}
+
+.leaflet-popup {
+  .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    border: 0;
+  }
+  .leaflet-popup-content {
+    ${breakpoint('md')`
+      background: transparent;
+      margin: 0 !important;
+      border: 0;
+    `};
+  }
+  .leaflet-popup-tip-container {
+    display: none;
+  }
+  .card {
+    margin-bottom: 0;
+    border: 0;
+  }
+}
+
+.marker-cluster div span {
+  font-weight: bold;
+}
+.marker-cluster-small {
+  background-color: rgba(181, 226, 140, 0.8);
+}
+.marker-cluster-small div {
+	background-color: rgba(110, 204, 57, 1);
+}
+
+.marker-cluster-medium {
+	background-color: rgba(241, 211, 87, 0.8);
+}
+.marker-cluster-medium div {
+	background-color: rgba(240, 194, 12, 1);
+}
+
+.marker-cluster-large {
+	background-color: rgba(253, 156, 115, 0.8);
+}
+.marker-cluster-large div {
+	background-color: rgba(241, 128, 23, 1);
+}
+  
 `;

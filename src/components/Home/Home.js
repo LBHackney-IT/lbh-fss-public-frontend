@@ -13,12 +13,14 @@ import { useQueryParams, NumberParam } from 'use-query-params';
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import { green, light } from "../../settings";
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
-    background: #00664F;
+    background: ${green["main"]};
     h2 {
-        color: #fff;
+        color: ${light["white"]};
         font-weight: normal;
         font-size: 36px;
         letter-spacing: -0.0175em;
@@ -113,7 +115,6 @@ const Home = () => {
     
     }
 
-    // console.log('Home');
     return (
         isLoading ? (
             <AppLoading />
@@ -150,6 +151,7 @@ const Home = () => {
                     </form>
                 </HomeHeader>
                 <ListCategories onClick={handleEvent} />
+                <MapPlaceholder />
             </div>
             </>
         )

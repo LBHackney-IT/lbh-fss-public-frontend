@@ -12,6 +12,29 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
+import { dark, red } from "../../settings";
+import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import {MapContainer} from "../../util/styled-components/MapContainer";
+import {
+    MAX_ZOOM,
+    MIN_ZOOM,
+    CENTER_DESKTOP_LEGEND,
+    CENTER_DESKTOP_LEGEND_FULLSCREEN,
+    CENTER_DESKTOP_NO_LEGEND,
+    CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
+    CENTER_MOBILE,
+    CENTER_MOBILE_FULLSCREEN,
+    DEFAULT_ZOOM_DESKTOP,
+    DEFAULT_ZOOM_MOBILE,
+    MAP_BOUNDS,
+    HACKNEY_BOUNDS_1,
+    HACKNEY_BOUNDS_2,
+    HACKNEY_GEOSERVER_WMS,
+    MAPBOX_TILES_URL,
+    GENERIC_GEOLOCATION_ERROR,
+    GENERIC_OUTSIDE_HACKNEY_ERROR,
+    ATTRIBUTION
+  } from "../../helpers/GlobalVariables/GlobalVariables";
 
 export const SetPostcodeContainer = styled.div`
     padding: 20px 15px;
@@ -22,22 +45,22 @@ export const SetPostcodeContainer = styled.div`
     }
     p {
         font-size: 19px;
-        color: #525A5B;
+        color: ${dark["grey"]};
     }
     input[name=postcode] {
-        border: 2px solid #0B0C0C;
+        border: 2px solid ${dark["offBlack"]};
         box-sizing: border-box;
         border-radius: 3px;
     }
     span[role=alert] {
-        color: #BE3A34;
+        color: ${red["error"]};
     }
 `;
 
 const StyledButton = styled(Button)`
     width: 100%;
     border-radius: 3px;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid ${dark["black"]};
 `;
 
 const SetPostcode = () => {
@@ -130,6 +153,23 @@ const SetPostcode = () => {
                         <StyledButton type="submit" label="Set postcode" disabled={isLoading} />
                     </form>
                 </SetPostcodeContainer>
+                <MapContainer>
+                    <Map className="markercluster-map"
+                        center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
+                        zoom={MIN_ZOOM}
+                        maxZoom={MAX_ZOOM}
+                        zoomControl={false}
+                        // bounds={MAP_BOUNDS}
+                        maxBounds={MAP_BOUNDS}
+                        gestureHandling
+                        >
+                        <ZoomControl position='topright' />
+                        <TileLayer
+                            attribution={ATTRIBUTION}
+                            url={MAPBOX_TILES_URL}
+                        />
+                    </Map>
+                </MapContainer>
             </div>
             </>
         )

@@ -1,17 +1,16 @@
-export const blue = {
-  200: "#2B8CC4",
-  300: "#0085CA",
-  400: "#025EA6",
-};
-
 export const green = {
-  100: "#A4D65E",
-  200: "#84BD00",
-  300: "#00B341",
-  400: "#00664F",
+  main: "#00664F",
+  dark: "#005E48",
+  light: "#7FB2A7",
+  bright: "#A4D65E",
+  ghost: "#BFC1C3",
 };
 
-export const pink = {
+export const blue = {
+  link: "#025EA6",
+};
+
+export const pink = { 
   100: "#EB6FBD",
   200: "#DF1995",
   300: "#AA0061",
@@ -19,22 +18,32 @@ export const pink = {
 };
 
 export const red = {
-  100: "#FF6A13",
-  200: "#E03C31",
-  300: "#BE3A34",
-  400: "#81312F",
+  error: "#BE3A34",
 };
 
-export const yellow = {
-  100: "#F8E08E",
-  200: "#FFC845",
+export const dark = {
+  black: "#000000",
+  offBlack: "#0B0C0C",
+  grey: "#525A5B",
+  greyLight: "#6F777B",
 };
 
-export const neutral = {
-  100: "#ffffff",
-  200: "#f3f3f3",
-  300: "#DEE0E2",
-  400: "#6F777B",
-  500: "#0B0C0C",
-  600: "#000000",
+export const light = {
+  white: "#ffffff",
+  grey: "#F8F8F8",
+  greyBorder: "#DEE0E2",
 };
+
+export const category = {
+  pink: "#DF1995",
+  orange: "#FF6A13",
+  greenLight: "#84BD00",
+  red: "#E03C31",
+  blueDark: "#025EA6",
+  green: "#328472",
+  blue: "#0085CA",
+  brown: "#81312F",
+  purple: "#8031A7",
+  blueLight: "#2B8CC4",
+  greenDark: "#00664F",
+}

@@ -6,10 +6,11 @@ import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
+import { green, light } from "../../settings";
 
 const PostcodeButtonContainer = styled.button`
-    background: #005E48;
-    color: #fff;
+    background: ${green["dark"]};
+    color: ${light["white"]};
     border: 0;
     padding: 10px 15px;
     cursor: pointer;
@@ -18,7 +19,7 @@ const PostcodeButtonContainer = styled.button`
     width: 130px;
     text-align: left;
     &.postcode-set {
-        background: #005E48;
+        background: ${green["dark"]};
         padding: 20px 15px;
         text-transform: uppercase;
     }
