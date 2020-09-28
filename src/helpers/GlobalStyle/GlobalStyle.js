@@ -304,4 +304,28 @@ hr {
   }
 }
 
+.marker-cluster div span {
+  font-weight: bold;
+}
+.marker-cluster-small {
+  background-color: rgba(181, 226, 140, 0.8);
+}
+.marker-cluster-small div {
+	background-color: rgba(110, 204, 57, 1);
+}
+
+.marker-cluster-medium {
+	background-color: rgba(241, 211, 87, 0.8);
+}
+.marker-cluster-medium div {
+	background-color: rgba(240, 194, 12, 1);
+}
+
+.marker-cluster-large {
+	background-color: rgba(253, 156, 115, 0.8);
+}
+.marker-cluster-large div {
+	background-color: rgba(241, 128, 23, 1);
+}
+  
 `;
