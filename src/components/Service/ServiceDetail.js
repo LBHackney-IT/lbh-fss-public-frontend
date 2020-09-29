@@ -153,6 +153,7 @@ export const AccordionContainer = styled.div`
             height: 30px;
             margin-right: 5px;
             svg {
+                margin-right: auto;
                 font-size: 16px;
                 color: #fff;
             }
@@ -277,7 +278,7 @@ const ServiceDetail = ({ onClick }) => {
                     <p>{data.description}</p>
                     <h3>This is for:</h3>
                     <p>
-                        {data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
+                        {(data.demographic.length !== 0) ? data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr]) : ""}
                     </p>
                 </GreyInnerContainer>
                 <InnerContainer>

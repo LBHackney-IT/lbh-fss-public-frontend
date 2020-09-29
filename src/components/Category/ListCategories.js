@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import GetCategories from "../../services/GetCategories/GetCategories";
+import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import CategoryCard from "./CategoryCard";
 import { CardContainer } from "../../util/styled-components/CardContainer";
 
@@ -9,7 +9,7 @@ const ListCategories = ({ categories = [], onClick }) => {
 
   useEffect(() => {
     async function fetchData() {
-      const getCategories = await GetCategories.retrieveCategories({});
+      const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "category"});
       setData(getCategories || []);
       setIsLoading(false); 
     }

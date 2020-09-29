@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import GetServices from "../../services/GetServices/GetServices";
-import GetCategories from "../../services/GetCategories/GetCategories";
+import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import { CardContainer } from "../../util/styled-components/CardContainer";
 import ServiceCard from "../Service/ServiceCard";
 import CategoryCard from "../Category/CategoryCard";
@@ -77,9 +77,10 @@ const CategoryExplorer = ({ category, onClick }) => {
       }
       // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
+      console.log(getServices);
       setData(getServices || []);
-      // call retrieveCategories with categoryId param passed to return the category name and description
-      const getCategories = await GetCategories.retrieveCategories({id: categoryId});
+      // call getTaxonomy with categoryId param passed to return the category name and description
+      const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
       setCategoryData(getCategories || []);
       setIsLoading(false);
     }
