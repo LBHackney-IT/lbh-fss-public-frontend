@@ -75,9 +75,8 @@ const CategoryExplorer = ({ category, onClick }) => {
       if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
-      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
-      console.log(getServices);
+      // call retrieveServices with categoryId param passed to return all services associated with the category
+      const getServices = await GetServices.retrieveServices({taxonomyId: categoryId});
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
@@ -131,8 +130,8 @@ const CategoryExplorer = ({ category, onClick }) => {
           <ServiceFilter />
           <CategoryCardContainer>
             <CategoryCard
-              key={categoryData[0].id}
-              category={categoryData[0]}
+              key={categoryData.id}
+              category={categoryData}
             />
           </CategoryCardContainer>
           <Mobile>
