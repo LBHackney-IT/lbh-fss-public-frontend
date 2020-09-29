@@ -7,7 +7,7 @@ import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
-import { green, light } from "../../settings";
+import { green, yellow, light } from "../../settings";
 
 export const ServiceFilterContainer = styled.div`
     background: ${green["main"]};
@@ -21,7 +21,7 @@ export const ServiceFilterContainer = styled.div`
 
 export const BUTTON_MODIFIERS = {
     active: () => `
-        color: red;
+        color: ${yellow["selected"]};
     `
 }
 
@@ -62,11 +62,12 @@ const ServiceFilter = ({onClick}) => {
     const pathDemographics = "?select_demographics=true";
     let showCategoriesButton = true;
     let showDemographicsButton = true;
+    let showClearAllButton = false;
     let style = "";
 
     const selectCategoriesEvent = e => {
         for (const [key, value] of Object.entries(urlParams)) {
-            if (key == "select_categories" && value !== "true") {
+            if (key !== "select_categories" && value !== "true") {
                 history.push(pathCategories);
                 setUrl(pathCategories);
                 setUrlParams({"select_categories": "true"});
@@ -75,7 +76,7 @@ const ServiceFilter = ({onClick}) => {
     };
     const selectDemographicsEvent = e => {
         for (const [key, value] of Object.entries(urlParams)) {
-            if (key == "select_demographics" && value !== "true") {
+            if (key !== "select_demographics" && value !== "true") {
                 history.push(pathDemographics);
                 setUrl(pathDemographics);
                 setUrlParams({"select_demographics": "true"});
@@ -83,8 +84,13 @@ const ServiceFilter = ({onClick}) => {
         }
     };
     const clearTaxonomiesEvent = e => {
-        // clear all checkboxes
-        console.log('samwong2');
+        let checks = document.querySelectorAll('input[type="checkbox"]');
+        for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            if (!check.disabled) {
+                check.checked = false;
+            }
+        }
     };
     
 
@@ -94,10 +100,12 @@ const ServiceFilter = ({onClick}) => {
         }
         if (key == "select_categories" && value === "true") {
             showDemographicsButton = false;
+            showClearAllButton = true;
             style = "active";
         }
         if (key == "select_demographics" && value === "true") {
             showCategoriesButton = false;
+            showClearAllButton = true;
             style = "active";
         }
     }
@@ -108,10 +116,10 @@ const ServiceFilter = ({onClick}) => {
                 <FilterButton modifiers={style} onClick={selectCategoriesEvent}>
                     Categories
                 </FilterButton>
-
-                <ClearButton>
+                {(showClearAllButton) ?
+                <ClearButton onClick={clearTaxonomiesEvent}>
                     Clear all
-                </ClearButton>
+                </ClearButton> : ""}
             </ServiceFilterContainer>
         : ""
         (showDemographicsButton) ?
@@ -119,10 +127,10 @@ const ServiceFilter = ({onClick}) => {
                 <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
                     Filters
                 </FilterButton>
-
-                <ClearButton>
+                {(showClearAllButton) ?
+                <ClearButton onClick={clearTaxonomiesEvent}>
                     Clear all
-                </ClearButton>
+                </ClearButton> : ""}
             </ServiceFilterContainer>
         : ""
     );

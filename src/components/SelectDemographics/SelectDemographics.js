@@ -78,11 +78,6 @@ const SelectDemographics = () => {
     
     }, [setData, setIsLoading]);
 
-    const clearTaxonomiesEvent = e => {
-        // clear all checkboxes
-        console.log('samwong');
-    };
-
     async function submitForm({ postcode }) {
         if (isLoading) return;
         // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
@@ -111,7 +106,6 @@ const SelectDemographics = () => {
             <>
             <FilterContainer>
                 <Header />
-                {/* <ServiceFilter onClick={clearTaxonomiesEvent} /> */},
                 <ServiceFilter />
                 <h2>Select demographics</h2>
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">
@@ -135,6 +129,7 @@ const SelectDemographics = () => {
                     </CheckboxContainer>
                 </form>
             </FilterContainer>
+            <MapPlaceholder />
             </>
         )
     )
