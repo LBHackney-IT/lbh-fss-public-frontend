@@ -121,7 +121,7 @@ const ServiceFilter = ({onClick}) => {
                     Clear all
                 </ClearButton> : ""}
             </ServiceFilterContainer>
-        : ""
+        : "",
         (showDemographicsButton) ?
             <ServiceFilterContainer>
                 <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
