@@ -13,7 +13,6 @@ import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
 import { dark, red } from "../../settings";
-import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const SetPostcodeContainer = styled.div`

@@ -62,9 +62,9 @@ const SelectCategories = () => {
 
     useEffect(() => {
         async function fetchData() {
-          const getCategories = await GetCategories.retrieveCategories({});
-          setData(getCategories || []);
-          setIsLoading(false);
+            const getCategories = await GetCategories.retrieveCategories({});
+            setData(getCategories || []);
+            setIsLoading(false);
         }
     
         // if directly accessing this page redirect user back to home
@@ -78,26 +78,51 @@ const SelectCategories = () => {
     
     }, [setData, setIsLoading]);
 
-    async function submitForm({ postcode }) {
+    // console.log("prevUrl");
+    // console.log(prevUrl);
+    // console.log("prevUrlParams");
+    // console.log(prevUrlParams);
+    // prevUrl
+    // ["", "?&postcode=bs50ee&service_search"]
+    // prevUrlParams
+    // (2) [{…}, {…}]
+    // 0: {}
+    // 1: {postcode: "bs50ee", service_search: undefined}
+
+    async function submitForm() {
         if (isLoading) return;
         // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
-        console.log("url");
-        console.log(url);
-        console.log("urlParams");
-        console.log(urlParams);
-        console.log("prevUrl");
-        console.log(prevUrl);
-        console.log("prevUrlParams");
-        console.log(prevUrlParams);
-        // get all selected data-taxonomy-id values
+        
+        // keep track of prev url
+        const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+        const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+
+        let categoriesArray = [];
+        let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            categoriesArray.push(checkboxes[i].value);
+        }
+        console.log(categoriesArray);
+
+        if (categoriesArray.length === 0) {
+            console.log('none selected');
+        } else {
+            console.log('some selected');
+        }
+
+        history.push(url);
+        setUrl(url);
+        setUrlParams(urlParams["categories"] = categoriesArray);
+
         // make string separated by +
         // clear all previous categories in urlParams (or prevUrlParams)
         // append new categories filter to urlParams
-        // make request
+        // make request (in listservices)
         // push
-        const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-        const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+        
     }
+    console.log(urlParams);
 
     return (
         isLoading ? (
@@ -111,17 +136,16 @@ const SelectCategories = () => {
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">
                     <CheckboxContainer>
                         {data.map((category, index) => {
-                            const categoryName = category.name.replaceAll(" ", "-").toLowerCase();
                             return (
                                 <FormCheckbox
                                     key={index}
                                     taxonomyId={category.id}
                                     type="checkbox"
                                     label={category.name}
-                                    name={categoryName}
+                                    name={category.name}
                                     register={register}
-                                    required
-                                    error={errors.agreeToTerms}
+                                    value={category.id}
+                                    // error={errors.agreeToTerms}
                                 />
                             );
                         })}
