@@ -16,7 +16,6 @@ export const ServiceFilterContainer = styled.div`
     max-height: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 `;
 
 export const BUTTON_MODIFIERS = {
@@ -51,6 +50,7 @@ const ClearButton = styled.button`
     padding: 20px 15px;
     cursor: pointer;
     background: transparent;
+    margin-left: auto;
 `;
 
 const ServiceFilter = ({onClick}) => {
@@ -111,28 +111,20 @@ const ServiceFilter = ({onClick}) => {
     }
 
     return (
-        (showCategoriesButton) ?
-            <ServiceFilterContainer>
+        <ServiceFilterContainer>
+            {(showCategoriesButton) ?
                 <FilterButton modifiers={style} onClick={selectCategoriesEvent}>
                     Categories
-                </FilterButton>
-                {(showClearAllButton) ?
-                <ClearButton onClick={clearTaxonomiesEvent}>
-                    Clear all
-                </ClearButton> : ""}
-            </ServiceFilterContainer>
-        : "",
-        (showDemographicsButton) ?
-            <ServiceFilterContainer>
+                </FilterButton> : ""}
+            {(showDemographicsButton) ?
                 <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
                     Filters
-                </FilterButton>
-                {(showClearAllButton) ?
+                </FilterButton> : ""}
+            {(showClearAllButton) ?
                 <ClearButton onClick={clearTaxonomiesEvent}>
                     Clear all
                 </ClearButton> : ""}
-            </ServiceFilterContainer>
-        : ""
+        </ServiceFilterContainer>
     );
 }
 
