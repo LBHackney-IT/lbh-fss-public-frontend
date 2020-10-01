@@ -15,6 +15,7 @@ import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const CategoryCardContainer = styled.div`
   .fss--card {
@@ -122,8 +123,15 @@ const CategoryExplorer = ({ category, onClick }) => {
 
   return(
     <div>
-      {!data.length ? (
-        <h2>No data Found</h2>
+      {Object.keys(categoryData).length === 0 ? (
+        <div>
+          <Header />
+          <div className="no-results">
+            <h2>No results found</h2>
+            <p>Please use the 'Back' button above to go back and select a category.</p>
+          </div>
+          <MapPlaceholder />
+      </div>
       ) : (
         <div>
           <Header />

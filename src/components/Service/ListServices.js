@@ -13,6 +13,7 @@ import styled from "styled-components";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { useMediaQuery } from 'react-responsive';
 import HackneyMap from "../HackneyMap/HackneyMap";
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
@@ -50,13 +51,9 @@ const ListServices = ({ onClick }) => {
 
   useEffect(() => {
     async function fetchData() {
-      // get urlParams and pass in postcode and search values
-      // searchValue.replace("%20", "+"); // don't do this for postcode
-      // const getServices = await GetServices.retrieveServices({postcode: value, search: value});
       let postcode = "";
       let search = "";
       let taxonomyId = [];
-      console.log(urlParams);
       for (const [key, value] of Object.entries(urlParams)) {
         if (key == "postcode" && value !== "") {
           postcode = value;
@@ -114,7 +111,14 @@ const ListServices = ({ onClick }) => {
   return(
     <div>
       {!data.length ? (
-        <h2>No data Found</h2>
+        <div>
+          <Header />
+          <div className="no-results">
+            <h2>No results found</h2>
+            <p>Please use the 'Back' button above to go back and try a different search term.</p>
+          </div>
+          <MapPlaceholder />
+        </div>
       ) : (
         <div>
           <Header />

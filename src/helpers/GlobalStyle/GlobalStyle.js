@@ -101,6 +101,10 @@ hr {
   `}
 }
 
+.no-results {
+  padding: 20px;
+}
+
 #postcode-input-container {
   p {
     color: ${light["white"]};
