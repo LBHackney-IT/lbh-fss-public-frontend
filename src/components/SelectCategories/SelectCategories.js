@@ -58,7 +58,16 @@ const SelectCategories = () => {
     const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
     const currentSearch = window.location.search;
-    let paramObj = {};
+    // I NEED THIS
+    // keep track of prev url
+    // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    // const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+
+    // TESTING
+    const myPrevUrl = ["", "?&postcode=bs50ee&service_search&categories=1"];
+    const myPrevUrlParams = [{}, {postcode: "bs50ee", service_search: undefined, categories: "1"}];
+    const prevUrlArrayLast = myPrevUrl[myPrevUrl.length - 1];
+    const prevUrlParamsArrayLast = myPrevUrlParams[myPrevUrlParams.length - 1];
 
     useEffect(() => {
         async function fetchData() {
@@ -79,36 +88,17 @@ const SelectCategories = () => {
     
     }, [setData, setIsLoading]);
 
-    // console.log("prevUrl");
-    // console.log(prevUrl);
-    // console.log("prevUrlParams");
-    // console.log(prevUrlParams);
-    // prevUrl
-    // ["", "?&postcode=bs50ee&service_search"]
-    // prevUrlParams
-    // (2) [{…}, {…}]
-    // 0: {}
-    // 1: {postcode: "bs50ee", service_search: undefined}
+    const list = document.querySelectorAll('input[type=checkbox]');
+    console.log(list);
+    for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
+        if (key == "categories" && value !== "") {
+            console.log(value);
+            document.querySelectorAll("input[type='checkbox'][value='"+value+"']").checked = true;
+        }
+    }
 
     async function submitForm() {
         if (isLoading) return;
-        // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
-        
-        // keep track of prev url
-        // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-        // const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
-
-        const myPrevUrl = ["", "?&postcode=bs50ee&service_search&categories=1"];
-        const myPrevUrlParams = [{}, {postcode: "bs50ee", service_search: undefined}];
-        const prevUrlArrayLast = myPrevUrl[myPrevUrl.length - 1];
-        const prevUrlParamsArrayLast = myPrevUrlParams[myPrevUrlParams.length - 1];
-
-        console.log(prevUrlArrayLast);
-        console.log(prevUrlParamsArrayLast);
-
-        // taxonomyids: (2) ["8", "9"]
-        // taxonomyids: Array(1)
-        // 0: ["11"]
 
         let categoriesArray = [];
         let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
@@ -116,36 +106,19 @@ const SelectCategories = () => {
         for (let i = 0; i < checkboxes.length; i++) {
             categoriesArray.push(checkboxes[i].value);
         }
-        console.log("categoriesArray");
-        console.log(categoriesArray);
 
         if (categoriesArray.length === 0) {
             console.log('none selected');
-            // need to test to see if it will work if categories doesn't exist
             delete prevUrlParamsArrayLast["categories"];
         } else {
-            console.log('some selected');
             prevUrlParamsArrayLast["categories"] = categoriesArray;
             let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
             push = push.replaceAll("=undefined", "");
-            console.log(push);
             history.push(push);
             setUrl(push);
             setUrlParams(prevUrlParamsArrayLast);
         }
-
-        // history.push(url);
-        // setUrl(url);
-        // setUrlParams(urlParams["categories"] = categoriesArray);
-
-
-        // clear all previous categories in urlParams (or prevUrlParams)
-        // append new categories filter to urlParams
-        // make request (in listservices)
-        // push
-        
     }
-    console.log(urlParams);
 
     return (
         isLoading ? (
