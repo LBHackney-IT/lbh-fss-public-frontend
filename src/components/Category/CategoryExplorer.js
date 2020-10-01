@@ -76,7 +76,7 @@ const CategoryExplorer = ({ category, onClick }) => {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
       // call retrieveServices with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({taxonomyId: categoryId});
+      const getServices = await GetServices.retrieveServices({taxonomyids: categoryId});
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);

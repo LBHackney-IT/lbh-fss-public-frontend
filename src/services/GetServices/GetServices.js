@@ -1,44 +1,36 @@
 import axios from "axios";
 import API_KEY from "../ApiKey/ApiKey";
-const isMatch = require('lodash/isMatch');
-const filter = require('lodash/filter');
-const some = require('lodash/some');
+import qs from "qs";
 
 const GetServices = {
   async retrieveServices({
     sort = "name",
-    direction = "asc",
-    offset = 0,
-    taxonomyId = "",
-    limit = 151,
     search = "",
+    offset = 0,
+    taxonomyids = "",
+    limit = 0,
+    postcode = "",
+    
   }) {
     try {
       const response = await axios.get("https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/services", {
         headers: {"x-api-key": API_KEY},
         params: {
           sort,
-          direction,
-          offset,   
-          taxonomyId,
-          limit,
           search,
+          offset,
+          taxonomyids,
+          limit,
+          postcode,
         },
+        paramsSerializer: params => {
+          return qs.stringify(params);
+        }
       });
-
-      let data = null;
-      if (taxonomyId) {
-        const isTaxonomy = o => isMatch(o, {id: taxonomyId});
-        const allServices = filter(response.data.services, ({categories}) => categories.some(isTaxonomy));
-
-        // console.log("allServices");
-        // console.log(allServices);
-        data = allServices;
-      } else {
-        data = response.data.services;
-      }
-
-      return data;
+      // console.log(response);
+      // console.log("response.data.services");
+      // console.log(response.data.services);
+      return response.data.services;
     } catch (error) {
       console.error(error);
 

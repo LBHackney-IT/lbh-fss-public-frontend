@@ -53,17 +53,23 @@ const ListServices = ({ onClick }) => {
       // get urlParams and pass in postcode and search values
       // searchValue.replace("%20", "+"); // don't do this for postcode
       // const getServices = await GetServices.retrieveServices({postcode: value, search: value});
-      let taxonomyId = "";
+      let postcode = "";
+      let search = "";
+      let taxonomyId = [];
+      console.log(urlParams);
       for (const [key, value] of Object.entries(urlParams)) {
-        // should pass string value separated by +?
-        // convert %2B to + sign
-        // will call GET /services and search through the taxonomies object array
+        if (key == "postcode" && value !== "") {
+          postcode = value;
+        }
+        if (key == "service_search" && value !== "") {
+          search = value;
+        }
         if ((key == "categories" || key == "demographic") && value !== "") {
-          taxonomyId = value;
+          taxonomyId.push(value);
         }
       }
-      // call retrieveServicesByCategory with taxonomyId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({taxonomyId: taxonomyId});
+      // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
+      const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
       // const getServices = await GetServices.retrieveServices({});
       setData(getServices || []);
       setIsLoading(false);

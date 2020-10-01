@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import AppLoading from "../../AppLoading";
-import GetCategories from "../../services/GetCategories/GetCategories";
+import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import Header from "../Header/Header";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
@@ -62,7 +62,7 @@ const SelectDemographics = () => {
 
     useEffect(() => {
         async function fetchData() {
-          const getCategories = await GetCategories.retrieveCategories({});
+          const getCategories = await GetTaxonomies.retrieveTaxonomies({});
           setData(getCategories || []);
           setIsLoading(false);
         }
