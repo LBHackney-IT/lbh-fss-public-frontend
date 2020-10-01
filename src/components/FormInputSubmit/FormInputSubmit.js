@@ -52,6 +52,7 @@ const StyledButton = styled(Button)`
 const StyledHelp = styled.p``;
 
 const FormInputSubmit = ({
+  id,
   type,
   name,
   label,
@@ -85,6 +86,7 @@ const FormInputSubmit = ({
       {help ? <StyledHelp>{help}</StyledHelp> : ""}
       <StyledInputContainer>
         <StyledInput
+          id={id}
           aria-label={name}
           name={name}
           placeholder={placeholder}
@@ -103,6 +105,7 @@ const FormInputSubmit = ({
 };
 
 FormInputSubmit.propTypes = {
+  id: PropTypes.string,
   type: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,

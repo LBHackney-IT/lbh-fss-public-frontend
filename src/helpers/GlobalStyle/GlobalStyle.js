@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { defaultTheme, blue, green, dark, light, category } from "../../settings";
+import { defaultTheme, blue, green, dark, light, red, category } from "../../settings";
 import { normalize } from "polished";
 import openSansV17Latin700Ttf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.ttf";
 import openSansV17Latin700Woff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff";
@@ -99,6 +99,14 @@ hr {
   ${breakpoint('md')`
     
   `}
+}
+
+#postcode-input-container {
+  p {
+    color: ${light["white"]};
+    border-left: 4px solid ${red["error"]};
+    padding-left: 10px;
+  }
 }
 
 .category-icons {
