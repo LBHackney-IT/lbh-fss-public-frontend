@@ -55,49 +55,81 @@ const SelectDemographics = () => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
-    const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
-    const currentSearch = window.location.search;
-    let paramObj = {};
+    const currentSearch = window.location.search;    
+    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+    
+    let defaultValues = {
+        checkbox: "",
+    };
+
+    let selectedObj = {};
+    if (prevUrlParamsArrayLast !== undefined) {
+        for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
+            if (key == "demographic" && value !== "") {
+                
+                // used if coming from url with demographic set
+                // string 1+2
+                if (value.indexOf("+") > -1) {
+                    value = value.split("+");
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
+                console.log(value);
+                // array of ["1", "2"]
+                // array of ["1"]
+                // string of 1
+                if (value.length >= 1) {
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
+            }
+        }
+    }
+    defaultValues = selectedObj;
+
+    const { register, handleSubmit } = useForm({
+        defaultValues: defaultValues,
+    });
 
     useEffect(() => {
         async function fetchData() {
             const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
-          setData(getCategories || []);
-          setIsLoading(false);
+            setData(getCategories || []);
+            setIsLoading(false);
         }
     
-        // I NEED THIS
         // if directly accessing this page redirect user back to home
-        // if (prevUrl.length == 0 && prevUrlParams.length == 0) {
-        //     history.push("?");
-        //     setUrl("");
-        //     setUrlParams({});
-        // } else {
+        if (prevUrl.length == 0 && prevUrlParams.length == 0) {
+            history.push("?");
+            setUrl("");
+            setUrlParams({});
+        } else {
             fetchData();
-        // }
+        }
     
     }, [setData, setIsLoading]);
 
-    async function submitForm({ postcode }) {
+    async function submitForm() {
+        console.log('submit');
         if (isLoading) return;
-        // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
-        console.log("url");
-        console.log(url);
-        console.log("urlParams");
-        console.log(urlParams);
-        console.log("prevUrl");
-        console.log(prevUrl);
-        console.log("prevUrlParams");
-        console.log(prevUrlParams);
-        // get all selected data-taxonomy-id values
-        // make string separated by +
-        // clear all previous categories in urlParams (or prevUrlParams)
-        // append new categories filter to urlParams
-        // make request
-        // push
-        const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-        const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+
+        let demographicsArray = [];
+        let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            demographicsArray.push(checkboxes[i].value);
+        }
+
+        if (demographicsArray.length === 0) {
+            delete prevUrlParamsArrayLast["demographic"];
+        } else {
+            prevUrlParamsArrayLast["demographic"] = demographicsArray;
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+            push = push.replaceAll("=undefined", "");
+            history.push(push);
+            setUrl(push);
+            setUrlParams(prevUrlParamsArrayLast);
+        }
     }
 
     return (
@@ -112,16 +144,16 @@ const SelectDemographics = () => {
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">
                     <CheckboxContainer>
                         {data.map((demographic, index) => {
-                            const demographicName = demographic.name.replaceAll(" ", "-").toLowerCase();
+                            const demographicIdString = demographic.id.toString();
                             return (
                                 <FormCheckbox
                                     key={index}
                                     taxonomyId={demographic.id}
                                     type="checkbox"
                                     label={demographic.name}
-                                    name={demographicName}
+                                    name={demographicIdString}
                                     register={register}
-                                    required
+                                    value={demographic.id}
                                 />
                             );
                         })}

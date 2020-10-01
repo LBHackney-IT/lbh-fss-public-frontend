@@ -55,19 +55,36 @@ const SelectCategories = () => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
-    const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
-    const currentSearch = window.location.search;
-    // I NEED THIS
-    // keep track of prev url
-    // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-    // const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+    const currentSearch = window.location.search;    
+    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
-    // TESTING
-    const myPrevUrl = ["", "?&postcode=bs50ee&service_search&categories=1"];
-    const myPrevUrlParams = [{}, {postcode: "bs50ee", service_search: undefined, categories: "1"}];
-    const prevUrlArrayLast = myPrevUrl[myPrevUrl.length - 1];
-    const prevUrlParamsArrayLast = myPrevUrlParams[myPrevUrlParams.length - 1];
+    let defaultValues = {
+        checkbox: "",
+    };
+
+    let selectedObj = {};
+    if (prevUrlParamsArrayLast !== undefined) {
+        for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
+            if (key == "categories" && value !== "") {
+                
+                // used if coming from url with categories set
+                if (value.indexOf("+") > -1) {
+                    value = value.split("+");
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
+                if (value.length >= 1) {
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
+            }
+        }
+    }
+    defaultValues = selectedObj;
+
+    const { register, handleSubmit } = useForm({
+        defaultValues: defaultValues,
+    });
 
     useEffect(() => {
         async function fetchData() {
@@ -76,26 +93,16 @@ const SelectCategories = () => {
             setIsLoading(false);
         }
     
-        // I NEED THIS
         // if directly accessing this page redirect user back to home
-        // if (prevUrl.length == 0 && prevUrlParams.length == 0) {
-        //     history.push("?");
-        //     setUrl("");
-        //     setUrlParams({});
-        // } else {
+        if (prevUrl.length == 0 && prevUrlParams.length == 0) {
+            history.push("?");
+            setUrl("");
+            setUrlParams({});
+        } else {
             fetchData();
-        // }
+        }
     
     }, [setData, setIsLoading]);
-
-    const list = document.querySelectorAll('input[type=checkbox]');
-    console.log(list);
-    for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
-        if (key == "categories" && value !== "") {
-            console.log(value);
-            document.querySelectorAll("input[type='checkbox'][value='"+value+"']").checked = true;
-        }
-    }
 
     async function submitForm() {
         if (isLoading) return;
@@ -108,7 +115,6 @@ const SelectCategories = () => {
         }
 
         if (categoriesArray.length === 0) {
-            console.log('none selected');
             delete prevUrlParamsArrayLast["categories"];
         } else {
             prevUrlParamsArrayLast["categories"] = categoriesArray;
@@ -132,13 +138,14 @@ const SelectCategories = () => {
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">
                     <CheckboxContainer>
                         {data.map((category, index) => {
+                            const categoryIdString = category.id.toString();
                             return (
                                 <FormCheckbox
                                     key={index}
                                     taxonomyId={category.id}
                                     type="checkbox"
                                     label={category.name}
-                                    name={category.name}
+                                    name={categoryIdString}
                                     register={register}
                                     value={category.id}
                                 />
