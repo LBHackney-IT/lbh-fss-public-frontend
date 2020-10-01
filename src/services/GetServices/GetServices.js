@@ -4,7 +4,7 @@ import qs from "qs";
 
 const GetServices = {
   async retrieveServices({
-    sort = "name",
+    sort = "id",
     search = "",
     offset = 0,
     taxonomyids = "",
@@ -12,6 +12,14 @@ const GetServices = {
     postcode = "",
     
   }) {
+    // get subarray from SelectCategories
+    if (Array.isArray(taxonomyids[0])) {
+      taxonomyids = taxonomyids[0];
+    }
+    // if array only has 1 item, check to see if it is a concatenated array element and split
+    if (taxonomyids.length === 1) {
+      taxonomyids = taxonomyids[0].split("+");
+    }
     try {
       const response = await axios.get("https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/services", {
         headers: {"x-api-key": API_KEY},

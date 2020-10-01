@@ -62,11 +62,12 @@ const SelectDemographics = () => {
 
     useEffect(() => {
         async function fetchData() {
-          const getCategories = await GetTaxonomies.retrieveTaxonomies({});
+            const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
           setData(getCategories || []);
           setIsLoading(false);
         }
     
+        // I NEED THIS
         // if directly accessing this page redirect user back to home
         // if (prevUrl.length == 0 && prevUrlParams.length == 0) {
         //     history.push("?");
@@ -121,7 +122,6 @@ const SelectDemographics = () => {
                                     name={demographicName}
                                     register={register}
                                     required
-                                    error={errors.agreeToTerms}
                                 />
                             );
                         })}

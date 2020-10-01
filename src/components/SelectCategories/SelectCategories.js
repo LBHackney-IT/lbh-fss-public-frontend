@@ -62,11 +62,12 @@ const SelectCategories = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const getCategories = await GetTaxonomies.retrieveTaxonomies({});
+            const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "category"});
             setData(getCategories || []);
             setIsLoading(false);
         }
     
+        // I NEED THIS
         // if directly accessing this page redirect user back to home
         // if (prevUrl.length == 0 && prevUrlParams.length == 0) {
         //     history.push("?");
@@ -94,8 +95,20 @@ const SelectCategories = () => {
         // understand previous url params e.g. postcode=bs50ee&service_search // postcode&service+search=food+bank // postcode&service+search=food+bank&categories=1+2
         
         // keep track of prev url
-        const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-        const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+        // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+        // const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+
+        const myPrevUrl = ["", "?&postcode=bs50ee&service_search&categories=1"];
+        const myPrevUrlParams = [{}, {postcode: "bs50ee", service_search: undefined}];
+        const prevUrlArrayLast = myPrevUrl[myPrevUrl.length - 1];
+        const prevUrlParamsArrayLast = myPrevUrlParams[myPrevUrlParams.length - 1];
+
+        console.log(prevUrlArrayLast);
+        console.log(prevUrlParamsArrayLast);
+
+        // taxonomyids: (2) ["8", "9"]
+        // taxonomyids: Array(1)
+        // 0: ["11"]
 
         let categoriesArray = [];
         let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
@@ -103,19 +116,29 @@ const SelectCategories = () => {
         for (let i = 0; i < checkboxes.length; i++) {
             categoriesArray.push(checkboxes[i].value);
         }
+        console.log("categoriesArray");
         console.log(categoriesArray);
 
         if (categoriesArray.length === 0) {
             console.log('none selected');
+            // need to test to see if it will work if categories doesn't exist
+            delete prevUrlParamsArrayLast["categories"];
         } else {
             console.log('some selected');
+            prevUrlParamsArrayLast["categories"] = categoriesArray;
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+            push = push.replaceAll("=undefined", "");
+            console.log(push);
+            history.push(push);
+            setUrl(push);
+            setUrlParams(prevUrlParamsArrayLast);
         }
 
-        history.push(url);
-        setUrl(url);
-        setUrlParams(urlParams["categories"] = categoriesArray);
+        // history.push(url);
+        // setUrl(url);
+        // setUrlParams(urlParams["categories"] = categoriesArray);
 
-        // make string separated by +
+
         // clear all previous categories in urlParams (or prevUrlParams)
         // append new categories filter to urlParams
         // make request (in listservices)
@@ -145,7 +168,6 @@ const SelectCategories = () => {
                                     name={category.name}
                                     register={register}
                                     value={category.id}
-                                    // error={errors.agreeToTerms}
                                 />
                             );
                         })}
