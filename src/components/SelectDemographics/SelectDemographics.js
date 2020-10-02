@@ -158,7 +158,7 @@ const SelectDemographics = () => {
                                 />
                             );
                         })}
-                        <StyledButton type="submit" label="Select demographics" disabled={isLoading} />
+                        <StyledButton type="submit" label="Select filters" disabled={isLoading} />
                     </CheckboxContainer>
                 </form>
             </FilterContainer>
