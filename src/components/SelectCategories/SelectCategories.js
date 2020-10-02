@@ -68,14 +68,16 @@ const SelectCategories = () => {
     if (prevUrlParamsArrayLast !== undefined) {
         for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
             if (key == "categories" && value !== "") {
-                
+                if (Array.isArray(value) && value.length >= 1) {
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
                 // used if coming from url with categories set
-                if (value.indexOf("+") > -1) {
+                if (typeof value === 'string' && value.indexOf("+") > -1) {
                     value = value.split("+");
                     selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
                 }
-                if (value.length >= 1) {
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                if (typeof value === 'string' && value.indexOf("+") === -1) {
+                    selectedObj[value] = true;
                 }
             }
         }
@@ -116,9 +118,14 @@ const SelectCategories = () => {
 
         if (categoriesArray.length === 0) {
             delete prevUrlParamsArrayLast["categories"];
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
+            push = push.replaceAll("=undefined", "");
+            history.push(push);
+            setUrl(push);
+            setUrlParams(prevUrlParamsArrayLast);
         } else {
             prevUrlParamsArrayLast["categories"] = categoriesArray;
-            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
             push = push.replaceAll("=undefined", "");
             history.push(push);
             setUrl(push);

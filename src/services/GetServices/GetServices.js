@@ -11,16 +11,29 @@ const GetServices = {
     taxonomyids = "",
     limit = 0,
     postcode = "",
-    
   }) {
-    // get subarray from SelectCategories
-    if (Array.isArray(taxonomyids[0])) {
-      taxonomyids = taxonomyids[0];
-    }
-    // if array only has 1 item, check to see if it is a concatenated array element and split
+    // prepare taxonomies into an array
     if (taxonomyids.length === 1) {
-      taxonomyids = taxonomyids[0].split("+");
+      // if only one vocabulary is selected
+      if (Array.isArray(taxonomyids[0])) {
+        taxonomyids = taxonomyids[0];
+      } else {
+        taxonomyids = taxonomyids[0].split("+");
+      }
+    } else if (taxonomyids.length > 1) {
+      // check if elements are array and convert to string by +
+      if (Array.isArray(taxonomyids[0])) {
+        taxonomyids[0] = taxonomyids[0].join("+");
+      }
+      if (Array.isArray(taxonomyids[1])) {
+        taxonomyids[1] = taxonomyids[1].join("+");
+      }
+      // append + before concatenating both categories and demographics array
+      taxonomyids[0] = taxonomyids[0]+"+";
+      taxonomyids = taxonomyids[0].concat(taxonomyids[1]);
+      taxonomyids = taxonomyids.split("+");
     }
+    
     try {
       const response = await axios.get(`${BASE_API_URL}/services`, {
         headers: {"x-api-key": API_KEY},

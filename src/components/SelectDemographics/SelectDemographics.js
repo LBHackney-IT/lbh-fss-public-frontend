@@ -68,19 +68,16 @@ const SelectDemographics = () => {
     if (prevUrlParamsArrayLast !== undefined) {
         for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
             if (key == "demographic" && value !== "") {
-                
+                if (Array.isArray(value) && value.length >= 1) {
+                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                }
                 // used if coming from url with demographic set
-                // string 1+2
-                if (value.indexOf("+") > -1) {
+                if (typeof value === 'string' && value.indexOf("+") > -1) {
                     value = value.split("+");
                     selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
                 }
-                console.log(value);
-                // array of ["1", "2"]
-                // array of ["1"]
-                // string of 1
-                if (value.length >= 1) {
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                if (typeof value === 'string' && value.indexOf("+") === -1) {
+                    selectedObj[value] = true;
                 }
             }
         }
@@ -110,7 +107,6 @@ const SelectDemographics = () => {
     }, [setData, setIsLoading]);
 
     async function submitForm() {
-        console.log('submit');
         if (isLoading) return;
 
         let demographicsArray = [];
@@ -122,9 +118,14 @@ const SelectDemographics = () => {
 
         if (demographicsArray.length === 0) {
             delete prevUrlParamsArrayLast["demographic"];
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
+            push = push.replaceAll("=undefined", "");
+            history.push(push);
+            setUrl(push);
+            setUrlParams(prevUrlParamsArrayLast);
         } else {
             prevUrlParamsArrayLast["demographic"] = demographicsArray;
-            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
             push = push.replaceAll("=undefined", "");
             history.push(push);
             setUrl(push);
