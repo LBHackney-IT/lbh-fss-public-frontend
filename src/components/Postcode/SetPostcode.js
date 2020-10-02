@@ -64,7 +64,6 @@ const SetPostcode = () => {
         const validPostcode = postcodeValidator(postcode, 'UK');
         if (validPostcode) {
             localStorage.setItem("postcode", postcode);
-            prevUrlParamsArrayLast["postcode"] = postcode;
             let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
             let params = prevUrlParamsArrayLast;
 
@@ -79,6 +78,7 @@ const SetPostcode = () => {
                 // catch all for list services
                     const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
                     let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
+                    prevUrlParamsArrayLast["postcode"] = postcode;
                     console.log(ListServicesSearchObj);
                     console.log(ListServicesPostcodeObj);
                     if (ListServicesSearchObj !== undefined) {
