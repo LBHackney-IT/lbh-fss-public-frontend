@@ -147,7 +147,7 @@ const CategoryExplorer = ({ category, onClick }) => {
             {
               ( showMap == "false" ) ?
                 <CardContainer>
-                  {data.map((service, index) => {
+                  {data.services.map((service, index) => {
                     return (
                       <ServiceCard key={index} service={service} onClick={select} />
                     );
@@ -157,7 +157,7 @@ const CategoryExplorer = ({ category, onClick }) => {
           </Mobile>
           <Desktop>
             <CardContainer>
-              {data.map((service, index) => {
+              {data.services.map((service, index) => {
                 return (
                   <ServiceCard key={index} service={service} onClick={select} />
                 );
