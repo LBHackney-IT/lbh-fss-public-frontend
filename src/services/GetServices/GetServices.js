@@ -50,21 +50,28 @@ const GetServices = {
         }
       });
       console.log(response);
-      // console.log("response.data.services");
-      // console.log(response.data.services);
-      return response.data.services;
+      // console.log("response.data");
+      // console.log(response.data);
+      return response.data;
     } catch (error) {
       console.error(error);
 
       return false;
     }
   },
-  async getService(id) {
+  async getService({
+    id,
+    postcode = "",
+  }) {
     try {
       const response = await axios.get(`${BASE_API_URL}/services/${id}`, {
-        headers: {"x-api-key": API_KEY}
+        headers: {"x-api-key": API_KEY},
+        params: {
+          postcode,
+        },
       });
 
+      // console.log(response);
       // console.log("response.data");
       // console.log(response.data);
       return response.data;

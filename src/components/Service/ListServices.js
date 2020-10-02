@@ -110,7 +110,7 @@ const ListServices = ({ onClick }) => {
 
   return(
     <div>
-      {!data.length ? (
+      {!data.services.length ? (
         <div>
           <Header />
           <div className="no-results">
@@ -128,7 +128,7 @@ const ListServices = ({ onClick }) => {
             {
               ( showMap == "false" ) ?
                 <CardContainer>
-                  {data.map((service, index) => {
+                  {data.services.map((service, index) => {
                     return (
                       <ServiceCard key={index} service={service} onClick={select} />
                     );
@@ -138,7 +138,7 @@ const ListServices = ({ onClick }) => {
           </Mobile>
           <Desktop>
             <CardContainer>
-              {data.map((service, index) => {
+              {data.services.map((service, index) => {
                 return (
                   <ServiceCard key={index} service={service} onClick={select} />
                 );

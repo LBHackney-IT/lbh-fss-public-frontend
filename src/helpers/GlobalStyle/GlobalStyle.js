@@ -279,9 +279,25 @@ hr {
     background: transparent;
     border: 0;
   }
-  .hackney-map-marker {
+  .hackney-map-marker, .hackney-map-home-marker  {
     position: relative;
     left: -10px;
+  }
+  .hackney-map-home-marker {
+    .map-marker--foreground {
+      font-size: 37px;
+      top: -1px;
+      left: 0;
+      color: ${red["error"]} !important;
+    }
+    svg.fa-home {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      z-index: -1;
+      color: ${light["white"]};
+      font-size: 18px;
+    }
   }
   svg.fa-map-marker {
     position: absolute;

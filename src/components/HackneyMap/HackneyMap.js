@@ -12,6 +12,7 @@ import { divIcon, Map as LeafletMap } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
+import getHomeLocation from "../../helpers/Mapbox/getHomeLocation";
 import { GestureHandling } from 'leaflet-gesture-handling';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.js";
@@ -47,6 +48,7 @@ const HackneyMap = (data) => {
     const [{ service }, setQuery] = useQueryParams({ service: NumberParam });
     const removeQuery = ["category_explorer", "postcode", "service_search", "categories", "demographic"];
     const paramsArray = [...removeQuery, "service"];
+    let metadata = "";
     LeafletMap.addInitHook('addHandler', 'gestureHandling', GestureHandling);
 
     useEffect(() => {
@@ -111,40 +113,62 @@ const HackneyMap = (data) => {
             url={MAPBOX_TILES_URL}
         />
         <MarkerClusterGroup>
-        {
-        getAllAddresses(data).map((service, index) => {
-            
-            const categoriesSorted = service["categories"].sort(function (a, b) {
-                return a.weight - b.weight;
-            });
+            {
+                getAllAddresses(data).map((service, index) => {
+                    
+                    const categoriesSorted = service["categories"].sort(function (a, b) {
+                        return a.weight - b.weight;
+                    });
 
-            const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                    const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
 
-            const iconMarkup = renderToStaticMarkup(
-            <div className="hackney-map-marker" data-category-icon={categoryIconName}>
-                <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
-                <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
-            </div>
-            );
-            const customMarkerIcon = divIcon({
-            html: iconMarkup
-            });
+                    const iconMarkup = renderToStaticMarkup(
+                        <div className="hackney-map-marker" data-category-icon={categoryIconName}>
+                            <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
+                            <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
+                        </div>
+                    );
+                    const customMarkerIcon = divIcon({
+                        html: iconMarkup
+                    });
 
-            const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
-            
-            return (
-            <Marker position={point} key={index} icon={customMarkerIcon}>
-                {
-                    (isServiceDetail == false) ?
-                        <Popup>
-                            <ServiceCard key={index} service={service} onClick={ServiceCardEvent} />
-                        </Popup> : ""
-                }
-            </Marker>
-            )
-        })
-        }
+                    const point = [parseFloat(service["locations"][0]['latitude']), parseFloat(service["locations"][0]['longitude'])];
+                    
+                    return (
+                        <Marker position={point} key={index} icon={customMarkerIcon}>
+                            {
+                                (isServiceDetail == false) ?
+                                    <Popup>
+                                        <ServiceCard key={index} service={service} onClick={ServiceCardEvent} />
+                                    </Popup> : ""
+                            }
+                        </Marker>
+                    )
+                })
+            }
         </MarkerClusterGroup>
+
+        {
+            getHomeLocation(data).map((location, index) => {
+                if (location.postCodeLatitude !== null && location.postCodeLongitude !== null) {
+                    const iconMarkup = renderToStaticMarkup(
+                        <div className="hackney-map-home-marker">
+                            <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
+                            <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" className="map-marker--foreground" />
+                            <FontAwesomeIcon icon={["fas", "home"]} size="3x" />
+                        </div>
+                    );
+                    const customMarkerIcon = divIcon({
+                        html: iconMarkup
+                    });
+                    const point = [parseFloat(location.postCodeLatitude), parseFloat(location.postCodeLongitude)];
+                    return (
+                        <Marker position={point} key={index} icon={customMarkerIcon}></Marker>
+                    );
+                }
+            })
+        }
+
     </Map>
  );
 }
