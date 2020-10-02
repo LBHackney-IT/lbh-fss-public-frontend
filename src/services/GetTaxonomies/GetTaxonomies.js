@@ -1,5 +1,6 @@
 import axios from "axios";
 import API_KEY from "../ApiKey/ApiKey";
+import BASE_API_URL from "../BaseApiUrl/BaseApiUrl";
 
 const GetTaxonomies = {
   async retrieveTaxonomies({
@@ -8,7 +9,7 @@ const GetTaxonomies = {
     vocabulary = "",
   }) {
     try {
-      const response = await axios.get(`https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/taxonomies`, {
+      const response = await axios.get(`${BASE_API_URL}/taxonomies`, {
         headers: {"x-api-key": API_KEY},
         params: {
           sort,
@@ -17,9 +18,7 @@ const GetTaxonomies = {
         },
       });
 
-      let data = null;
-      (vocabulary) ? data = response.data.taxonomies.filter(obj => obj.vocabulary === vocabulary) : data = response.data.taxonomies;
-      return data;
+      return response.data.taxonomies;
     } catch (error) {
       console.error(error);
 
@@ -28,7 +27,7 @@ const GetTaxonomies = {
   },
   async getTaxonomy(id) {
     try {
-      const response = await axios.get(`https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/taxonomies/${id}`, {
+      const response = await axios.get(`${BASE_API_URL}/taxonomies/${id}`, {
         headers: {"x-api-key": API_KEY}
       });
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import API_KEY from "../ApiKey/ApiKey";
+import BASE_API_URL from "../BaseApiUrl/BaseApiUrl";
 import qs from "qs";
 
 const GetServices = {
@@ -21,7 +22,7 @@ const GetServices = {
       taxonomyids = taxonomyids[0].split("+");
     }
     try {
-      const response = await axios.get("https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/services", {
+      const response = await axios.get(`${BASE_API_URL}/services`, {
         headers: {"x-api-key": API_KEY},
         params: {
           sort,
@@ -47,7 +48,7 @@ const GetServices = {
   },
   async getService(id) {
     try {
-      const response = await axios.get(`https://1ah37v184c.execute-api.eu-west-2.amazonaws.com/development/api/v1/services/${id}`, {
+      const response = await axios.get(`${BASE_API_URL}/services/${id}`, {
         headers: {"x-api-key": API_KEY}
       });
 
