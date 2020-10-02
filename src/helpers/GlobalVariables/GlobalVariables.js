@@ -19,8 +19,8 @@ const HACKNEY_BOUNDS_2 = [51.580648, -0.00909];
 
 const HACKNEY_GEOSERVER_WFS = "https://map.hackney.gov.uk/geoserver/ows?service=WFS&version=2.0&request=GetFeature&outputFormat=json&SrsName=EPSG:4326&typeName=";
 const HACKNEY_GEOSERVER_WMS = "https://map.hackney.gov.uk/geoserver/wms";
-const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
-// const MAPBOX_TILES_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+// const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/samnudge/ckf5pfyrj2ua819ld0f4yq4hk/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
+const MAPBOX_TILES_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 // const MAPBOX_TILES_URL = "https://api.mapbox.com/styles/v1/hackneygis/ck7ounc2t0cg41imjb3j53dp8/tiles/256/{z}/{x}/{y}@2x?access_token="+MAPBOX_ACCESS_TOKEN;
 const GENERIC_GEOLOCATION_ERROR =
   "We cannot find your location. Please enable Location Services for your browser in Settings or try again outside of your office as your network may block geolocation.";

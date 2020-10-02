@@ -5,7 +5,6 @@ import qs from "qs";
 
 const GetServices = {
   async retrieveServices({
-    sort = "id",
     search = "",
     offset = 0,
     taxonomyids = "",
@@ -38,7 +37,6 @@ const GetServices = {
       const response = await axios.get(`${BASE_API_URL}/services`, {
         headers: {"x-api-key": API_KEY},
         params: {
-          sort,
           search,
           offset,
           taxonomyids,
@@ -49,9 +47,7 @@ const GetServices = {
           return qs.stringify(params);
         }
       });
-      console.log(response);
-      // console.log("response.data");
-      // console.log(response.data);
+
       return response.data;
     } catch (error) {
       console.error(error);
@@ -71,9 +67,6 @@ const GetServices = {
         },
       });
 
-      // console.log(response);
-      // console.log("response.data");
-      // console.log(response.data);
       return response.data;
     } catch (error) {
       console.error(error);

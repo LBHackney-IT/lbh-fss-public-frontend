@@ -21,6 +21,11 @@ export const ServiceFilterContainer = styled.div`
 export const BUTTON_MODIFIERS = {
     active: () => `
         color: ${yellow["selected"]};
+    `,
+    filter: () => `
+        &::before {
+            content: "\f0b0";
+        }
     `
 }
 
@@ -42,6 +47,7 @@ const FilterButton = styled.button`
     }
     ${applyStyleModifiers(BUTTON_MODIFIERS)};
 `;
+
 
 const ClearButton = styled.button`
     color: #fff;
@@ -117,7 +123,7 @@ const ServiceFilter = ({onClick}) => {
                     Categories
                 </FilterButton> : ""}
             {(showDemographicsButton) ?
-                <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
+                <FilterButton modifiers={style} modifiers="filter" onClick={selectDemographicsEvent}>
                     Filters
                 </FilterButton> : ""}
             {(showClearAllButton) ?

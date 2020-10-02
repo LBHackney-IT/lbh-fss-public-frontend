@@ -10,6 +10,7 @@ import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
+import ServiceSearchProcess from '../ServiceSearch/ServiceSearchProcess';
 import Home from "../Home/Home";
 import { useQueryParams, NumberParam } from 'use-query-params';
 import history from '../../history';
@@ -34,6 +35,8 @@ const RouteContainer = (props) => {
                     setPage("ServiceDetail");
                 } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
                     setPage("ListServices");
+                } else if (key == "service_search_process" && value == "true") {
+                    setPage("ServiceSearchProcess");
                 } else if (key == "set_postcode" && value == "true") {
                     setPage("SetPostcode");
                 } else if (key == "select_categories" && value == "true") {
@@ -83,12 +86,12 @@ const RouteContainer = (props) => {
         setPrevUrlParams(prevUrlParamsArray);
     };
 
-    // console.log("RouteContainer");
     return (
         isLoading ? ( <AppLoading /> ) :
         (
             ( page == "CategoryExplorer" ) ? <CategoryExplorer onClick={ ServiceCardEvent} /> :
             ( page == "ServiceDetail" ) ? <ServiceDetail service={service} /> :
+            ( page == "ServiceSearchProcess") ? <ServiceSearchProcess /> :
             ( page == "ListServices") ? <ListServices onClick={ ServiceCardEvent} /> :
             ( page == "SetPostcode") ? <SetPostcode /> :
             ( page == "SelectCategories") ? <SelectCategories /> :

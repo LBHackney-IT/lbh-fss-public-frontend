@@ -14,6 +14,7 @@ import {MapContainer} from "../../util/styled-components/MapContainer";
 import { useMediaQuery } from 'react-responsive';
 import HackneyMap from "../HackneyMap/HackneyMap";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import ServiceSearch from '../ServiceSearch/ServiceSearch';
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
@@ -67,7 +68,6 @@ const ListServices = ({ onClick }) => {
       }
       // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
-      // const getServices = await GetServices.retrieveServices({});
       setData(getServices || []);
       setIsLoading(false);
     }
@@ -122,6 +122,7 @@ const ListServices = ({ onClick }) => {
       ) : (
         <div>
           <Header />
+          <ServiceSearch />
           <ServiceFilter />
           <Mobile>
             <ToggleView />

@@ -79,8 +79,6 @@ const SetPostcode = () => {
                     const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
                     let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
                     prevUrlParamsArrayLast["postcode"] = postcode;
-                    console.log(ListServicesSearchObj);
-                    console.log(ListServicesPostcodeObj);
                     if (ListServicesSearchObj !== undefined) {
                     // if service_search exists in prevUrlParams
                         // replace previous postcode with new value
