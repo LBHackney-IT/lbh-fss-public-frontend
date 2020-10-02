@@ -72,12 +72,20 @@ const CategoryExplorer = ({ category, onClick }) => {
   
   useEffect(() => {
     async function fetchData() {
+      let taxonomyId = [];
       let categoryId = "";
       if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
+      
+      for (const [key, value] of Object.entries(urlParams)) {
+        if ((key == "category_explorer" || key == "demographic") && value !== "") {
+          taxonomyId.push(value);
+        }
+      }
+
       // call retrieveServices with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({taxonomyids: categoryId});
+      const getServices = await GetServices.retrieveServices({taxonomyids: taxonomyId});
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
