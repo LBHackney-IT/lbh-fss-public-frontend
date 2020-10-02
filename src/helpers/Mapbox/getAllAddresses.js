@@ -3,7 +3,8 @@ const getAllAddresses = data => {
   if (data.data.services !== undefined && data.data.services.constructor === Array) {
     data = data.data.services;
   } else {
-    data = [data["data"]];
+
+    data = [data.data.service];
   }
   let duplicateService = [...data];
 

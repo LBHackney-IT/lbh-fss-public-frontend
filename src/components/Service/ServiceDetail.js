@@ -197,27 +197,6 @@ const ServiceDetail = ({ onClick }) => {
     const storedPostcode = localStorage.getItem("postcode");
     let paramObj = {};
 
-    const Desktop = ({ children }) => {
-        const isDesktop = useMediaQuery({ minWidth: 768 })
-        return isDesktop ? children : null
-    }
-
-    const Mobile = ({ children }) => {
-        const isMobile = useMediaQuery({ maxWidth: 767 })
-        return isMobile ? children : null
-    }
-
-    function createParamObj(currentSearch, paramsArray) {
-        const queryParts = currentSearch.substring(1).split(/[&;]/g);
-        const arrayLength = queryParts.length;
-        for (let i = 0; i < arrayLength; i++) {
-            const queryKeyValue = queryParts[i].split("=");
-            if (paramsArray.includes(queryKeyValue[0])) {
-                paramObj[queryKeyValue[0]] = queryKeyValue[1];
-            } 
-        }
-    }
-
     useEffect(() => {
         async function fetchData() {
             let serviceId = "";
@@ -248,13 +227,30 @@ const ServiceDetail = ({ onClick }) => {
 
     }, [setData, setIsLoading]);
 
-    const select = e => {
-        onClick(e);
+    const Desktop = ({ children }) => {
+        const isDesktop = useMediaQuery({ minWidth: 768 })
+        return isDesktop ? children : null
+    }
+
+    const Mobile = ({ children }) => {
+        const isMobile = useMediaQuery({ maxWidth: 767 })
+        return isMobile ? children : null
+    }
+
+    function createParamObj(currentSearch, paramsArray) {
+        const queryParts = currentSearch.substring(1).split(/[&;]/g);
+        const arrayLength = queryParts.length;
+        for (let i = 0; i < arrayLength; i++) {
+            const queryKeyValue = queryParts[i].split("=");
+            if (paramsArray.includes(queryKeyValue[0])) {
+                paramObj[queryKeyValue[0]] = queryKeyValue[1];
+            } 
+        }
     }
 
     let hero = "";
-    if (data.images && data.images.medium.length) {
-        hero = data.images.medium;
+    if (data.service !== undefined && data.service.images !== undefined && data.service.images.medium.length) {
+        hero = data.service.images.medium;
     }
 
     const ref = useRef();
@@ -271,15 +267,15 @@ const ServiceDetail = ({ onClick }) => {
             <div className="service-info">
                 {hero.length ? (
                     <div className="image-container">
-                        <img src={hero} alt={data.name} />
+                        <img src={hero} alt={data.service.name} />
                     </div>
                 ) : ""}
                 <GreyInnerContainer className="info">
-                    <h2>{data.name}</h2>
-                    <p>{data.description}</p>
+                    <h2>{data.service.name}</h2>
+                    <p>{data.service.description}</p>
                     <h3>This is for:</h3>
                     <p>
-                        {(data.demographic.length !== 0) ? data.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr]) : ""}
+                        {(data.service.demographic.length !== 0) ? data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr]) : ""}
                     </p>
                 </GreyInnerContainer>
                 <InnerContainer>
@@ -288,7 +284,7 @@ const ServiceDetail = ({ onClick }) => {
                             <h3>We can help with:</h3>
                         </div>
                         <Accordion allowMultipleExpanded preExpanded={['hidden']}>
-                            {data.categories.map((category) => {
+                            {data.service.categories.map((category) => {
                                 const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
                                 return (
                                     <AccordionItem key={category.id}>
@@ -311,22 +307,22 @@ const ServiceDetail = ({ onClick }) => {
                 <InnerContainer>
                     <h3>Contact us</h3>
                     <ul className="ul-no-style">
-                        <li><a className="link-button" href={data.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                        <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.contact.telephone}`}>{data.contact.telephone}</a></li>
-                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.contact.email}`}>{data.contact.email}</a></li>
+                        <li><a className="link-button" href={data.service.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.service.contact.telephone}`}>{data.service.contact.telephone}</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.contact.email}`}>{data.service.contact.email}</a></li>
                     </ul>
                 </InnerContainer>
                 <InnerContainer>
                     <h3>Referral details</h3>
                     <ul className="ul-no-style">
-                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.referral.email}`}>{data.referral.email}</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.service.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.referral.email}`}>{data.service.referral.email}</a></li>
                     </ul>
                 </InnerContainer>
                 <InnerContainer>
                     <h3>Address</h3>
                     <ul className="ul-no-style">
-                        {data.locations.map((location, index) =>
+                        {data.service.locations.map((location, index) =>
                             <Address key={index} address={location} />
                         )}
                     </ul>
@@ -353,12 +349,12 @@ const ServiceDetail = ({ onClick }) => {
                 </ul>   
               </GreyInnerContainer>
               <InnerContainer>
-                <h3>Follow {data.name}</h3>
+                <h3>Follow {data.service.name}</h3>
                 <ul className="ul-no-style">
-                    <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.service.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.service.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.service.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                    <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.service.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                 </ul>
               </InnerContainer>
               <Desktop>
