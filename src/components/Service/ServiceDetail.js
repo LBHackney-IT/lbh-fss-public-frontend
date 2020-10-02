@@ -344,8 +344,6 @@ const ServiceDetail = ({ onClick }) => {
                             <Share service={data} />
                         </ActionSheetContainer>
                     </ActionSheet>
-                    
-                    <li>{`<Print>`}</li>
                 </ul>   
               </GreyInnerContainer>
               <InnerContainer>
