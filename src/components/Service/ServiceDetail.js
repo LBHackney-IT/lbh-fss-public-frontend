@@ -31,9 +31,8 @@ import ReactToPrint from 'react-to-print';
 export const DetailContainer = styled.div`
     .service-info {
         ${breakpoint('md')`
-            padding-bottom: 80px;
             overflow-y: scroll;
-            height: 100vh;
+            height: calc(100vh - 100px);
         `}
     }
     .image-container {
