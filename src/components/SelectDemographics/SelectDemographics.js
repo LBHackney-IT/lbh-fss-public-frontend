@@ -90,8 +90,8 @@ const SelectDemographics = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
-            setData(getCategories || []);
+            const getDemographics = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
+            setData(getDemographics || []);
             setIsLoading(false);
         }
     

@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect, useRef, Fragment} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
+import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import { darken } from "polished";
@@ -188,6 +189,7 @@ export const ActionSheetContainer = styled.div`
 
 const ServiceDetail = ({ onClick }) => {
     const [data, setData] = useState([]);
+    const [demographicData, setDemographicData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const {urlParams} = useContext(UrlParamsContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
@@ -205,6 +207,8 @@ const ServiceDetail = ({ onClick }) => {
             }
             const getService = await GetServices.getService({id: serviceId, postcode: storedPostcode});
             setData(getService || []);
+            const getDemographics = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
+            setDemographicData(getDemographics || []);
             setIsLoading(false);
         }
         fetchData();
@@ -275,7 +279,7 @@ const ServiceDetail = ({ onClick }) => {
                     <p>{data.service.description}</p>
                     <h3>This is for:</h3>
                     <p>
-                        {(data.service.demographic.length !== 0) ? data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr]) : ""}
+                        {(data.service.demographic.length && data.service.demographic.length === demographicData.length) ? "Everyone" : data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
                     </p>
                 </GreyInnerContainer>
                 <InnerContainer>
