@@ -26,6 +26,7 @@ import Share from "../Share/Share";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
+import ReactToPrint from 'react-to-print';
 
 export const DetailContainer = styled.div`
     .service-info {
@@ -61,7 +62,8 @@ export const DetailContainer = styled.div`
             font-size: 19px;
         }
     }
-    .fss--social-share {
+    .fss--social-share, .print-button {
+        display: block;
         border: 0;
         background: transparent;
         cursor: pointer;
@@ -75,6 +77,40 @@ export const DetailContainer = styled.div`
         svg {
             margin-right: 5px;
             color: #000;
+        }
+    }
+    .print-button {
+        margin-top: 15px;
+    }
+    .print-only, .page-break {
+        display: none;
+    }
+    @media print {
+        @page { size: landscape; }
+        .page-break {
+            margin-top: 3.5rem;
+            display: block;
+            page-break-before: always;
+        }
+        .image-container {
+            width: 400px;
+            height: 200px;
+            break-inside: avoid;
+        }
+        a {
+            text-decoration: none;
+            color: ${dark["offBlack"]};
+        }
+        .fa-map-marker-alt {
+            margin-top: -10px !important;
+        }
+        .accordion__button {
+            .fa-plus, .fa-minus {
+                display: none;
+            }
+        }
+        .accordion__panel {
+            display: block;
         }
     }
 `;
@@ -185,6 +221,10 @@ export const ActionSheetContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    @media print {
+        display: none !important;
+        visibility: hidden !important;
+    }
 `;
 
 const ServiceDetail = ({ onClick }) => {
@@ -258,6 +298,7 @@ const ServiceDetail = ({ onClick }) => {
     }
 
     const ref = useRef();
+    const componentRef = useRef();
  
     const handleOpen = () => {
         ref.current.open();
@@ -266,7 +307,7 @@ const ServiceDetail = ({ onClick }) => {
     return isLoading ? (
             <AppLoading />
         ) : (
-        <DetailContainer>
+        <DetailContainer ref={componentRef}>
             <Header />
             <div className="service-info">
                 {hero.length ? (
@@ -311,7 +352,8 @@ const ServiceDetail = ({ onClick }) => {
                 <InnerContainer>
                     <h3>Contact us</h3>
                     <ul className="ul-no-style">
-                        <li><a className="link-button" href={data.service.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li className="no-print"><a className="link-button" href={data.service.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li className="print-only"><a className="link-button" href={data.service.contact.website}>Visit website: {data.service.contact.website}</a></li>
                         <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.service.contact.telephone}`}>{data.service.contact.telephone}</a></li>
                         <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.contact.email}`}>{data.service.contact.email}</a></li>
                     </ul>
@@ -319,7 +361,7 @@ const ServiceDetail = ({ onClick }) => {
                 <InnerContainer>
                     <h3>Referral details</h3>
                     <ul className="ul-no-style">
-                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.service.referral.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.service.referral.website} target="_blank" rel="noopener noreferrer">Visit website<span className="print-only">: {data.service.referral.website}</span></a></li>
                         <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.referral.email}`}>{data.service.referral.email}</a></li>
                     </ul>
                 </InnerContainer>
@@ -332,35 +374,38 @@ const ServiceDetail = ({ onClick }) => {
                     </ul>
                 </InnerContainer>
                 <Mobile>
-                    <InnerMapContainer>
+                    <InnerMapContainer className="inner-map-container">
                         <HackneyMap data={data} />
                     </InnerMapContainer>
                 </Mobile>
-              <GreyInnerContainer>
-                <ul className="ul-no-style">
-                    <button onClick={handleOpen} className="fss--social-share">
-                        <FontAwesomeIcon icon={["fas", "share-square"]} />
-                        Share
-                    </button>
-                    <ActionSheet ref={ref}>
-                        <ActionSheetContainer>
-                            <h3>Share</h3>
-                            <Share service={data} />
-                        </ActionSheetContainer>
-                    </ActionSheet>
-                </ul>   
+              <GreyInnerContainer className="no-print">
+                <button onClick={handleOpen} className="fss--social-share">
+                    <FontAwesomeIcon icon={["fas", "share-square"]} />
+                    Share
+                </button>
+                <ActionSheet className="fss-social-share--details" ref={ref}>
+                    <ActionSheetContainer>
+                        <h3>Share</h3>
+                        <Share service={data} />
+                    </ActionSheetContainer>
+                </ActionSheet>
+                <ReactToPrint
+                    trigger={() => <button className="print-button"><FontAwesomeIcon icon={["fas", "print"]} />Print</button>}
+                    content={() => componentRef.current}
+                />
               </GreyInnerContainer>
               <InnerContainer>
                 <h3>Follow {data.service.name}</h3>
                 <ul className="ul-no-style">
-                    <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.service.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.service.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.service.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.service.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                    {(data.service.social.facebook) ? <li><FontAwesomeIcon icon={["fab", "facebook-square"]} /><a href={data.service.social.facebook} target="_blank" rel="noopener noreferrer">Facebook<span className="print-only">: {data.service.social.facebook}</span></a></li> : ""}
+                    {(data.service.social.twitter) ? <li><FontAwesomeIcon icon={["fab", "twitter-square"]} /><a href={data.service.social.twitter} target="_blank" rel="noopener noreferrer">Twitter<span className="print-only">: {data.service.social.twitter}</span></a></li> : ""}
+                    {(data.service.social.instagram) ? <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.service.social.instagram} target="_blank" rel="noopener noreferrer">Instagram<span className="print-only">: {data.service.social.instagram}</span></a></li> : ""}
+                    {(data.service.social.linkedin) ? <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.service.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<span className="print-only">: {data.service.social.linkedin}</span></a></li> : ""}
                 </ul>
               </InnerContainer>
               <Desktop>
                 <MapContainer>
+                    <div className="page-break" />
                     <HackneyMap data={data} />
                 </MapContainer>
               </Desktop>

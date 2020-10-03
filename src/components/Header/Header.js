@@ -30,7 +30,7 @@ const Header = () => {
     }
 
     return (
-        <HeaderContainer>
+        <HeaderContainer className="no-print">
             <Back />
             {(showPostcodeButton) ? <PostcodeButton /> : ""}
         </HeaderContainer>

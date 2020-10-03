@@ -91,6 +91,24 @@ hr {
   width: 1px;
 }
 
+@media print {
+  @page {
+    margin: 10mm;
+  }
+  .print-only {
+      display: inline;
+  }
+  .page-break {
+      margin-top: 3.5rem;
+      display: block;
+      page-break-before: always;
+  }
+  .no-print {
+      display: none !important;
+      visibility: hidden !important;
+  }
+}
+
 .App {
   position: relative;
   ${breakpoint('sm')`
@@ -350,10 +368,10 @@ hr {
 }
 
 .marker-cluster-large {
-	background-color: rgba(253, 156, 115, 0.8);
+  background-color: rgba(253, 156, 115, 0.8);
 }
 .marker-cluster-large div {
-	background-color: rgba(241, 128, 23, 1);
+  background-color: rgba(241, 128, 23, 1);
 }
   
 `;
