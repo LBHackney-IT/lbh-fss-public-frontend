@@ -2,7 +2,6 @@ import React, {useState, useContext, useEffect, useRef, Fragment} from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
-import ServiceCard from "./ServiceCard";
 import styled from "styled-components";
 import { darken } from "polished";
 import { green, blue, light, dark } from "../../settings";
@@ -86,10 +85,17 @@ export const DetailContainer = styled.div`
     }
     @media print {
         @page { size: landscape; }
+        .print-only {
+            display: inline;
+        }
         .page-break {
             margin-top: 3.5rem;
             display: block;
             page-break-before: always;
+        }
+        .no-print {
+            display: none !important;
+            visibility: hidden !important;
         }
         .image-container {
             width: 400px;
