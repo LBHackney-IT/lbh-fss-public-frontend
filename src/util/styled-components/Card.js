@@ -44,8 +44,14 @@ export const CARD_MODIFIERS = {
             font-size: 16px;
         }
         .service--distance {
-            margin-top: 15px;
             color: ${dark["black"]};
+            padding: 0 10px 15px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         img {
             width: 100%;
