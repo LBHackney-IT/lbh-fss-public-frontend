@@ -52,11 +52,13 @@ const StyledButton = styled(Button)`
 const StyledHelp = styled.p``;
 
 const FormInputSubmit = ({
+  id,
   type,
   name,
   label,
   placeholder,
   register,
+  defaultValue,
   required,
   maxLength,
   minLength,
@@ -85,6 +87,7 @@ const FormInputSubmit = ({
       {help ? <StyledHelp>{help}</StyledHelp> : ""}
       <StyledInputContainer>
         <StyledInput
+          id={id}
           aria-label={name}
           name={name}
           placeholder={placeholder}
@@ -93,6 +96,7 @@ const FormInputSubmit = ({
             register(e, { required, minLength, maxLength, validate });
             if (inputRef) inputRef.current = e;
           }}
+          defaultValue={defaultValue}
           aria-invalid={error ? "true" : "false"}
         />
         {/* <StyledButton type="submit" label="Login" disabled={isLoading} /> */}
@@ -103,11 +107,13 @@ const FormInputSubmit = ({
 };
 
 FormInputSubmit.propTypes = {
+  id: PropTypes.string,
   type: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   register: PropTypes.func,
+  defaultValue: PropTypes.string,
   required: PropTypes.bool,
   maxLength: PropTypes.number,
   minLength: PropTypes.number,

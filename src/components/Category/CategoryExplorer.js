@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import GetServices from "../../services/GetServices/GetServices";
-import GetCategories from "../../services/GetCategories/GetCategories";
+import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import { CardContainer } from "../../util/styled-components/CardContainer";
 import ServiceCard from "../Service/ServiceCard";
 import CategoryCard from "../Category/CategoryCard";
@@ -15,20 +15,21 @@ import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const CategoryCardContainer = styled.div`
-  .card {
+  .fss--card {
     box-shadow: none;
     border: 0;
     cursor: auto;
     margin-bottom: 0;
-    .card--container {
+    .fss--card--container {
       padding: 20px 15px;
       &::after {
           content: none;
       }
     }
-    .card--content {
+    .fss--card--content {
       margin-right: 0;
     }
   }
@@ -71,15 +72,23 @@ const CategoryExplorer = ({ category, onClick }) => {
   
   useEffect(() => {
     async function fetchData() {
+      let taxonomyId = [];
       let categoryId = "";
       if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
-      // call retrieveServicesByCategory with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServicesByCategory({taxonomyId: categoryId});
+      
+      for (const [key, value] of Object.entries(urlParams)) {
+        if ((key == "category_explorer" || key == "demographic") && value !== "") {
+          taxonomyId.push(value);
+        }
+      }
+
+      // call retrieveServices with categoryId param passed to return all services associated with the category
+      const getServices = await GetServices.retrieveServices({taxonomyids: taxonomyId});
       setData(getServices || []);
-      // call retrieveCategories with categoryId param passed to return the category name and description
-      const getCategories = await GetCategories.retrieveCategories({id: categoryId});
+      // call getTaxonomy with categoryId param passed to return the category name and description
+      const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
       setCategoryData(getCategories || []);
       setIsLoading(false);
     }
@@ -122,16 +131,23 @@ const CategoryExplorer = ({ category, onClick }) => {
 
   return(
     <div>
-      {!data.length ? (
-        <h2>No data Found</h2>
+      {Object.keys(categoryData).length === 0 ? (
+        <div>
+          <Header />
+          <div className="no-results">
+            <h2>No results found</h2>
+            <p>Please use the 'Back' button above to go back and select a category.</p>
+          </div>
+          <MapPlaceholder />
+      </div>
       ) : (
         <div>
           <Header />
           <ServiceFilter />
           <CategoryCardContainer>
             <CategoryCard
-              key={categoryData[0].id}
-              category={categoryData[0]}
+              key={categoryData.id}
+              category={categoryData}
             />
           </CategoryCardContainer>
           <Mobile>
@@ -139,7 +155,7 @@ const CategoryExplorer = ({ category, onClick }) => {
             {
               ( showMap == "false" ) ?
                 <CardContainer>
-                  {data.map((service, index) => {
+                  {data.services.map((service, index) => {
                     return (
                       <ServiceCard key={index} service={service} onClick={select} />
                     );
@@ -149,7 +165,7 @@ const CategoryExplorer = ({ category, onClick }) => {
           </Mobile>
           <Desktop>
             <CardContainer>
-              {data.map((service, index) => {
+              {data.services.map((service, index) => {
                 return (
                   <ServiceCard key={index} service={service} onClick={select} />
                 );

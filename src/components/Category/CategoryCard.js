@@ -17,12 +17,12 @@ const CategoryCard = ({ category, onClick }) => {
     const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
 
     return (
-        <Card modifiers="categoryCard" id={category.id} className="card" onClick={select}>
-            <div className="card--container category-icons" data-category-icon={categoryIconName}>
-                <div className="icon-container">
+        <Card modifiers="categoryCard" id={category.id} className="fss--card" onClick={select}>
+            <div className="fss--card--container category-icons" data-category-icon={categoryIconName}>
+                <div className="fss--icon-container">
                     <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
-                    </div>
-                <div className="card--content">
+                </div>
+                <div className="fss--card--content">
                     <h4>{category.name}</h4>
                     <p>{category.description}</p>
                 </div>

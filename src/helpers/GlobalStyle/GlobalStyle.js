@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { defaultTheme, blue, green, dark, light, category } from "../../settings";
+import { defaultTheme, blue, green, dark, light, red, category } from "../../settings";
 import { normalize } from "polished";
 import openSansV17Latin700Ttf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.ttf";
 import openSansV17Latin700Woff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff";
@@ -91,6 +91,24 @@ hr {
   width: 1px;
 }
 
+@media print {
+  @page {
+    margin: 10mm;
+  }
+  .print-only {
+      display: inline;
+  }
+  .page-break {
+      margin-top: 3.5rem;
+      display: block;
+      page-break-before: always;
+  }
+  .no-print {
+      display: none !important;
+      visibility: hidden !important;
+  }
+}
+
 .App {
   position: relative;
   ${breakpoint('sm')`
@@ -99,6 +117,18 @@ hr {
   ${breakpoint('md')`
     
   `}
+}
+
+.no-results {
+  padding: 20px;
+}
+
+#postcode-input-container {
+  p {
+    color: ${light["white"]};
+    border-left: 4px solid ${red["error"]};
+    padding-left: 10px;
+  }
 }
 
 .category-icons {
@@ -267,9 +297,25 @@ hr {
     background: transparent;
     border: 0;
   }
-  .hackney-map-marker {
+  .hackney-map-marker, .hackney-map-home-marker  {
     position: relative;
     left: -10px;
+  }
+  .hackney-map-home-marker {
+    .map-marker--foreground {
+      font-size: 37px;
+      top: -1px;
+      left: 0;
+      color: ${red["error"]} !important;
+    }
+    svg.fa-home {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      z-index: -1;
+      color: ${light["white"]};
+      font-size: 18px;
+    }
   }
   svg.fa-map-marker {
     position: absolute;
@@ -322,10 +368,10 @@ hr {
 }
 
 .marker-cluster-large {
-	background-color: rgba(253, 156, 115, 0.8);
+  background-color: rgba(253, 156, 115, 0.8);
 }
 .marker-cluster-large div {
-	background-color: rgba(241, 128, 23, 1);
+  background-color: rgba(241, 128, 23, 1);
 }
   
 `;

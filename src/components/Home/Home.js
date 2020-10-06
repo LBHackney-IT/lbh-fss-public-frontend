@@ -71,7 +71,7 @@ const Home = () => {
             setUrl(currentSearch);
 
             // setPrevUrl
-            prevUrlArray.push(currentSearch); // (2) ["", "?postcode=GL543ND&service_search"] // PUSHING NEWLY LOADED URL TO prevUrlArray
+            prevUrlArray.push(currentSearch);
             setPrevUrl(prevUrlArray);
 
             // setPrevUrlParams
@@ -97,22 +97,43 @@ const Home = () => {
     async function submitForm({ postcode, service_search }) {
         if (isLoading) return;
 
+        const postcodeValue = document.forms["fss--find-service"]["postcode"].value;
+        const searchValue = document.forms["fss--find-service"]["service_search"].value;
         const validPostcode = postcodeValidator(postcode, 'UK');
-        if (validPostcode) {
-            localStorage.setItem("postcode", postcode);
-            if (url) {
-                history.push(url + "&postcode=" + postcode + "&service_search");
+
+        if (postcodeValue !== "" && searchValue !== "") {
+            if (validPostcode) {
+                history.push("?postcode=" + postcode + "&service_search=" + service_search);
+                const currentSearch = window.location.search;   
+                setPreviousUrls(currentSearch);
+                setUrlParams({postcode: postcode, service_search: service_search});
             } else {
-                history.push("?postcode=" + postcode + "&service_search");
+                let node = document.createElement("p");
+                let textNode = document.createTextNode("Please enter a valid postcode");
+                node.appendChild(textNode);
+                document.getElementById("postcode-input-container").appendChild(node);
             }
+        } else if (postcodeValue !== "") {
+            if (validPostcode) {
+                localStorage.setItem("postcode", postcode);
+                history.push("?postcode=" + postcode + "&service_search");
+                const currentSearch = window.location.search;
+                setPreviousUrls(currentSearch);
+                setUrlParams({postcode: postcode, service_search: undefined});
+            } else {
+                let node = document.createElement("p");
+                let textNode = document.createTextNode("Please enter a valid postcode");
+                node.appendChild(textNode);
+                document.getElementById("postcode-input-container").appendChild(node);
+            }
+            
+        } else if (searchValue !== "") {
+            history.push("?postcode&service_search=" + service_search);
             const currentSearch = window.location.search;
             setPreviousUrls(currentSearch);
-            setUrlParams({postcode: postcode, service_search: undefined});
-        // TODO add keyword search
-        } else {
-            postcodeRef.current.focus();
+            setUrlParams({postcode: undefined, service_search: service_search});
+            localStorage.removeItem('postcode');
         }
-    
     }
 
     return (
@@ -123,25 +144,20 @@ const Home = () => {
             <div className="Home">
                 <HomeHeader>
                     <h2>Find support services</h2>
-                    <form onSubmit={handleSubmit(submitForm)} data-testid="form">
-                        <FormInput
-                            label="Enter a postcode"
-                            placeholder="Set your postcode e.g E8 1DY"
-                            name="postcode"
-                            inputRef={postcodeRef}
-                            register={register}
-                            defaultValue={storedPostcode}
-                            validate={{
-                                pattern: (value) => {
-                                    return (
-                                        postcodeValidator(value, 'UK') ||
-                                        "Please enter a valid postcode"
-                                    );
-                                },
-                            }}
-                            error={errors.postcode}
-                        />
+                    <form id="fss--find-service" onSubmit={handleSubmit(submitForm)} data-testid="form">
+                        <div id="postcode-input-container">
+                            <FormInput
+                                id="fss--postcode"
+                                label="Enter a postcode"
+                                placeholder="Set your postcode e.g E8 1DY"
+                                name="postcode"
+                                inputRef={postcodeRef}
+                                register={register}
+                                defaultValue={storedPostcode}
+                            />
+                        </div>
                         <FormInputSubmit
+                            id="fss--service-search"
                             label="Search for a service"
                             placeholder="Search..."
                             name="service_search"

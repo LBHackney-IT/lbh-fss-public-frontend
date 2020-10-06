@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import breakpoint from 'styled-components-breakpoint';
 
-export const CardContainer = styled.div`
-    padding: 20px 15px 0;
+export const CheckboxContainer = styled.div`
+    padding: 0 15px 0;
     ${breakpoint('md')`
-        padding: 20px 15px 20px;
+        padding: 0 15px;
         overflow-y: scroll;
-        height: calc(100vh - 260px);
+        height: calc(100vh - 225px);
     `}
 `;

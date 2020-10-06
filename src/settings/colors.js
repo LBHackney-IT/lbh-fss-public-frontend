@@ -21,6 +21,10 @@ export const red = {
   error: "#BE3A34",
 };
 
+export const yellow = {
+  selected: "#FFC845",
+};
+
 export const dark = {
   black: "#000000",
   offBlack: "#0B0C0C",

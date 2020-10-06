@@ -21,7 +21,7 @@ export const CARD_MODIFIERS = {
                 color: ${light["white"]};
             }
         }
-        .card--container {
+        .fss--card--container {
             display: flex;
             flex-direction: row;
             &::after {
@@ -30,7 +30,7 @@ export const CARD_MODIFIERS = {
                 margin-left: auto;
             }
         }
-        .card--content {
+        .fss--card--content {
             margin-right: 10px;
         }
     `,
@@ -44,8 +44,14 @@ export const CARD_MODIFIERS = {
             font-size: 16px;
         }
         .service--distance {
-            margin-top: 15px;
             color: ${dark["black"]};
+            padding: 0 10px 15px;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         img {
             width: 100%;
@@ -63,7 +69,7 @@ export const Card = styled.div`
     margin-bottom: 10px;
     cursor: pointer;
 
-    .card--container {
+    .fss--card--container {
         padding: 15px 10px;
     }
     h1, h2, h3, h4 {

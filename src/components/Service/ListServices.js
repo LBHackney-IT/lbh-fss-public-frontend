@@ -13,6 +13,8 @@ import styled from "styled-components";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { useMediaQuery } from 'react-responsive';
 import HackneyMap from "../HackneyMap/HackneyMap";
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import ServiceSearch from '../ServiceSearch/ServiceSearch';
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
@@ -50,10 +52,22 @@ const ListServices = ({ onClick }) => {
 
   useEffect(() => {
     async function fetchData() {
-      // get urlParams and pass in postcode and search values
-      // searchValue.replace("%20", "+"); // don't do this for postcode
-      // const getServices = await GetServices.retrieveServices({postcode: value, search: value});
-      const getServices = await GetServices.retrieveServices({});
+      let postcode = "";
+      let search = "";
+      let taxonomyId = [];
+      for (const [key, value] of Object.entries(urlParams)) {
+        if (key == "postcode" && value !== "") {
+          postcode = value;
+        }
+        if (key == "service_search" && value !== "") {
+          search = value;
+        }
+        if ((key == "categories" || key == "demographic") && value !== "") {
+          taxonomyId.push(value);
+        }
+      }
+      // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
+      const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
       setData(getServices || []);
       setIsLoading(false);
     }
@@ -96,18 +110,26 @@ const ListServices = ({ onClick }) => {
 
   return(
     <div>
-      {!data.length ? (
-        <h2>No data Found</h2>
+      {!data.services.length ? (
+        <div>
+          <Header />
+          <div className="no-results">
+            <h2>No results found</h2>
+            <p>Please use the 'Back' button above to go back and try a different search term.</p>
+          </div>
+          <MapPlaceholder />
+        </div>
       ) : (
         <div>
           <Header />
+          <ServiceSearch />
           <ServiceFilter />
           <Mobile>
             <ToggleView />
             {
               ( showMap == "false" ) ?
                 <CardContainer>
-                  {data.map((service, index) => {
+                  {data.services.map((service, index) => {
                     return (
                       <ServiceCard key={index} service={service} onClick={select} />
                     );
@@ -117,7 +139,7 @@ const ListServices = ({ onClick }) => {
           </Mobile>
           <Desktop>
             <CardContainer>
-              {data.map((service, index) => {
+              {data.services.map((service, index) => {
                 return (
                   <ServiceCard key={index} service={service} onClick={select} />
                 );

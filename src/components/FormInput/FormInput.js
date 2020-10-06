@@ -19,6 +19,7 @@ const StyledLabel = styled.label`
 const StyledHelp = styled.p``;
 
 const FormInput = ({
+  id,
   type,
   name,
   label,
@@ -52,6 +53,7 @@ const FormInput = ({
       <StyledLabel htmlFor={name}>{label}</StyledLabel>
       {help ? <StyledHelp>{help}</StyledHelp> : ""}
       <StyledInput
+        id={id}
         aria-label={name}
         name={name}
         placeholder={placeholder}
@@ -68,6 +70,7 @@ const FormInput = ({
 };
 
 FormInput.propTypes = {
+  id: PropTypes.string,
   type: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,

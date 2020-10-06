@@ -13,28 +13,7 @@ import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
 import { dark, red } from "../../settings";
-import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
-import {MapContainer} from "../../util/styled-components/MapContainer";
-import {
-    MAX_ZOOM,
-    MIN_ZOOM,
-    CENTER_DESKTOP_LEGEND,
-    CENTER_DESKTOP_LEGEND_FULLSCREEN,
-    CENTER_DESKTOP_NO_LEGEND,
-    CENTER_DESKTOP_NO_LEGEND_FULLSCREEN,
-    CENTER_MOBILE,
-    CENTER_MOBILE_FULLSCREEN,
-    DEFAULT_ZOOM_DESKTOP,
-    DEFAULT_ZOOM_MOBILE,
-    MAP_BOUNDS,
-    HACKNEY_BOUNDS_1,
-    HACKNEY_BOUNDS_2,
-    HACKNEY_GEOSERVER_WMS,
-    MAPBOX_TILES_URL,
-    GENERIC_GEOLOCATION_ERROR,
-    GENERIC_OUTSIDE_HACKNEY_ERROR,
-    ATTRIBUTION
-  } from "../../helpers/GlobalVariables/GlobalVariables";
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const SetPostcodeContainer = styled.div`
     padding: 20px 15px;
@@ -85,8 +64,8 @@ const SetPostcode = () => {
         const validPostcode = postcodeValidator(postcode, 'UK');
         if (validPostcode) {
             localStorage.setItem("postcode", postcode);
-            let push = "?postcode="+postcode+"&service_search";
-            let params = {"postcode": postcode, "search_service": undefined};
+            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+            let params = prevUrlParamsArrayLast;
 
             if (prevUrl.length !== 0 && prevUrlParams.length !== 0) {
                 push = prevUrlArrayLast;
@@ -99,6 +78,7 @@ const SetPostcode = () => {
                 // catch all for list services
                     const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
                     let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
+                    prevUrlParamsArrayLast["postcode"] = postcode;
                     if (ListServicesSearchObj !== undefined) {
                     // if service_search exists in prevUrlParams
                         // replace previous postcode with new value
@@ -153,23 +133,7 @@ const SetPostcode = () => {
                         <StyledButton type="submit" label="Set postcode" disabled={isLoading} />
                     </form>
                 </SetPostcodeContainer>
-                <MapContainer>
-                    <Map className="markercluster-map"
-                        center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
-                        zoom={MIN_ZOOM}
-                        maxZoom={MAX_ZOOM}
-                        zoomControl={false}
-                        // bounds={MAP_BOUNDS}
-                        maxBounds={MAP_BOUNDS}
-                        gestureHandling
-                        >
-                        <ZoomControl position='topright' />
-                        <TileLayer
-                            attribution={ATTRIBUTION}
-                            url={MAPBOX_TILES_URL}
-                        />
-                    </Map>
-                </MapContainer>
+                <MapPlaceholder />
             </div>
             </>
         )
