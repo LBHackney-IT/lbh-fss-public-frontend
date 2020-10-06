@@ -3,6 +3,7 @@ import { Card } from "../../util/styled-components/Card";
 
 const ServiceCard = ({ service, onClick }) => {
     const storedPostcode = localStorage.getItem("postcode");
+    const serviceArray = [service];
 
     let hero = "";
     if (service.images && service.images.medium.length) {
@@ -26,7 +27,17 @@ const ServiceCard = ({ service, onClick }) => {
                     <p>{service.description}</p>
                 </div>
             </div>
-            {(service.locations[0].distance) !== null ? <p className="service--distance">Distance: <a className="service--distance--link" href={`https://www.google.com/maps/dir/${storedPostcode}/${service.locations[0].address1}%20${service.locations[0].address2}%20${service.locations[0].city}%20${service.locations[0].stateProvince}%20${service.locations[0].postalCode}`} target="_blank">{service.locations[0].distance}</a></p> : ""}
+            {
+                serviceArray.map((service, index) => {
+                    const locationSorted = service.locations.sort(function (a, b) {
+                        return parseFloat(a.distance) - parseFloat(b.distance);
+                    });
+
+                    return (
+                        (locationSorted[0].distance) !== null ? <p key={index} className="service--distance">Distance: <a className="service--distance--link" href={`https://www.google.com/maps/dir/${storedPostcode}/${locationSorted[0].address1}%20${locationSorted[0].address2}%20${locationSorted[0].city}%20${locationSorted[0].stateProvince}%20${locationSorted[0].postalCode}`} target="_blank">{locationSorted[0].distance}</a></p> : ""
+                    )
+                })
+            }
         </Card>
     );
   };

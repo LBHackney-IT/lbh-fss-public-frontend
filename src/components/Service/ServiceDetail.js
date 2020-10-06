@@ -232,7 +232,7 @@ export const ActionSheetContainer = styled.div`
     }
 `;
 
-const ServiceDetail = ({ onClick }) => {
+const ServiceDetail = () => {
     const [data, setData] = useState([]);
     const [demographicData, setDemographicData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -308,6 +308,7 @@ const ServiceDetail = ({ onClick }) => {
     const handleOpen = () => {
         ref.current.open();
     }
+    const serviceArray = [data.service];
   
     return isLoading ? (
             <AppLoading />
@@ -373,9 +374,16 @@ const ServiceDetail = ({ onClick }) => {
                 <InnerContainer>
                     <h3>Address</h3>
                     <ul className="ul-no-style">
-                        {data.service.locations.map((location, index) =>
-                            <Address key={index} address={location} />
-                        )}
+                        {
+                            serviceArray.map((service, index) => {
+                                const locationSorted = service.locations.sort(function (a, b) {
+                                    return parseFloat(a.distance) - parseFloat(b.distance);
+                                });
+                                return locationSorted.map((location, index) =>
+                                    <Address key={index} address={location} />
+                                );
+                            })
+                        }
                     </ul>
                 </InnerContainer>
                 <Mobile>
