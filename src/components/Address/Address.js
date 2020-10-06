@@ -25,11 +25,13 @@ export const AddressList = styled.li`
 
 const Address = (props) => {
     const { address } = props;
+    let storedPostcode = localStorage.getItem("postcode");
+    storedPostcode = (storedPostcode) ? storedPostcode : "";
 
     return(
         <AddressList key={address.uprn}>
             <div>
-                <a href={`https://maps.google.com/?q=${address.address1}%20${address.address2}%20${address.city}%20${address.stateProvince}%20${address.postalCode}`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://www.google.com/maps/dir/${storedPostcode}/${address.address1}%20${address.address2}%20${address.city}%20${address.stateProvince}%20${address.postalCode}`} target="_blank" rel="noopener noreferrer">
                     {address.address1}<br></br>
                     {address.address2 ? address.address2 + ", " : ""}
                     {address.city ? address.city + ", " : ""}
