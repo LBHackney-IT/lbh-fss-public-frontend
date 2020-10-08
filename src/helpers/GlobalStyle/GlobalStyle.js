@@ -29,6 +29,12 @@ body {
   overflow-x: hidden;
 }
 
+#erw-root {
+  * + * {
+    margin-top: 0;
+  }
+}
+
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -51,6 +57,12 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
+  margin-bottom: 1em;
+}
+
+p {
+  line-height: 1.25 !important;
+  font-weight: normal !important;
 }
 
 a {

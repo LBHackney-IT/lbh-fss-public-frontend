@@ -14,6 +14,7 @@ import ServiceSearchProcess from '../ServiceSearch/ServiceSearchProcess';
 import Home from "../Home/Home";
 import { useQueryParams, NumberParam } from 'use-query-params';
 import history from '../../history';
+window.FontAwesomeConfig = { searchPseudoElements: true };
 
 const RouteContainer = (props) => {
     const {url, setUrl} = useContext(UrlContext);

@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from "react";
+import "leaflet/dist/leaflet.css";
+import "leaflet/dist/leaflet.js";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
@@ -16,6 +18,7 @@ import getHomeLocation from "../../helpers/Mapbox/getHomeLocation";
 import { GestureHandling } from 'leaflet-gesture-handling';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.js";
+
 import {
   MAX_ZOOM,
   MIN_ZOOM,

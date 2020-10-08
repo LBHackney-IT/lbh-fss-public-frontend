@@ -1,4 +1,6 @@
 import React from "react";
+import "leaflet/dist/leaflet.css";
+import "leaflet/dist/leaflet.js";
 import { useMediaQuery } from 'react-responsive';
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { Map, TileLayer, ZoomControl } from "react-leaflet";
