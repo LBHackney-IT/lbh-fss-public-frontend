@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.js": "/static/js/main.2df17d79.chunk.js",
+    "main.js.map": "/static/js/main.2df17d79.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c80f4175.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c80f4175.js.map",
+    "static/css/2.0fd9ed37.chunk.css": "/static/css/2.0fd9ed37.chunk.css",
+    "static/js/2.516210aa.chunk.js": "/static/js/2.516210aa.chunk.js",
+    "static/js/2.516210aa.chunk.js.map": "/static/js/2.516210aa.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.c1f44d873b909106a9cd1d5d2ced2113.js": "/precache-manifest.c1f44d873b909106a9cd1d5d2ced2113.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.0fd9ed37.chunk.css.map": "/static/css/2.0fd9ed37.chunk.css.map",
+    "static/js/2.516210aa.chunk.js.LICENSE.txt": "/static/js/2.516210aa.chunk.js.LICENSE.txt",
+    "static/media/arrow-right.svg": "/static/media/arrow-right.7c57f75a.svg",
+    "static/media/open-sans-v17-latin-700.woff2": "/static/media/open-sans-v17-latin-700.0edb7628.woff2",
+    "static/media/open-sans-v17-latin-700.woff": "/static/media/open-sans-v17-latin-700.1f85e92d.woff",
+    "static/media/open-sans-v17-latin-700.ttf": "/static/media/open-sans-v17-latin-700.e5111cab.ttf",
+    "static/media/open-sans-v17-latin-regular.ttf": "/static/media/open-sans-v17-latin-regular.049a929c.ttf",
+    "static/media/open-sans-v17-latin-regular.woff2": "/static/media/open-sans-v17-latin-regular.33543c5c.woff2",
+    "static/media/open-sans-v17-latin-regular.woff": "/static/media/open-sans-v17-latin-regular.de0869e3.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c80f4175.js",
+    "static/css/2.0fd9ed37.chunk.css",
+    "static/js/2.516210aa.chunk.js",
+    "static/js/main.2df17d79.chunk.js"
+  ]
+}
