@@ -23,6 +23,8 @@ export const CategoryCardContainer = styled.div`
     border: 0;
     cursor: auto;
     margin-bottom: 0;
+    position: relative;
+    z-index: 1;
     .fss--card--container {
       padding: 20px 15px;
       &::after {

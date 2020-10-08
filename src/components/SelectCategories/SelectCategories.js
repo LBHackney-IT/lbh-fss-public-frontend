@@ -13,33 +13,12 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
-import { dark, red } from "../../settings";
+import { dark, red, light } from "../../settings";
 import {FilterContainer} from "../../util/styled-components/FilterContainer";
 import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
-
-export const SetPostcodeContainer = styled.div`
-    padding: 20px 15px;
-    h2 {
-        font-size: 27px;
-        font-weight: normal;
-        margin-bottom: 10px;
-    }
-    p {
-        font-size: 19px;
-        color: ${dark["grey"]};
-    }
-    input[name=postcode] {
-        border: 2px solid ${dark["offBlack"]};
-        box-sizing: border-box;
-        border-radius: 3px;
-    }
-    span[role=alert] {
-        color: ${red["error"]};
-    }
-`;
 
 const StyledButton = styled(Button)`
     width: 100%;

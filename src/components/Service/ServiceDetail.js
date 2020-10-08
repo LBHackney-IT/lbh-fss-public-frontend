@@ -32,6 +32,9 @@ export const DetailContainer = styled.div`
         ${breakpoint('md')`
             overflow-y: scroll;
             height: calc(100vh - 100px);
+            position: relative;
+            z-index: 1;
+            background: ${light["white"]};
         `}
     }
     .image-container {
@@ -58,6 +61,11 @@ export const DetailContainer = styled.div`
     ul {
         li {
             font-size: 19px;
+        }
+    }
+    #fss--social-share-overlay {
+        > div:first-of-type {
+            display: none;
         }
     }
     .fss--social-share, .print-button {
@@ -307,13 +315,26 @@ const ServiceDetail = () => {
  
     const handleOpen = () => {
         ref.current.open();
+        document.getElementById("fss--social-share-overlay").childNodes[0].style.display = "block";
     }
+
+    const handleClose = () => {
+        ref.current.close();
+        document.getElementById("fss--social-share-overlay").childNodes[0].style.display = "none";
+    }
+
     const serviceArray = [data.service];
   
     return isLoading ? (
             <AppLoading />
         ) : (
         <DetailContainer ref={componentRef}>
+            <Desktop>
+                <MapContainer>
+                    <div className="page-break" />
+                    <HackneyMap data={data} />
+                </MapContainer>
+            </Desktop>
             <Header />
             <div className="service-info">
                 {hero.length ? (
@@ -396,12 +417,14 @@ const ServiceDetail = () => {
                     <FontAwesomeIcon icon={["fas", "share-square"]} />
                     Share
                 </button>
-                <ActionSheet className="fss-social-share--details" ref={ref}>
-                    <ActionSheetContainer>
-                        <h3>Share</h3>
-                        <Share service={data} />
-                    </ActionSheetContainer>
-                </ActionSheet>
+                <div id="fss--social-share-overlay" onClick={handleClose}>
+                    <ActionSheet ref={ref}>
+                        <ActionSheetContainer>
+                            <h3>Share</h3>
+                            <Share service={data} />
+                        </ActionSheetContainer>
+                    </ActionSheet>
+                </div>
                 <ReactToPrint
                     trigger={() => <button className="print-button"><FontAwesomeIcon icon={["fas", "print"]} />Print</button>}
                     content={() => componentRef.current}
@@ -416,13 +439,8 @@ const ServiceDetail = () => {
                     {(data.service.social.linkedin) ? <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.service.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<span className="print-only">: {data.service.social.linkedin}</span></a></li> : ""}
                 </ul>
               </InnerContainer>
-              <Desktop>
-                <MapContainer>
-                    <div className="page-break" />
-                    <HackneyMap data={data} />
-                </MapContainer>
-              </Desktop>
             </div>
+            
         </DetailContainer>
     );
   };

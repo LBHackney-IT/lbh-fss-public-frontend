@@ -8,14 +8,16 @@ import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlPara
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
 import { green, yellow, light } from "../../settings";
+import { lighten } from 'polished';
 
 export const ServiceFilterContainer = styled.div`
-    background: ${green["main"]};
-    opacity: 0.9;
+    background: ${lighten(0.03, green["main"])};
     width: 100%;
     max-height: 60px;
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 1;
 `;
 
 export const BUTTON_MODIFIERS = {

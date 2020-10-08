@@ -15,10 +15,15 @@ import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { green, light } from "../../settings";
+import breakpoint from 'styled-components-breakpoint';
 
 const HomeHeader = styled.div`
     padding: 25px 15px 10px;
     background: ${green["main"]};
+    z-index: 1;
+    ${breakpoint('md')`
+        position: absolute;
+    `}
     h2 {
         color: ${light["white"]};
         font-weight: normal;

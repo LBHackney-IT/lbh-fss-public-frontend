@@ -14,6 +14,8 @@ const HeaderContainer = styled.div`
     justify-content: space-between;
     height: 60px;
     border-bottom: 1px solid ${green["light"]};
+    position: relative;
+    z-index: 1;
 `;
 
 const Header = () => {  

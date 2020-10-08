@@ -15,6 +15,8 @@ export const ServiceSearchContainer = styled.div`
     align-items: center;
     opacity: 1;
     padding: 17px 15px;
+    position: relative;
+    z-index: 1;
     form {
         width: 100%;
         input {

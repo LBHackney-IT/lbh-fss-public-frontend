@@ -12,11 +12,15 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
-import { dark, red } from "../../settings";
+import { dark, red, light } from "../../settings";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
 export const SetPostcodeContainer = styled.div`
     padding: 20px 15px;
+    position: relative;
+    z-index: 1;
+    background: ${light["white"]};
+    height: 100vh;
     h2 {
         font-size: 27px;
         font-weight: normal;

@@ -2,6 +2,18 @@ import React, { useEffect, useState } from 'react';
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import CategoryCard from "./CategoryCard";
 import { CardContainer } from "../../util/styled-components/CardContainer";
+import styled from "styled-components";
+import breakpoint from 'styled-components-breakpoint';
+import { light } from "../../settings";
+
+export const ListCategoriesContainer = styled.div`
+    ${breakpoint('md')`
+      position: relative;
+      top: 216px;
+      z-index: 2;
+      background: ${light["white"]};
+    `}
+`;
 
 const ListCategories = ({ categories = [], onClick }) => {
   const [data, setData] = useState([]);
@@ -27,7 +39,7 @@ const ListCategories = ({ categories = [], onClick }) => {
   }
 
   return(
-    <div>
+    <ListCategoriesContainer>
       {!data.length ? (
         <h2>No data Found</h2>
       ) : (
@@ -44,7 +56,7 @@ const ListCategories = ({ categories = [], onClick }) => {
           })}
         </CardContainer>
       )}
-    </div>
+    </ListCategoriesContainer>
   );
 
 }
