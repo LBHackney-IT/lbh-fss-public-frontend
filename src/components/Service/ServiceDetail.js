@@ -48,7 +48,7 @@ export const DetailContainer = styled.div`
         border-radius: 3px;
         padding: 15px 30px;
         display: inline-block;
-        color: ${light["white"]};
+        color: ${light["white"]} !important;
         text-decoration: none;
         &:hover {
             background-color: ${darken(0.1, green["main"])};
@@ -86,7 +86,7 @@ export const DetailContainer = styled.div`
         }
     }
     .print-button {
-        margin-top: 15px;
+        margin-top: 15px !important;
     }
     .print-only, .page-break {
         display: none;

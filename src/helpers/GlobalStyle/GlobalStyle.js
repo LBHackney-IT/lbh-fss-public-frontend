@@ -29,11 +29,21 @@ body {
   overflow-x: hidden;
 }
 
+/* erw-root */
 #erw-root {
   overflow: auto;
-  * + * {
-    margin-top: 0;
-  }
+  * {
+		margin-top: unset;
+	}
+	p {
+		margin-bottom: 1em !important;
+	}
+	p, h1, h2, h3, h4, h5, h6 {
+		line-height: 1.25;
+	}
+	p, button, li {
+		font-weight: 400;
+	}
 }
 
 @font-face {
@@ -79,7 +89,7 @@ ul.ul-no-style {
   padding-left: 0;
   li {
     + li {
-      margin-top: 15px;
+      margin-top: 15px !important;
     }
     svg {
       margin-right: 5px;
@@ -1006,30 +1016,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
     margin-bottom: 0;
     border: 0;
   }
-}
-
-.marker-cluster div span {
-  font-weight: bold;
-}
-.marker-cluster-small {
-  background-color: rgba(181, 226, 140, 0.8);
-}
-.marker-cluster-small div {
-	background-color: rgba(110, 204, 57, 1);
-}
-
-.marker-cluster-medium {
-	background-color: rgba(241, 211, 87, 0.8);
-}
-.marker-cluster-medium div {
-	background-color: rgba(240, 194, 12, 1);
-}
-
-.marker-cluster-large {
-  background-color: rgba(253, 156, 115, 0.8);
-}
-.marker-cluster-large div {
-  background-color: rgba(241, 128, 23, 1);
 }
   
 `;

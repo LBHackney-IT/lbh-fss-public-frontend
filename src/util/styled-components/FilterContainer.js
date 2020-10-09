@@ -11,6 +11,6 @@ export const FilterContainer = styled.div`
         height: 100vh;
     `}
     h2 {
-        margin: 30px 15px 15px;
+        margin: 30px 15px 15px !important;
     }
 `;
