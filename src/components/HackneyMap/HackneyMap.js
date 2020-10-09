@@ -13,6 +13,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon, Map as LeafletMap } from "leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MarkerClusterGroup from "react-leaflet-markercluster";
+import {ReactLeafletMarkerClusterStyles} from "../../helpers/Mapbox/ReactLeafletMarkerClusterStyles";
 import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
 import getHomeLocation from "../../helpers/Mapbox/getHomeLocation";
 import { GestureHandling } from 'leaflet-gesture-handling';
@@ -110,6 +111,7 @@ const HackneyMap = (data) => {
         maxBounds={MAP_BOUNDS}
         gestureHandling={true}
     >
+        <ReactLeafletMarkerClusterStyles />
         <ZoomControl position='topright' />
         <TileLayer
             attribution={ATTRIBUTION}
