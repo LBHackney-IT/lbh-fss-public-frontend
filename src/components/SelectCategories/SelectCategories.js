@@ -33,7 +33,7 @@ const SelectCategories = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
+    const paramsArray = ["category_explorer", "postcode" , "service_search", "support_service"];
     const storedPostcode = localStorage.getItem("postcode");
     const currentSearch = window.location.search;    
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];

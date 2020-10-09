@@ -52,7 +52,7 @@ const SetPostcode = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode" , "service_search", "service"];
+    const paramsArray = ["category_explorer", "postcode" , "service_search", "support_service"];
     const { register, handleSubmit, errors, reset } = useForm();
     const storedPostcode = localStorage.getItem("postcode");
 
@@ -75,8 +75,8 @@ const SetPostcode = () => {
                 push = prevUrlArrayLast;
                 params = prevUrlParamsArrayLast;
 
-                // checking if previous page is service
-                if (prevUrlParamsArrayLast.service !== undefined) {
+                // checking if previous page is support_service
+                if (prevUrlParamsArrayLast.support_service !== undefined) {
                     //
                 } else {
                 // catch all for list services

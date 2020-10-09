@@ -247,7 +247,7 @@ const ServiceDetail = () => {
     const {urlParams} = useContext(UrlParamsContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const currentSearch = window.location.search;
     const storedPostcode = localStorage.getItem("postcode");
     let paramObj = {};
@@ -255,7 +255,7 @@ const ServiceDetail = () => {
     useEffect(() => {
         async function fetchData() {
             let serviceId = "";
-            if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "service" && Object.entries(urlParams)[0][1] !== "") {
+            if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "support_service" && Object.entries(urlParams)[0][1] !== "") {
                 serviceId = parseInt(Object.entries(urlParams)[0][1]);
             }
             const getService = await GetServices.getService({id: serviceId, postcode: storedPostcode});

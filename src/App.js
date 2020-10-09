@@ -24,7 +24,7 @@ function App() {
   const [mapToggle, setMapToggle] = useState("false");
   const mapToggleValue = useMemo(() => ({ mapToggle, setMapToggle }), [mapToggle, setMapToggle]);
   const [isLoading, setIsLoading] = useState(true);
-  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic", "set_postcode", "select_categories", "select_demographics", "map_toggle"];
+  const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic", "set_postcode", "select_categories", "select_demographics", "map_toggle"];
 
   const theme = {
     breakpoints: { 

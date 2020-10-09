@@ -23,7 +23,7 @@ const ListServices = ({ onClick }) => {
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
   const {mapToggle, setMapToggle} = useContext(MapToggleContext);
-  const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+  const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
   const currentSearch = window.location.search;
   let paramObj = {};
   const [showMap, setShowMap] = useState("false");

@@ -23,16 +23,16 @@ const RouteContainer = (props) => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(null);
-    const [{ service }, setQuery] = useQueryParams({ service: NumberParam });
+    const [{ service }, setQuery] = useQueryParams({ support_service: NumberParam });
     const removeQuery = ["category_explorer", "postcode", "service_search", "categories", "demographic"];
-    const paramsArray = [...removeQuery, "service"];
+    const paramsArray = [...removeQuery, "support_service"];
 
     useEffect(() => {
         async function checkQuery() {
             for (const [key, value] of Object.entries(urlParams)) {
                 if (key == "category_explorer" && value !== "") {
                     setPage("CategoryExplorer");
-                } else if (key == "service" && value !== "") {
+                } else if (key == "support_service" && value !== "") {
                     setPage("ServiceDetail");
                 } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
                     setPage("ListServices");
@@ -71,8 +71,8 @@ const RouteContainer = (props) => {
 
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
-        const updatedUrl = "?service=" + e;
-        const newServiceObj = {service: e.toString()};
+        const updatedUrl = "?support_service=" + e;
+        const newServiceObj = {support_service: e.toString()};
         history.push(updatedUrl);
 
         setUrl(updatedUrl);

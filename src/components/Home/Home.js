@@ -40,7 +40,7 @@ const Home = () => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const { register, handleSubmit, errors, reset } = useForm();
     const postcodeRef = useRef();
     const currentSearch = window.location.search;

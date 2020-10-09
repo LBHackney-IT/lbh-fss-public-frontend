@@ -50,13 +50,13 @@ const HackneyMap = (data) => {
     const [page, setPage] = useState(null);
     const [{ service }, setQuery] = useQueryParams({ service: NumberParam });
     const removeQuery = ["category_explorer", "postcode", "service_search", "categories", "demographic"];
-    const paramsArray = [...removeQuery, "service"];
+    const paramsArray = [...removeQuery, "support_service"];
     let metadata = "";
     LeafletMap.addInitHook('addHandler', 'gestureHandling', GestureHandling);
 
     useEffect(() => {
         for (const [key, value] of Object.entries(urlParams)) {
-            if (key == "service" && value !== "") {
+            if (key == "support_service" && value !== "") {
                 setIsServiceDetail(true);
             } else {
                 setIsServiceDetail(false);
@@ -84,8 +84,8 @@ const HackneyMap = (data) => {
 
         let newServiceUrl = urlArray.filter(val => !serviceArray.includes(val)).join("&");
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
-        const updatedUrl = "?service=" + e;
-        const newServiceObj = {service: e.toString()};
+        const updatedUrl = "?support_service=" + e;
+        const newServiceObj = {support_service: e.toString()};
         history.push(updatedUrl);
 
         setUrl(updatedUrl);

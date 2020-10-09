@@ -32,7 +32,7 @@ const ServiceSearch = ({onClick}) => {
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const { register, handleSubmit, errors, reset } = useForm();
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const storedPostcode = localStorage.getItem("postcode");
     const [searchTerm, setSearchTerm] = useState("");
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];

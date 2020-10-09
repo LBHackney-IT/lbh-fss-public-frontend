@@ -34,7 +34,7 @@ const Back = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const storedPostcode = localStorage.getItem("postcode");
-    const paramsArray = ["category_explorer", "postcode", "service_search", "service", "categories", "demographic"];
+    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const currentSearch = window.location.search;
     let paramObj = {};
 
@@ -56,7 +56,7 @@ const Back = () => {
         let push = "/?";
         let params = {};
 
-        // if "service" (ServiceDetail)
+        // if "support_service" (ServiceDetail)
             // if prevUrl exists
                 // go back to prevUrl (the latest array item which includes ?category_explorer || ?postcode&service_search
             // else
@@ -72,7 +72,7 @@ const Back = () => {
         if (prevUrl.length !== 0 && prevUrlParams !== 0) {
             for (const [key, value] of Object.entries(urlParams)) {
                 // if service detail page
-                if (key == "service" && value !== "") {
+                if (key == "support_service" && value !== "") {
                     if (prevUrl.length !== 0) {
                         let prevUrlArray = prevUrl;
                         let prevUrlParamsArray = prevUrlParams;
@@ -104,7 +104,7 @@ const Back = () => {
                             // if direct on service page and postcode is stored > back will direct the user to the list services page
                             if (storedPostcode) {
                                 push = "?postcode="+storedPostcode+"&service_search";
-                                params = {"postcode": storedPostcode, "search_service": undefined};
+                                params = {"postcode": storedPostcode, "service_search": undefined};
                                 prevUrl.splice(1, 0, push);
                                 prevUrlParams.splice(1, 0, params);
                             }
@@ -119,7 +119,7 @@ const Back = () => {
                     } else {
                         if (storedPostcode) {
                             push = "?postcode="+storedPostcode+"&service_search";
-                            params = {"postcode": storedPostcode, "search_service": undefined};
+                            params = {"postcode": storedPostcode, "service_search": undefined};
                         }
                     }
                 // else if a middlelayer page i.e. setting postcode, selecting categories or demographics
