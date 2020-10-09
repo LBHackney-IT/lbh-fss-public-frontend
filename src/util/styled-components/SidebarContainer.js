@@ -7,7 +7,7 @@ export const SidebarContainer = styled.div`
     border-radius: 3px;
     width: 100%;
     ${breakpoint('md')`
-        margin: 20px;
+        margin: 20px !important;
         max-width: 375px;
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);
         overflow: hidden;
