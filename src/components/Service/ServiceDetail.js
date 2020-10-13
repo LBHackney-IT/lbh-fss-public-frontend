@@ -125,6 +125,12 @@ export const DetailContainer = styled.div`
         .accordion__panel {
             display: block;
         }
+        img + img {
+            margin: 0;
+        }
+        svg + svg {
+            margin-top: -10px;
+        }
     }
 `;
 
