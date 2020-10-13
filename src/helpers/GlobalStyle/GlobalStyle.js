@@ -143,7 +143,11 @@ hr {
 }
 
 .no-results {
-  padding: 20px;
+	padding: 20px;
+	background: ${light["white"]};
+	height: 100vh;
+	z-index: 1;
+	position: relative;
 }
 
 #postcode-input-container {
