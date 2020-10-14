@@ -42,6 +42,9 @@ export const CARD_MODIFIERS = {
         }
         p {
             font-size: 16px;
+            &:last-of-type {
+                margin-bottom: 0 !important;
+            }
         }
         .service--distance {
             color: ${dark["black"]};

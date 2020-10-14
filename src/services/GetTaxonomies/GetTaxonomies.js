@@ -1,5 +1,4 @@
 import axios from "axios";
-import API_KEY from "../ApiKey/ApiKey";
 import BASE_API_URL from "../BaseApiUrl/BaseApiUrl";
 
 const GetTaxonomies = {
@@ -10,7 +9,6 @@ const GetTaxonomies = {
   }) {
     try {
       const response = await axios.get(`${BASE_API_URL}/taxonomies`, {
-        headers: {"x-api-key": API_KEY},
         params: {
           sort,
           direction,
@@ -28,7 +26,7 @@ const GetTaxonomies = {
   async getTaxonomy(id) {
     try {
       const response = await axios.get(`${BASE_API_URL}/taxonomies/${id}`, {
-        headers: {"x-api-key": API_KEY}
+
       });
 
       return response.data;

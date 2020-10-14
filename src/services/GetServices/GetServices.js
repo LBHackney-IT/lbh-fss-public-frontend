@@ -1,5 +1,4 @@
 import axios from "axios";
-import API_KEY from "../ApiKey/ApiKey";
 import BASE_API_URL from "../BaseApiUrl/BaseApiUrl";
 import qs from "qs";
 
@@ -35,7 +34,6 @@ const GetServices = {
     
     try {
       const response = await axios.get(`${BASE_API_URL}/services`, {
-        headers: {"x-api-key": API_KEY},
         params: {
           search,
           offset,
@@ -61,7 +59,6 @@ const GetServices = {
   }) {
     try {
       const response = await axios.get(`${BASE_API_URL}/services/${id}`, {
-        headers: {"x-api-key": API_KEY},
         params: {
           postcode,
         },
