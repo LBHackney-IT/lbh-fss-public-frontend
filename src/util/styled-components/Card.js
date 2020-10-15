@@ -42,9 +42,6 @@ export const CARD_MODIFIERS = {
         }
         p {
             font-size: 16px;
-            &:last-of-type {
-                margin-bottom: 0 !important;
-            }
         }
         .service--distance {
             color: ${dark["black"]};
@@ -87,6 +84,9 @@ export const Card = styled.div`
         margin-bottom: 0;
         font-size: 14px;
         color: ${dark["grey"]};
+        &:last-of-type {
+            margin-bottom: 0 !important;
+        }
     }
 
     ${applyStyleModifiers(CARD_MODIFIERS)};
