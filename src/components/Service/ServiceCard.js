@@ -24,7 +24,7 @@ const ServiceCard = ({ service, onClick }) => {
                 ) : ""}
                 <div className="fss--card--container">
                     <h4>{service.name}</h4>
-                    <p>{service.description}</p>
+                    <p className="card--description">{service.description}</p>
                 </div>
             </div>
             {

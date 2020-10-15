@@ -24,7 +24,7 @@ const CategoryCard = ({ category, onClick }) => {
                 </div>
                 <div className="fss--card--content">
                     <h4>{category.name}</h4>
-                    <p>{category.description}</p>
+                    <p className="card--description">{category.description}</p>
                 </div>
             </div>
         </Card>

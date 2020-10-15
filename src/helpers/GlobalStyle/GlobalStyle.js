@@ -35,7 +35,7 @@ body {
   * {
 		margin-top: unset;
 	}
-	p {
+	p:not(.card--description) {
 		margin-bottom: 1em !important;
 	}
 	p, h1, h2, h3, h4, h5, h6 {

@@ -84,9 +84,6 @@ export const Card = styled.div`
         margin-bottom: 0;
         font-size: 14px;
         color: ${dark["grey"]};
-        &:last-of-type {
-            margin-bottom: 0 !important;
-        }
     }
 
     ${applyStyleModifiers(CARD_MODIFIERS)};
