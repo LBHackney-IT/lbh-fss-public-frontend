@@ -870,6 +870,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	border: 1px solid #999;
 	}
 
+	.leaflet-control-zoom {
+		margin-top: 10px !important;
+	}
+
 
 /* div icon */
 
