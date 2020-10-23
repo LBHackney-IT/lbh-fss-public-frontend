@@ -127,9 +127,21 @@ const Home = () => {
                 setUrlParams({postcode: postcode, service_search: undefined});
             } else {
                 let node = document.createElement("p");
+                node.className = "postcode-validation-error-message";
                 let textNode = document.createTextNode("Please enter a valid postcode");
                 node.appendChild(textNode);
+
+                let pList = document.getElementsByTagName("p");
+                for(var i=pList.length-1; i>=0; i--){
+                    let p = pList[i];
+                    if(p.className === "postcode-validation-error-message"){
+                        p.parentNode.removeChild(p);
+                    }
+                }
+
                 document.getElementById("postcode-input-container").appendChild(node);
+                document.getElementById("list-categories--container").style.top = "258px";
+                document.getElementById("list-categories--container").firstChild.style.height = "calc(100vh - 300px)";
             }
             
         } else if (searchValue !== "") {
@@ -154,7 +166,7 @@ const Home = () => {
                             <FormInput
                                 id="fss--postcode"
                                 label="Enter a postcode"
-                                placeholder="Set your postcode e.g E8 1DY"
+                                placeholder="Enter full postcode (optional) e.g E8 1DY"
                                 name="postcode"
                                 inputRef={postcodeRef}
                                 register={register}

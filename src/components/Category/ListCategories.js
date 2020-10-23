@@ -39,7 +39,7 @@ const ListCategories = ({ categories = [], onClick }) => {
   }
 
   return(
-    <ListCategoriesContainer>
+    <ListCategoriesContainer id="list-categories--container">
       {!data.length ? (
         <h2>No data Found</h2>
       ) : (

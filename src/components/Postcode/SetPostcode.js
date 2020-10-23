@@ -115,12 +115,12 @@ const SetPostcode = () => {
             <div className="">
                 <Header />
                 <SetPostcodeContainer>    
-                    <h2>Set your postcode</h2>
+                    <h2>Enter full postcode</h2>
                     <p>This will list services near you</p>
                     <form onSubmit={handleSubmit(submitForm)} data-testid="form">
                         <FormInput
                             label="Enter a postcode"
-                            placeholder="Set your postcode e.g E8 1DY"
+                            placeholder="Enter full postcode (optional) e.g E8 1DY"
                             name="postcode"
                             register={register}
                             defaultValue={storedPostcode}
@@ -134,7 +134,7 @@ const SetPostcode = () => {
                             }}
                             error={errors.postcode}
                         />
-                        <StyledButton type="submit" label="Set postcode" disabled={isLoading} />
+                        <StyledButton type="submit" label="Enter postcode" disabled={isLoading} />
                     </form>
                 </SetPostcodeContainer>
                 <MapPlaceholder />
