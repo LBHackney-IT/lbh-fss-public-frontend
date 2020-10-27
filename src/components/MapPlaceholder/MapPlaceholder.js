@@ -42,14 +42,19 @@ const MapPlaceholder = () => {
         <Desktop>
             <MapContainer>
                 <Map className="markercluster-map"
+                    bounds={MAP_BOUNDS}
+                    maxBounds={MAP_BOUNDS}
                     center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
                     zoom={MIN_ZOOM}
+                    minZoom={MIN_ZOOM}
                     maxZoom={MAX_ZOOM}
                     zoomControl={false}
-                    // bounds={MAP_BOUNDS}
-                    maxBounds={MAP_BOUNDS}
+                    dragging={false}
+                    tap={false}
+                    scrollWheelZoom={false}
+                    bounceAtZoomLimits={false}
                     gestureHandling
-                    >
+                >
                     <ZoomControl position='topright' />
                     <TileLayer
                         attribution={ATTRIBUTION}

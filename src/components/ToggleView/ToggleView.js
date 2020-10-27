@@ -13,7 +13,7 @@ const ToggleViewContainer = styled.div`
     display: flex;
     padding: 20px 15px 0;
     align-items: center;
-    z-index: 34;
+    z-index: 3;
     position: relative;
     aside {
         font-size: 14px;
