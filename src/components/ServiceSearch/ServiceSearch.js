@@ -67,7 +67,7 @@ const ServiceSearch = ({onClick}) => {
                 <FormInputSubmit
                     id="fss--service-search"
                     label="Search for a service"
-                    placeholder="Search..."
+                    placeholder="Enter keyword or organisation"
                     name="service_search"
                     type="text"
                     register={register}
