@@ -20,7 +20,9 @@ const GetTaxonomies = {
     } catch (error) {
       console.error(error);
 
-      return false;
+      return {
+        "taxonomies": []
+      };
     }
   },
   async getTaxonomy(id) {
@@ -33,7 +35,7 @@ const GetTaxonomies = {
     } catch (error) {
       console.error(error);
 
-      return false;
+      return {};
     }
   },
 };

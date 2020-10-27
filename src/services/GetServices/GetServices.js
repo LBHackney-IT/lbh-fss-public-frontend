@@ -50,7 +50,9 @@ const GetServices = {
     } catch (error) {
       console.error(error);
 
-      return false;
+      return {
+        "services": []
+      };
     }
   },
   async getService({
@@ -68,7 +70,9 @@ const GetServices = {
     } catch (error) {
       console.error(error);
 
-      return false;
+      return {
+        "service": {"demographic": []}
+      };
     }
   },
 };
