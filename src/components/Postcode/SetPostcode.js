@@ -120,10 +120,11 @@ const SetPostcode = () => {
                     <form onSubmit={handleSubmit(submitForm)} data-testid="form">
                         <FormInput
                             label="Enter a postcode"
-                            placeholder="Enter full postcode (optional) e.g E8 1DY"
+                            placeholder="Enter full postcode e.g E8 1DY (optional)"
                             name="postcode"
                             register={register}
                             defaultValue={storedPostcode}
+                            autoComplete="off"
                             validate={{
                                 pattern: (value) => {
                                     return (

@@ -166,11 +166,12 @@ const Home = () => {
                             <FormInput
                                 id="fss--postcode"
                                 label="Enter a postcode"
-                                placeholder="Enter full postcode (optional) e.g E8 1DY"
+                                placeholder="Enter full postcode e.g E8 1DY (optional)"
                                 name="postcode"
                                 inputRef={postcodeRef}
                                 register={register}
                                 defaultValue={storedPostcode}
+                                autoComplete="off"
                             />
                         </div>
                         <FormInputSubmit

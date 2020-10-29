@@ -26,6 +26,7 @@ const FormInput = ({
   placeholder,
   register,
   defaultValue,
+  autoComplete,
   required,
   maxLength,
   minLength,
@@ -63,6 +64,7 @@ const FormInput = ({
           if (inputRef) inputRef.current = e;
         }}
         defaultValue={defaultValue}
+        autoComplete={autoComplete}
         aria-invalid={error ? "true" : "false"}
       />
     </>
@@ -77,6 +79,7 @@ FormInput.propTypes = {
   placeholder: PropTypes.string,
   register: PropTypes.func,
   defaultValue: PropTypes.string,
+  autoComplete: PropTypes.string,
   required: PropTypes.bool,
   maxLength: PropTypes.number,
   minLength: PropTypes.number,
