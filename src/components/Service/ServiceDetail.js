@@ -312,7 +312,7 @@ const ServiceDetail = () => {
     }
 
     let hero = "";
-    if (data.service !== undefined && data.service.images !== undefined && data.service.images.medium.length) {
+    if (data.service !== undefined && data.service.images !== undefined && data.service.images.medium !== null) {
         hero = data.service.images.medium;
     }
 
