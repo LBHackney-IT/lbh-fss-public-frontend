@@ -176,10 +176,10 @@ export const AccordionContainer = styled.div`
         -ms-user-select: none;
         user-select: none;
         + .accordion__item {
-            margin-top: 15px;
+            margin-top: 15px !important;
         }
         &.hidden-item {
-            margin: 0;
+            margin: 0 !important;
         }
     }
     .accordion__button {

@@ -6,7 +6,7 @@ const ServiceCard = ({ service, onClick }) => {
     const serviceArray = [service];
 
     let hero = "";
-    if (service.images && service.images.medium.length) {
+    if (service.images && service.images.medium !== null) {
         hero = service.images.medium;
     }
 

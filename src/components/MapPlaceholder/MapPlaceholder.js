@@ -11,6 +11,7 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.js";
 import {
     MAX_ZOOM,
     MIN_ZOOM,
+    ZOOM,
     CENTER_DESKTOP_LEGEND,
     CENTER_DESKTOP_LEGEND_FULLSCREEN,
     CENTER_DESKTOP_NO_LEGEND,
@@ -45,7 +46,7 @@ const MapPlaceholder = () => {
                     bounds={MAP_BOUNDS}
                     maxBounds={MAP_BOUNDS}
                     center={CENTER_DESKTOP_LEGEND_FULLSCREEN}
-                    zoom={MIN_ZOOM}
+                    zoom={ZOOM}
                     minZoom={MIN_ZOOM}
                     maxZoom={MAX_ZOOM}
                     zoomControl={false}
