@@ -88,6 +88,12 @@ const CategoryExplorer = ({ category, onClick }) => {
 
       // call retrieveServices with categoryId param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServices({taxonomyids: taxonomyId});
+      // TEST NO CATEGORIES OR DEMOGRAPHICS - START
+      getServices.services[0].demographics = null
+      getServices.services[0].categories = null
+      console.log('getServices - CategoryExplorer.js');
+      console.log(getServices);
+      // TEST NO CATEGORIES OR DEMOGRAPHICS - END
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);

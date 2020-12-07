@@ -126,12 +126,15 @@ const HackneyMap = (data) => {
         <MarkerClusterGroup>
             {
                 getAllAddresses(data).map((service, index) => {
-                    
-                    const categoriesSorted = service["categories"].sort(function (a, b) {
-                        return a.weight - b.weight;
-                    });
+                    let categoryIconName = ''
 
-                    const categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                    if(service.categories) {
+                        const categoriesSorted = service["categories"].sort(function (a, b) {
+                            return a.weight - b.weight;
+                        });    
+
+                        categoryIconName = categoriesSorted[0].name.replaceAll(" ", "-").toLowerCase();
+                    }
 
                     const iconMarkup = renderToStaticMarkup(
                         <div className="hackney-map-marker" data-category-icon={categoryIconName}>
