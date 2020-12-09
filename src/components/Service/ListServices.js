@@ -68,12 +68,7 @@ const ListServices = ({ onClick }) => {
       }
       // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
-      // TEST NO CATEGORIES OR DEMOGRAPHICS - START
-      getServices.services[3].demographic = null
-      getServices.services[3].categories = null
-      console.log('getServices - ListServices.js');
-      console.log(getServices);
-      // TEST NO CATEGORIES OR DEMOGRAPHICS - END      
+
       setData(getServices || []);
       setIsLoading(false);
     }

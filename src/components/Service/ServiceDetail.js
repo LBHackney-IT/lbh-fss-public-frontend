@@ -265,12 +265,7 @@ const ServiceDetail = () => {
                 serviceId = parseInt(Object.entries(urlParams)[0][1]);
             }
             const getService = await GetServices.getService({id: serviceId, postcode: storedPostcode});
-            // TEST NO CATEGORIES OR DEMOGRAPHICS - START
-            getService.service.demographic = null
-            getService.service.categories = null
-            console.log('getService - ServiceDetail.js');
-            console.log(getService.service);
-            // TEST NO CATEGORIES OR DEMOGRAPHICS - END
+            
             setData(getService || []);
             const getDemographics = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
             setDemographicData(getDemographics || []);
