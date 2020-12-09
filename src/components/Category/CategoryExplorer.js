@@ -88,6 +88,7 @@ const CategoryExplorer = ({ category, onClick }) => {
 
       // call retrieveServices with categoryId param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServices({taxonomyids: taxonomyId});
+      
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);

@@ -68,6 +68,7 @@ const ListServices = ({ onClick }) => {
       }
       // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
       const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
+
       setData(getServices || []);
       setIsLoading(false);
     }

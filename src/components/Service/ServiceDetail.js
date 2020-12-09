@@ -265,6 +265,7 @@ const ServiceDetail = () => {
                 serviceId = parseInt(Object.entries(urlParams)[0][1]);
             }
             const getService = await GetServices.getService({id: serviceId, postcode: storedPostcode});
+            
             setData(getService || []);
             const getDemographics = await GetTaxonomies.retrieveTaxonomies({vocabulary: "demographic"});
             setDemographicData(getDemographics || []);
@@ -275,13 +276,13 @@ const ServiceDetail = () => {
         if (prevUrl.length == 0 && prevUrlParams.length == 0) {
             let prevUrlArray = [""];
             let prevUrlParamsArray = [{}];
-      
+
             // setPrevUrl
             if (currentSearch) {
                 prevUrlArray.push(currentSearch);
                 setPrevUrl(prevUrlArray);
             }
-      
+
             // setPrevUrlParams
             createParamObj(currentSearch, paramsArray);
             prevUrlParamsArray.push(paramObj);
@@ -312,7 +313,7 @@ const ServiceDetail = () => {
     }
 
     let hero = "";
-    if (data.service !== undefined && data.service.images !== undefined && data.service.images.medium !== null) {
+    if (data.service !== undefined && data.service.images !== undefined && data.service.images) {
         hero = data.service.images.medium;
     }
 
@@ -330,7 +331,25 @@ const ServiceDetail = () => {
     }
 
     const serviceArray = [data.service];
-  
+
+    let hasContact = false
+    let hasReferral = false
+    let hasSocial = false
+
+    if(data.service) {
+        Object.keys(data.service.contact).forEach(key => {
+            if(data.service.contact[key]) hasContact = true
+        })
+        
+        Object.keys(data.service.referral).forEach(key => {
+            if(data.service.referral[key]) hasReferral = true
+        })
+
+        Object.keys(data.service.social).forEach(key => {
+            if(data.service.social[key]) hasSocial = true
+        })
+    }
+
     return isLoading ? (
             <AppLoading />
         ) : (
@@ -351,11 +370,15 @@ const ServiceDetail = () => {
                 <GreyInnerContainer className="info">
                     <h2>{data.service.name}</h2>
                     <p>{data.service.description}</p>
+                    {data.service.demographic ? 
+                    (<>
                     <h3>This is for:</h3>
                     <p>
                         {(data.service.demographic.length && data.service.demographic.length === demographicData.length) ? "Everyone" : data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
                     </p>
+                    </>) : null}
                 </GreyInnerContainer>
+                {data.service.categories ? ( 
                 <InnerContainer>
                     <AccordionContainer>
                         <div className="category-header">   
@@ -382,22 +405,34 @@ const ServiceDetail = () => {
                         </Accordion>
                     </AccordionContainer>
                 </InnerContainer>
-                <InnerContainer>
-                    <h3>Contact us</h3>
-                    <ul className="ul-no-style">
-                        <li className="no-print"><a className="link-button" href={data.service.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
-                        <li className="print-only"><a className="link-button" href={data.service.contact.website}>Visit website: {data.service.contact.website}</a></li>
-                        <li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.service.contact.telephone}`}>{data.service.contact.telephone}</a></li>
-                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.contact.email}`}>{data.service.contact.email}</a></li>
-                    </ul>
-                </InnerContainer>
-                <InnerContainer>
-                    <h3>Referral details</h3>
-                    <ul className="ul-no-style">
-                        <li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.service.referral.website} target="_blank" rel="noopener noreferrer">Visit website<span className="print-only">: {data.service.referral.website}</span></a></li>
-                        <li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.referral.email}`}>{data.service.referral.email}</a></li>
-                    </ul>
-                </InnerContainer>
+                    
+                    ) : null}
+                    {hasContact ? (
+                        <InnerContainer>
+                            <h3>Contact us</h3>
+                            <ul className="ul-no-style">
+                                {data.service.contact.website ? (
+                                    <>
+                                    <li className="no-print"><a className="link-button" href={data.service.contact.website} target="_blank" rel="noopener noreferrer">Visit website</a></li>
+                                    <li className="print-only"><a className="link-button" href={data.service.contact.website}>Visit website: {data.service.contact.website}</a></li>
+                                    </>
+                                ) : null}
+                                {data.service.contact.telephone ? 
+                                (<li><FontAwesomeIcon icon={["fas", "phone"]} /><a href={`tel://${data.service.contact.telephone}`}>{data.service.contact.telephone}</a></li>) : null}
+                                {data.service.contact.email ? 
+                                (<li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.contact.email}`}>{data.service.contact.email}</a></li>) : null}
+                            </ul>
+                            </InnerContainer>
+                            ) : null
+                    }
+                    {hasReferral ? (
+                        <InnerContainer>
+                            <h3>Referral details</h3>
+                            <ul className="ul-no-style">
+                                {data.service.referral.website ? (<li><FontAwesomeIcon icon={["fas", "external-link-square-alt"]} /><a href={data.service.referral.website} target="_blank" rel="noopener noreferrer">Visit website<span className="print-only">: {data.service.referral.website}</span></a></li>) : null}
+                                {data.service.referral.email ? (<li><FontAwesomeIcon icon={["fas", "envelope"]} /><a href={`mailto:${data.service.referral.email}`}>{data.service.referral.email}</a></li>) : null}
+                            </ul>
+                        </InnerContainer>) : null}
                 <InnerContainer>
                     <h3>Address</h3>
                     <ul className="ul-no-style">
@@ -436,6 +471,7 @@ const ServiceDetail = () => {
                     content={() => componentRef.current}
                 />
               </GreyInnerContainer>
+              {hasSocial ? (              
               <InnerContainer>
                 <h3>Follow {data.service.name}</h3>
                 <ul className="ul-no-style">
@@ -444,7 +480,8 @@ const ServiceDetail = () => {
                     {(data.service.social.instagram) ? <li><FontAwesomeIcon icon={["fab", "instagram-square"]} /><a href={data.service.social.instagram} target="_blank" rel="noopener noreferrer">Instagram<span className="print-only">: {data.service.social.instagram}</span></a></li> : ""}
                     {(data.service.social.linkedin) ? <li><FontAwesomeIcon icon={["fab", "linkedin"]} /><a href={data.service.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<span className="print-only">: {data.service.social.linkedin}</span></a></li> : ""}
                 </ul>
-              </InnerContainer>
+              </InnerContainer>) : null}
+
             </div>
             
         </DetailContainer>
