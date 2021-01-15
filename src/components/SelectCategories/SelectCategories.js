@@ -17,6 +17,7 @@ import { dark, red, light } from "../../settings";
 import {FilterContainer} from "../../util/styled-components/FilterContainer";
 import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
+import ServiceSearch from '../ServiceSearch/ServiceSearch';
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 
@@ -119,6 +120,7 @@ const SelectCategories = () => {
             <>
             <FilterContainer>
                 <Header />
+                <ServiceSearch />
                 <ServiceFilter />
                 <h2>Select categories</h2>
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">

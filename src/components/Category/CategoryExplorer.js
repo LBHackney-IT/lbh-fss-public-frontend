@@ -16,6 +16,14 @@ import {MapContainer} from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import { light } from "../../settings";
+import { lighten } from 'polished';
+
+export const FILTER_MODIFIER = {
+    grey: () => `
+        background: ${lighten(0.09, light["greyBorder"])};
+    `,
+}
 
 export const CategoryCardContainer = styled.div`
   .fss--card {
@@ -146,13 +154,13 @@ const CategoryExplorer = ({ category, onClick }) => {
       ) : (
         <div>
           <Header />
-          <ServiceFilter />
           <CategoryCardContainer>
             <CategoryCard
               key={categoryData.id}
               category={categoryData}
             />
           </CategoryCardContainer>
+          <ServiceFilter modifiers="grey" />
           <Mobile>
             <ToggleView />
             {

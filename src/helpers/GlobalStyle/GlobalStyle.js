@@ -84,6 +84,10 @@ a {
   }
 }
 
+button {
+	cursor: pointer;
+}
+
 ul.ul-no-style {
   list-style: none;
   padding-left: 0;

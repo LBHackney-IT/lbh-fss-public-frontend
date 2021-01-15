@@ -30,7 +30,11 @@ const RouteContainer = (props) => {
     useEffect(() => {
         async function checkQuery() {
             for (const [key, value] of Object.entries(urlParams)) {
-                if (key == "category_explorer" && value !== "") {
+                if (key == "select_demographics" && value == "true") {
+                    setPage("SelectDemographics");
+                // } else if (key == "select_categories" && value == "true") {
+                //     setPage("SelectCategories");
+                } else if (key == "category_explorer" && value !== "") {
                     setPage("CategoryExplorer");
                 } else if (key == "support_service" && value !== "") {
                     setPage("ServiceDetail");
@@ -40,10 +44,6 @@ const RouteContainer = (props) => {
                     setPage("ServiceSearchProcess");
                 } else if (key == "set_postcode" && value == "true") {
                     setPage("SetPostcode");
-                } else if (key == "select_categories" && value == "true") {
-                    setPage("SelectCategories");
-                } else if (key == "select_demographics" && value == "true") {
-                    setPage("SelectDemographics");
                 }
             }
         }

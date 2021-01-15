@@ -129,6 +129,54 @@ const Back = () => {
                 }
                 // anything else (category explorer / list services) will use default route
             }
+        } else {
+            const selectDemographicsObj = [urlParams].find(selectDemographicsObj => selectDemographicsObj.select_demographics);
+            const selectCategoriesObj = [urlParams].find(selectCategoriesObj => selectCategoriesObj.select_categories);
+            const demographicObj = [urlParams].find(demographicObj => demographicObj.demographic);
+            const categoriesObj = [urlParams].find(categoriesObj => categoriesObj.categories);
+            const categoryExplorerObj = [urlParams].find(categoryExplorerObj => categoryExplorerObj.category_explorer);
+            const listServicesSearchObj = [urlParams].find(listServicesSearchObj => listServicesSearchObj.service_search);
+            const listServicesPostcodeObj = [urlParams].find(listServicesPostcodeObj => listServicesPostcodeObj.postcode);
+            if (selectDemographicsObj || selectCategoriesObj) {
+                let selectedDemographics = undefined;
+                let selectedCategories = undefined;
+                let serviceSearch = '';
+                let postcodeValue = null;
+                if (demographicObj) {
+                    selectedDemographics = demographicObj.demographic;
+                }
+                if (categoriesObj) {
+                    selectedCategories = categoriesObj.category;
+                }
+                if (categoryExplorerObj) {
+                    params = {"category_explorer": categoryExplorerObj.category_explorer, "demographic": selectedDemographics, "categories": selectedCategories};
+                }
+                if (listServicesSearchObj || listServicesPostcodeObj) {
+                    if (listServicesSearchObj !== undefined && listServicesSearchObj.service_search !== undefined) {
+                        serviceSearch = listServicesSearchObj.service_search;
+                    }
+                    console.log(storedPostcode);
+                    if (storedPostcode) {
+                        postcodeValue = storedPostcode;
+                    }
+                    params = {"service_search": serviceSearch, "postcode": postcodeValue, "demographic": selectedDemographics, "categories": selectedCategories};
+                }
+                // if (listServicesSearchObj && listServicesPostcodeObj) {
+                //     params = {"service_search": listServicesSearchObj.service_search, "postcode": listServicesPostcodeObj.postcode, "demographic": selectedDemographics, "categories": selectedCategories};
+                // } else if (listServicesSearchObj) {
+                //     params = {"service_search": listServicesSearchObj.service_search, "demographic": selectedDemographics, "categories": selectedCategories};
+                // } else if (listServicesPostcodeObj) {
+                //     params = {"postcode": listServicesPostcodeObj.postcode, "demographic": selectedDemographics, "categories": selectedCategories};
+                // }
+            }
+            if (!params.demographic) {
+                delete params["demographic"];
+            }
+            if (!params.categories) {
+                delete params["categories"];
+            }
+            push = "?" + new URLSearchParams(params).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
+            push = push.replaceAll("=undefined", "");
         }
         
         history.push(push);
