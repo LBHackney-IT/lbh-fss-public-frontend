@@ -99,6 +99,11 @@ const SetPostcode = () => {
                         params = ListServicesPostcodeObj;
                     }
                 }
+            } else {
+                // redirect the user back to home
+                // when setting a postcode from the home page
+                push = "/?";
+                params = {};
             }
 
             history.push(push);
