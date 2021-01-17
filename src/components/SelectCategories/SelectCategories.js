@@ -20,6 +20,7 @@ import FormCheckbox from "../FormCheckbox/FormCheckbox";
 import ServiceSearch from '../ServiceSearch/ServiceSearch';
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 const StyledButton = styled(Button)`
     width: 100%;
@@ -34,9 +35,7 @@ const SelectCategories = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode" , "service_search", "support_service"];
     const storedPostcode = localStorage.getItem("postcode");
-    const currentSearch = window.location.search;    
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
@@ -64,6 +63,12 @@ const SelectCategories = () => {
     }
     defaultValues = selectedObj;
 
+    let listServicesSearchObj, listServicesPostcodeObj = null;
+    if (urlParams !== 0) {
+        listServicesSearchObj = [urlParams].find(listServicesSearchObj => listServicesSearchObj.service_search);
+        listServicesPostcodeObj = [urlParams].find(listServicesPostcodeObj => listServicesPostcodeObj.postcode);
+    }
+
     const { register, handleSubmit } = useForm({
         defaultValues: defaultValues,
     });
@@ -75,13 +80,24 @@ const SelectCategories = () => {
             setIsLoading(false);
         }
     
-        // if directly accessing this page redirect user back to home
-        if (prevUrl.length == 0 && prevUrlParams.length == 0) {
-            history.push("?");
-            setUrl("");
-            setUrlParams({});
-        } else {
-            fetchData();
+        // if directly accessing this page
+        // without category_explorer / service_search / postcode passed
+        // redirect user back to home
+        if (prevUrl.length === 0 && prevUrlParams.length === 0) {
+            if (!(listServicesSearchObj || listServicesPostcodeObj)) {
+                history.push("?");
+                setUrl("");
+                setUrlParams({});
+            }
+        }
+        fetchData();
+
+        const setPrevUrlVals = handleSetPrevUrl({
+            prevUrl, prevUrlParams
+        });
+        if (setPrevUrlVals) {
+            setPrevUrl(setPrevUrlVals.prevUrlArray);
+            setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
         }
     
     }, [setData, setIsLoading]);

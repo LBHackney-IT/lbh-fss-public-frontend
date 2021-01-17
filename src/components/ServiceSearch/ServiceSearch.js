@@ -47,6 +47,9 @@ const ServiceSearch = ({onClick}) => {
         setIsLoading(false);
     });
 
+    console.log(prevUrl);
+    console.log(prevUrlParams);
+
     async function submitForm() {
         if (isLoading) return;
 

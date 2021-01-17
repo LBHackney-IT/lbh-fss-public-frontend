@@ -24,6 +24,7 @@ import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import CategoryCard from "../Category/CategoryCard";
 import CategoryExplorer from "../Category/CategoryExplorer";
+import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 export const BUTTON_MODIFIERS = {
     ghost: () => `
@@ -148,6 +149,14 @@ const SelectDemographics = () => {
             }
         }
         fetchData();
+
+        const setPrevUrlVals = handleSetPrevUrl({
+            prevUrl, prevUrlParams
+        });
+        if (setPrevUrlVals) {
+            setPrevUrl(setPrevUrlVals.prevUrlArray);
+            setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
+        }
     
     }, [setData, setCategoryData, setIsLoading]);
 

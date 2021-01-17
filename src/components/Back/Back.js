@@ -37,17 +37,6 @@ const Back = () => {
     const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const currentSearch = window.location.search;
     let paramObj = {};
-
-    function createParamObj(currentSearch, paramsArray) {
-        const queryParts = currentSearch.substring(1).split(/[&;]/g);
-        const arrayLength = queryParts.length;
-        for (let i = 0; i < arrayLength; i++) {
-            const queryKeyValue = queryParts[i].split("=");
-            if (paramsArray.includes(queryKeyValue[0])) {
-                paramObj[queryKeyValue[0]] = queryKeyValue[1];
-            } 
-        }
-    }
     
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
