@@ -11,9 +11,11 @@ import FormError from "../FormError/FormError";
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { applyStyleModifiers } from 'styled-components-modifiers';
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import history from '../../history';
-import { dark, red, light } from "../../settings";
+import { green, dark, red, light } from "../../settings";
+import breakpoint from 'styled-components-breakpoint';
 import {FilterContainer} from "../../util/styled-components/FilterContainer";
 import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
@@ -23,10 +25,31 @@ import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import CategoryCard from "../Category/CategoryCard";
 import CategoryExplorer from "../Category/CategoryExplorer";
 
+export const BUTTON_MODIFIERS = {
+    ghost: () => `
+        position: absolute;
+        top: -50px;
+        left: 180px;
+        width: auto;
+        padding: 8px;
+        color: ${green["main"]};
+        background: transparent;
+        border: 1px solid ${green["ghost"]};
+        font-size: 16px;
+        &:hover, &:focus {
+            color: ${light["white"]};
+        }
+        @media(min-width:768px) {
+            top: -44px;
+        }
+    `,
+}
+
 const StyledButton = styled(Button)`
     width: 100%;
     border-radius: 3px;
     border-bottom: 2px solid ${dark["black"]};
+    ${applyStyleModifiers(BUTTON_MODIFIERS)};
 `;
 
 export const CategoryCardContainer = styled.div`
@@ -172,8 +195,9 @@ const SelectDemographics = () => {
                 </CategoryCardContainer>
                 }
                 <ServiceFilter />
-                <h2>Select demographics</h2>
+                <h2>Select filters</h2>
                 <form onSubmit={handleSubmit(submitForm)} data-testid="form">
+                    <StyledButton modifiers="ghost" type="submit" label="Apply" disabled={isLoading} />
                     <CheckboxContainer>
                         {data.map((demographic, index) => {
                             const demographicIdString = demographic.id.toString();
@@ -189,7 +213,7 @@ const SelectDemographics = () => {
                                 />
                             );
                         })}
-                        <StyledButton type="submit" label="Select filters" disabled={isLoading} />
+                        <StyledButton type="submit" label="Apply filters" disabled={isLoading} />
                     </CheckboxContainer>
                 </form>
             </FilterContainer>
