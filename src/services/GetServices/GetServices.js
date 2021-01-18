@@ -16,7 +16,12 @@ const GetServices = {
       if (Array.isArray(taxonomyids[0])) {
         taxonomyids = taxonomyids[0];
       } else {
-        taxonomyids = taxonomyids[0].split("+");
+        taxonomyids[0] = taxonomyids[0].toString();
+        if (taxonomyids[0].indexOf('+') > -1) {
+          taxonomyids = taxonomyids[0].split("+");
+        } else {
+          taxonomyids = taxonomyids[0];
+        }
       }
     } else if (taxonomyids.length > 1) {
       // check if elements are array and convert to string by +

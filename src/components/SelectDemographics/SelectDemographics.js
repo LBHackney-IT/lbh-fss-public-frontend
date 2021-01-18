@@ -182,6 +182,8 @@ const SelectDemographics = () => {
         history.push(push);
         setUrl(push);
         setUrlParams(urlParams);
+        setPrevUrl([push]);
+        setPrevUrlParams([urlParams]);
     }
 
     return (

@@ -38,7 +38,7 @@ const RouteContainer = (props) => {
                     setPage("CategoryExplorer");
                 } else if (key == "support_service" && value !== "") {
                     setPage("ServiceDetail");
-                } else if (key == "postcode" && value !== "" || key == "service_search" && value !== "") {
+                } else if (key == "service_search") {
                     setPage("ListServices");
                 } else if (key == "service_search_process" && value == "true") {
                     setPage("ServiceSearchProcess");

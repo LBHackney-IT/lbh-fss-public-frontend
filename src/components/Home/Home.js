@@ -32,11 +32,9 @@ const Home = () => {
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const [{ category_explorer }, setQuery] = useQueryParams({ category_explorer: NumberParam });
     const [isLoading, setIsLoading] = useState(true);
     const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const { register, handleSubmit, errors, reset } = useForm();
-    const postcodeRef = useRef();
     const currentSearch = window.location.search;
     const storedPostcode = localStorage.getItem("postcode");
     let prevUrlArray = [""];
@@ -52,17 +50,6 @@ const Home = () => {
                 paramObj[queryKeyValue[0]] = queryKeyValue[1];
             } 
         }
-    }
-
-    const storeQuery = (e) => {
-        const currentSearch = window.location.search;
-        if (currentSearch) {
-            setUrl(currentSearch);
-            createParamObj(currentSearch, paramsArray);
-            
-            setUrlParams(paramObj);
-        }
-        setIsLoading(false);
     }
 
     const setPreviousUrls = (currentSearch) => {
@@ -85,20 +72,14 @@ const Home = () => {
         setIsLoading(false);
     }, [setIsLoading]);
 
-    const handleEvent = e => {
-        setQuery({ category_explorer: ~~ e }, 'pushIn');
-        storeQuery();
-        const currentSearch = window.location.search;
-        setPreviousUrls(currentSearch);  
-    };
+    let postcodeQuery = storedPostcode;
+    if (!storedPostcode) {
+        postcodeQuery = undefined;
+    }
 
+    // keyword search
     async function submitForm({ service_search }) {
         if (isLoading) return;
-
-        let postcodeQuery = storedPostcode;
-        if (!storedPostcode) {
-            postcodeQuery = undefined;
-        }
 
         let searchQuery = service_search;
         if (service_search === "") {
@@ -106,10 +87,16 @@ const Home = () => {
         }
 
         history.push("?postcode=" + storedPostcode + "&service_search=" + service_search);
-        const currentSearch = window.location.search;
         setPreviousUrls(currentSearch);
         setUrlParams({postcode: postcodeQuery, service_search: searchQuery});
     }
+
+    // category explorer
+    const selectCategory = e => {
+        history.push("?category_explorer=" + e + "&postcode=" + postcodeQuery);
+        setUrlParams({category_explorer: e, postcode: postcodeQuery});
+        setPreviousUrls(currentSearch);  
+    };
 
     return (
         isLoading ? (
@@ -130,7 +117,7 @@ const Home = () => {
                         />
                     </form>
                 </HomeHeader>
-                <ListCategories onClick={handleEvent} />
+                <ListCategories onClick={selectCategory} />
                 <MapPlaceholder />
             </div>
             </>
