@@ -56,7 +56,6 @@ const ServiceSearch = ({onClick}) => {
         prevUrlParamsArrayLast["service_search"] = searchValue;
         prevUrlParamsArray.push(prevUrlParamsArrayLast);
         setPrevUrlParams(prevUrlParamsArray);
-
         setUrlParams({"service_search_process": "true"});
 
     }
