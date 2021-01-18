@@ -34,9 +34,6 @@ const Back = () => {
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const storedPostcode = localStorage.getItem("postcode");
-    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
-    const currentSearch = window.location.search;
-    let paramObj = {};
     
     const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
@@ -113,7 +110,8 @@ const Back = () => {
                     }
                 // else if a middlelayer page i.e. setting postcode, selecting categories or demographics
                 } else if ((key == "set_postcode" || key == "select_categories" || key == "select_demographics") && value == "true") {
-                    push = prevUrlArrayLast;
+                    delete prevUrlParamsArrayLast["select_demographics"];
+                    push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString();
                     params = prevUrlParamsArrayLast;
                 }
                 // anything else (category explorer / list services) will use default route
@@ -144,7 +142,6 @@ const Back = () => {
                     if (listServicesSearchObj !== undefined && listServicesSearchObj.service_search !== undefined) {
                         serviceSearch = listServicesSearchObj.service_search;
                     }
-                    console.log(storedPostcode);
                     if (storedPostcode) {
                         postcodeValue = storedPostcode;
                     }
