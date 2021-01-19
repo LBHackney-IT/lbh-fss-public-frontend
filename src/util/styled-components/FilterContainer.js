@@ -3,7 +3,6 @@ import breakpoint from 'styled-components-breakpoint';
 import { light } from "../../settings";
 
 export const FilterContainer = styled.div`
-    
     ${breakpoint('md')`
         position: relative;
         z-index: 1;
@@ -12,5 +11,8 @@ export const FilterContainer = styled.div`
     `}
     h2 {
         margin: 30px 15px 15px !important;
+    }
+    form {
+        position: relative;
     }
 `;

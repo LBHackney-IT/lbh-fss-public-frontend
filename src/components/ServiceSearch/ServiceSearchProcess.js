@@ -13,6 +13,7 @@ const ServiceSearchProcess = () => {
     const searchValue = prevUrlParamsArrayLast["service_search"];
     
     prevUrlParamsArrayLast["service_search"] = searchValue;
+    delete prevUrlParamsArrayLast["select_demographics"];
     let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2520/g,"");
     push = push.replaceAll("=undefined", "");
     history.push(push);

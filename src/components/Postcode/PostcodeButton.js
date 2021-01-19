@@ -9,15 +9,17 @@ import history from '../../history';
 import { green, light } from "../../settings";
 
 const PostcodeButtonContainer = styled.button`
+    display: flex;
+    align-items: center;
+    width: 112px;
+    height: 100%;
     background: ${green["dark"]};
     color: ${light["white"]};
     border: 0;
-    padding: 10px 15px;
+    padding: 10px 13px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    width: 130px;
     text-align: left;
+    font-size: 14px;
     &.postcode-set {
         background: ${green["dark"]};
         padding: 20px 15px;
@@ -28,7 +30,7 @@ const PostcodeButtonContainer = styled.button`
         font-family: "Font Awesome 5 Duotone";
         font-weight: 900;
         content: "\f3c5";
-        margin-right: 10px;
+        margin-right: 5px;
     }
     svg {
         margin-right: 10px;

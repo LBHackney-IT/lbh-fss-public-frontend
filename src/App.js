@@ -8,7 +8,8 @@ import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "./context/PrevUrlParamsContext/PrevUrlParamsContext";
 import MapToggleContext from "./context/MapToggleContext/MapToggleContext";
 import AppLoading from './AppLoading';
-import { SidebarContainer } from "./util/styled-components/SidebarContainer"
+import { SidebarContainer } from "./util/styled-components/SidebarContainer";
+import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import {ThemeProvider} from 'styled-components';
 import "react-leaflet-markercluster/dist/styles.min.css";
 
@@ -56,7 +57,18 @@ function App() {
       setIsLoading(false);
     }
     storeQuery();
+
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
+
+  // rewrite postcode param if changed from url
+  if (Object.keys(urlParams).length !== 0) {
+    let postcode = [urlParams].find(postcode => postcode);
+    postcode = postcode.postcode;
+    const validPostcode = postcodeValidator(postcode, 'UK');
+    if (validPostcode) {
+      localStorage.setItem("postcode", postcode);
+    }
+  }
 
   return (
     isLoading ? <AppLoading /> :

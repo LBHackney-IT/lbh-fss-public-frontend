@@ -7,7 +7,7 @@ export const CardContainer = styled.div`
     ${breakpoint('md')`
         padding: 20px 15px 20px;
         overflow-y: scroll;
-        height: calc(100vh - 260px);
+        height: calc(100vh - 200px);
         position: relative;
         z-index: 1;
         background: ${light["white"]};

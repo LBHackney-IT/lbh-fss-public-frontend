@@ -26,6 +26,7 @@ import {MapContainer} from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
 import ReactToPrint from 'react-to-print';
+import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 export const DetailContainer = styled.div`
     .service-info {
@@ -253,10 +254,7 @@ const ServiceDetail = () => {
     const {urlParams} = useContext(UrlParamsContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
-    const currentSearch = window.location.search;
     const storedPostcode = localStorage.getItem("postcode");
-    let paramObj = {};
 
     useEffect(() => {
         async function fetchData() {
@@ -273,20 +271,12 @@ const ServiceDetail = () => {
         }
         fetchData();
 
-        if (prevUrl.length == 0 && prevUrlParams.length == 0) {
-            let prevUrlArray = [""];
-            let prevUrlParamsArray = [{}];
-
-            // setPrevUrl
-            if (currentSearch) {
-                prevUrlArray.push(currentSearch);
-                setPrevUrl(prevUrlArray);
-            }
-
-            // setPrevUrlParams
-            createParamObj(currentSearch, paramsArray);
-            prevUrlParamsArray.push(paramObj);
-            setPrevUrlParams(prevUrlParamsArray);
+        const setPrevUrlVals = handleSetPrevUrl({
+            prevUrl, prevUrlParams
+        });
+        if (setPrevUrlVals) {
+            setPrevUrl(setPrevUrlVals.prevUrlArray);
+            setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
         }
 
     }, [setData, setIsLoading]);
@@ -299,17 +289,6 @@ const ServiceDetail = () => {
     const Mobile = ({ children }) => {
         const isMobile = useMediaQuery({ maxWidth: 767 })
         return isMobile ? children : null
-    }
-
-    function createParamObj(currentSearch, paramsArray) {
-        const queryParts = currentSearch.substring(1).split(/[&;]/g);
-        const arrayLength = queryParts.length;
-        for (let i = 0; i < arrayLength; i++) {
-            const queryKeyValue = queryParts[i].split("=");
-            if (paramsArray.includes(queryKeyValue[0])) {
-                paramObj[queryKeyValue[0]] = queryKeyValue[1];
-            } 
-        }
     }
 
     let hero = "";
