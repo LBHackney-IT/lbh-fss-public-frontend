@@ -11,6 +11,7 @@ export const FilterContainer = styled.div`
     `}
     h2 {
         margin: 30px 15px 15px !important;
+        font-size: 24px;
     }
     form {
         position: relative;
