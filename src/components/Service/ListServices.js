@@ -15,6 +15,7 @@ import { useMediaQuery } from 'react-responsive';
 import HackneyMap from "../HackneyMap/HackneyMap";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import ServiceSearch from '../ServiceSearch/ServiceSearch';
+import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
@@ -23,9 +24,6 @@ const ListServices = ({ onClick }) => {
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
   const {mapToggle, setMapToggle} = useContext(MapToggleContext);
-  const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
-  const currentSearch = window.location.search;
-  let paramObj = {};
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
 
@@ -37,17 +35,6 @@ const ListServices = ({ onClick }) => {
   const Mobile = ({ children }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 })
     return isMobile ? children : null
-  }
-
-  function createParamObj(currentSearch, paramsArray) {
-    const queryParts = currentSearch.substring(1).split(/[&;]/g);
-    const arrayLength = queryParts.length;
-    for (let i = 0; i < arrayLength; i++) {
-      const queryKeyValue = queryParts[i].split("=");
-      if (paramsArray.includes(queryKeyValue[0])) {
-        paramObj[queryKeyValue[0]] = queryKeyValue[1];
-      } 
-    }
   }
 
   useEffect(() => {
@@ -77,20 +64,12 @@ const ListServices = ({ onClick }) => {
       setfetchOnce(true);
     }
 
-    if (prevUrl.length == 0 && prevUrlParams.length == 0) {
-      let prevUrlArray = [""];
-      let prevUrlParamsArray = [{}];
-
-      // setPrevUrl
-      if (currentSearch) {
-        prevUrlArray.push(currentSearch);
-        setPrevUrl(prevUrlArray);
-      }
-
-      // setPrevUrlParams
-      createParamObj(currentSearch, paramsArray);
-      prevUrlParamsArray.push(paramObj);
-      setPrevUrlParams(prevUrlParamsArray);
+    const setPrevUrlVals = handleSetPrevUrl({
+      prevUrl, prevUrlParams
+    });
+    if (setPrevUrlVals) {
+      setPrevUrl(setPrevUrlVals.prevUrlArray);
+      setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
     }
 
     if (mapToggle === "true") {

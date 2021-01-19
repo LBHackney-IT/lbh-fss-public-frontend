@@ -10,6 +10,15 @@ import history from '../../history';
 import { green, yellow, light } from "../../settings";
 import { lighten } from 'polished';
 
+export const BAR_MODIFIERS = {
+    grey: () => `
+        background: ${lighten(0.01, light["greyBorder"])};
+        button {
+            color: ${green["main"]}
+        }
+    `,
+}
+
 export const ServiceFilterContainer = styled.div`
     background: ${lighten(0.03, green["main"])};
     width: 100%;
@@ -18,6 +27,7 @@ export const ServiceFilterContainer = styled.div`
     align-items: center;
     position: relative;
     z-index: 1;
+    ${applyStyleModifiers(BAR_MODIFIERS)};
 `;
 
 export const BUTTON_MODIFIERS = {
@@ -42,7 +52,7 @@ const FilterButton = styled.button`
         display: none;
         font-family: "Font Awesome 5 Pro";
         font-weight: 900;
-        content: "\f03a";
+        content: "\f0b0";
     }
     svg {
         margin-right: 10px;
@@ -66,29 +76,38 @@ const ServiceFilter = ({onClick}) => {
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const pathCategories = "?select_categories=true";
-    const pathDemographics = "?select_demographics=true";
+    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+    let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+    let params = prevUrlParamsArrayLast;
+    const pathCategories = "&select_categories=true";
+    const pathDemographics = "&select_demographics=true";
     let showCategoriesButton = true;
     let showDemographicsButton = true;
     let showClearAllButton = false;
     let style = "";
+    let grey = "";
 
     const selectCategoriesEvent = e => {
-        for (const [key, value] of Object.entries(urlParams)) {
-            if (key !== "select_categories" && value !== "true") {
-                history.push(pathCategories);
-                setUrl(pathCategories);
-                setUrlParams({"select_categories": "true"});
-            }
+        const selectCategoriesObj = [urlParams].find(selectCategoriesObj => selectCategoriesObj.select_categories);
+        if (!selectCategoriesObj) {
+            let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+") + pathCategories;
+            push = push.replaceAll("=undefined", "");
+            history.push(push);
+            setUrl(push);
+            urlParams["select_categories"] = "true";
+            setUrlParams(urlParams);
         }
     };
     const selectDemographicsEvent = e => {
-        for (const [key, value] of Object.entries(urlParams)) {
-            if (key !== "select_demographics" && value !== "true") {
-                history.push(pathDemographics);
-                setUrl(pathDemographics);
-                setUrlParams({"select_demographics": "true"});
-            }
+        const selectDemographicsObj = [urlParams].find(selectDemographicsObj => selectDemographicsObj.select_demographics);
+        if (!selectDemographicsObj) {
+            let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+") + pathDemographics;
+            push = push.replaceAll("=undefined", "");
+            history.push(push);
+            setUrl(push);
+            urlParams["select_demographics"] = "true";
+            setUrlParams(urlParams);
         }
     };
     const clearTaxonomiesEvent = e => {
@@ -100,11 +119,11 @@ const ServiceFilter = ({onClick}) => {
             }
         }
     };
-    
 
     for (const [key, value] of Object.entries(urlParams)) {
         if (key == "category_explorer" && value !== "") {
             showCategoriesButton = false;
+            grey = "grey";
         }
         if (key == "select_categories" && value === "true") {
             showDemographicsButton = false;
@@ -119,13 +138,13 @@ const ServiceFilter = ({onClick}) => {
     }
 
     return (
-        <ServiceFilterContainer>
-            {(showCategoriesButton) ?
+        <ServiceFilterContainer modifiers={grey}>
+            {/* {(showCategoriesButton) ?
                 <FilterButton modifiers={style} onClick={selectCategoriesEvent}>
                     Categories
-                </FilterButton> : ""}
+                </FilterButton> : ""} */}
             {(showDemographicsButton) ?
-                <FilterButton modifiers={style} modifiers="filter" onClick={selectDemographicsEvent}>
+                <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
                     Filters
                 </FilterButton> : ""}
             {(showClearAllButton) ?

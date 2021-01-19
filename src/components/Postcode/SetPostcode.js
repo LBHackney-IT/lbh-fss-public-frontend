@@ -75,13 +75,15 @@ const SetPostcode = () => {
                 push = prevUrlArrayLast;
                 params = prevUrlParamsArrayLast;
 
+                
+
                 // checking if previous page is support_service
-                if (prevUrlParamsArrayLast.support_service !== undefined) {
+                if (prevUrlParamsArrayLast && prevUrlParamsArrayLast.support_service !== undefined) {
                     //
                 } else {
                 // catch all for list services
-                    const ListServicesSearchObj = prevUrlParams.find(ListServicesSearchObj => ListServicesSearchObj.service_search);
-                    let ListServicesPostcodeObj = prevUrlParams.find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
+                    const ListServicesSearchObj = [prevUrlParamsArrayLast].find(ListServicesSearchObj => ListServicesSearchObj.service_search);
+                    let ListServicesPostcodeObj = [prevUrlParamsArrayLast].find(ListServicesPostcodeObj => ListServicesPostcodeObj.postcode);
                     prevUrlParamsArrayLast["postcode"] = postcode;
                     if (ListServicesSearchObj !== undefined) {
                     // if service_search exists in prevUrlParams
@@ -99,6 +101,11 @@ const SetPostcode = () => {
                         params = ListServicesPostcodeObj;
                     }
                 }
+            } else {
+                // redirect the user back to home
+                // when setting a postcode from the home page
+                push = "/?";
+                params = {};
             }
 
             history.push(push);

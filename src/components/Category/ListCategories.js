@@ -9,10 +9,13 @@ import { light } from "../../settings";
 export const ListCategoriesContainer = styled.div`
     ${breakpoint('md')`
       position: relative;
-      top: 216px;
       z-index: 2;
       background: ${light["white"]};
     `}
+    h3 {
+      font-weight: normal;
+      font-size: 24px;
+    }
 `;
 
 const ListCategories = ({ categories = [], onClick }) => {
