@@ -128,7 +128,7 @@ const HackneyMap = (data) => {
                 getAllAddresses(data).map((service, index) => {
                     let categoryIconName = ''
 
-                    if(service.categories) {
+                    if(service.categories.length !== 0) {
                         const categoriesSorted = service["categories"].sort(function (a, b) {
                             return a.weight - b.weight;
                         });    

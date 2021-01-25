@@ -353,7 +353,15 @@ const ServiceDetail = () => {
                     (<>
                     <h3>This is for:</h3>
                     <p>
-                        {(data.service.demographic.length && data.service.demographic.length === demographicData.length) ? "Everyone" : data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])}
+                        {(data.service.demographic.length !== 0 ?
+                            (data.service.demographic.length === demographicData.length)
+                                ?
+                                    "Everyone"
+                                :
+                                    data.service.demographic.map(d => d.name).reduce((prev, curr) => [prev, ', ', curr])
+                            :
+                                ''
+                        )}
                     </p>
                     </>) : null}
                 </GreyInnerContainer>
