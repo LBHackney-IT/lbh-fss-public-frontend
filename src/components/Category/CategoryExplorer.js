@@ -56,6 +56,7 @@ const CategoryExplorer = ({ category, onClick }) => {
   const {mapToggle, setMapToggle} = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
+  const storedPostcode = localStorage.getItem("postcode");
 
   const Desktop = ({ children }) => {
     const isDesktop = useMediaQuery({ minWidth: 768 })
@@ -82,7 +83,7 @@ const CategoryExplorer = ({ category, onClick }) => {
       }
 
       // call retrieveServices with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({taxonomyids: taxonomyId});
+      const getServices = await GetServices.retrieveServices({postcode: storedPostcode, taxonomyids: taxonomyId});
       
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
