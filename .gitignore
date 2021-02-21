@@ -25,3 +25,4 @@ yarn-error.log*
 .npmrc
 src/helpers/Mapbox/Mapbox.js
 src/services/ApiKey/ApiKey.js
+.vscode/launch.json
