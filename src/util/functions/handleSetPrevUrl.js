@@ -3,7 +3,7 @@ function handleSetPrevUrl({prevUrl, prevUrlParams}){
     const currentSearch = window.location.search;
     let paramObj = {};
 
-    if (prevUrl.length == 0 && prevUrlParams.length == 0 || (currentSearch && prevUrl.length > 0 && prevUrl[prevUrl.length - 1] != currentSearch)) 
+    if (prevUrl.length == 0 && prevUrlParams.length == 0 || (currentSearch && prevUrl.length > 0 && prevUrl[prevUrl.length - 1] != currentSearch)) {
         let prevUrlArray = [""];
         let prevUrlParamsArray = [{}];
 
