@@ -3,30 +3,33 @@ function handleSetPrevUrl({prevUrl, prevUrlParams}){
     const currentSearch = window.location.search;
     let paramObj = {};
 
-    if (prevUrl.length == 0 && prevUrlParams.length == 0 || (currentSearch && prevUrl.length > 0 && prevUrl[prevUrl.length - 1] != currentSearch)) {
+    if(currentSearch)
+    {
         let prevUrlArray = [""];
         let prevUrlParamsArray = [{}];
 
-        // setPrevUrl
-        if (currentSearch) {
+        // setPrevUrl -- Ignore set postcode page and prevent an indefinite loop.
+        if(currentSearch.indexOf('set_postcode') > 0 ||
+            (prevUrl.length > 0 && prevUrl[prevUrl.length - 1] == currentSearch))
+            return;
+        else
+        {
             prevUrlArray.push(currentSearch);
+            // setPrevUrlParams
+            const queryParts = currentSearch.substring(1).split(/[&;]/g);
+            const arrayLength = queryParts.length;
+            for (let i = 0; i < arrayLength; i++) {
+                const queryKeyValue = queryParts[i].split("=");
+                if (paramsArray.includes(queryKeyValue[0])) {
+                    paramObj[queryKeyValue[0]] = queryKeyValue[1];
+                } 
+            }
+
+            prevUrlParamsArray.push(paramObj);
+            return {prevUrlArray, prevUrlParamsArray};
         }
 
-        // setPrevUrlParams
-        const queryParts = currentSearch.substring(1).split(/[&;]/g);
-        const arrayLength = queryParts.length;
-        for (let i = 0; i < arrayLength; i++) {
-            const queryKeyValue = queryParts[i].split("=");
-            if (paramsArray.includes(queryKeyValue[0])) {
-                paramObj[queryKeyValue[0]] = queryKeyValue[1];
-            } 
-        }
-
-        prevUrlParamsArray.push(paramObj);
-
-        return {prevUrlArray, prevUrlParamsArray};
     }
-
     return;
 }
 
