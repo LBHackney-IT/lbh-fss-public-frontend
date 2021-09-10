@@ -8,10 +8,12 @@ import UrlParamsContext from "./context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "./context/PrevUrlParamsContext/PrevUrlParamsContext";
 import MapToggleContext from "./context/MapToggleContext/MapToggleContext";
 import AppLoading from './AppLoading';
+import CookieBannerDisplay from "./components/CookieBanner/CookieBanner";
 import { SidebarContainer } from "./util/styled-components/SidebarContainer";
 import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
 import {ThemeProvider} from 'styled-components';
 import "react-leaflet-markercluster/dist/styles.min.css";
+import "./App.scss";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -36,6 +38,23 @@ function App() {
       xl: 1200
     }
   };
+
+  var COOKIE_NAME = 'seen_cookie_message'
+
+  const checkCookie = () => {
+    var nameEQ = COOKIE_NAME + '='
+    var ca = document.cookie.split(';')
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i]
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1, c.length)
+      }
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length)
+      }
+    }
+    return null
+  }
 
   useEffect(() => {
     async function storeQuery() {
@@ -73,24 +92,27 @@ function App() {
   return (
     isLoading ? <AppLoading /> :
     (
-      <div className="App">
-        <ThemeProvider theme={theme}>
-          <UrlParamsContext.Provider value={urlParamValue}>
-            <UrlContext.Provider value={urlValue}>
-              <PrevUrlContext.Provider value={prevUrlValue}>
-                <PrevUrlParamsContext.Provider value={prevUrlParamsValue}>
-                  <MapToggleContext.Provider value={mapToggleValue}>
-                    <SidebarContainer>
-                      { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home /> }
-                    </SidebarContainer>
-                    <GlobalStyle />
-                  </MapToggleContext.Provider>
-                </PrevUrlParamsContext.Provider>
-              </PrevUrlContext.Provider>
-            </UrlContext.Provider>
-          </UrlParamsContext.Provider>
-        </ThemeProvider>
-      </div>
+      <>
+       { checkCookie() ? '' : <CookieBannerDisplay /> }
+        <div className="App">
+          <ThemeProvider theme={theme}>
+            <UrlParamsContext.Provider value={urlParamValue}>
+              <UrlContext.Provider value={urlValue}>
+                <PrevUrlContext.Provider value={prevUrlValue}>
+                  <PrevUrlParamsContext.Provider value={prevUrlParamsValue}>
+                    <MapToggleContext.Provider value={mapToggleValue}>
+                      <SidebarContainer>
+                        { (Object.keys(urlParamValue.urlParams).length !== 0) ? <RouteContainer /> : <Home /> }
+                      </SidebarContainer>
+                      <GlobalStyle />
+                    </MapToggleContext.Provider>
+                  </PrevUrlParamsContext.Provider>
+                </PrevUrlContext.Provider>
+              </UrlContext.Provider>
+            </UrlParamsContext.Provider>
+          </ThemeProvider>
+        </div>
+      </>
     )
   )
 
