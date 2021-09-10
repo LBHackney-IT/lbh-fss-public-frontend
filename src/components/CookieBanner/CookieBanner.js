@@ -8,7 +8,7 @@ const CookieBannerDisplay = () => {
       }, [])
     console.log('Displaying cookie banner');
     return (
-        <section className="lbh-cookie-banner" data-module="lbh-cookie-banner">
+        <section className="lbh-cookie-banner" data-module="lbh-cookie-banner"  style={{background: "#00664F"}}>
         <div className="lbh-container">
             <div className="govuk-grid-row">
             <div
