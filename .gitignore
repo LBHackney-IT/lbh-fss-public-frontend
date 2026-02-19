@@ -22,8 +22,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.npmrc
+
 src/helpers/Mapbox/Mapbox.js
 src/services/ApiKey/ApiKey.js
 .vscode/launch.json
+
+# envs
 .npmrc
+.env
+.env.*
+!.env.example
+!example.npmrc
