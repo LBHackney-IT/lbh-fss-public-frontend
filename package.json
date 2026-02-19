@@ -75,6 +75,9 @@
     "react-scripts": "^5.0.1",
     "sass": "^1.97.3"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },  
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
