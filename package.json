@@ -54,6 +54,7 @@
   },
   "browserslist": "> 1%, last 2 versions",
   "devDependencies": {
+    "@hackney/prettier-config": "^1.0.1",    
     "core-js": "^3.37.0",
     "@babel/eslint-parser": "^7.24.0",
     "@faker-js/faker": "^8.4.0",
