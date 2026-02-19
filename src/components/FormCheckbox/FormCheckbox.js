@@ -49,12 +49,12 @@ const FormCheckbox = ({
       <StyledDiv>
         <StyledCheckbox
           name={name}
-          type="checkbox"
-          ref={register({ required })}
+          type="checkbox"          
           aria-invalid={error ? "true" : "false"}
           value={value}
           onClick={onClick}
           data-taxonomy-id={taxonomyId}
+          {...register(name, { required })}
         />
         <StyledLabel htmlFor={name}>{label}</StyledLabel>
       </StyledDiv>

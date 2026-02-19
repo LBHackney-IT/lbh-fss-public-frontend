@@ -7,6 +7,7 @@ import { darken } from "polished";
 import {StyledInput} from "../../util/styled-components/StyledInput";
 import {StyledLabel} from "../../util/styled-components/StyledLabel";
 import {green} from "../../settings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const StyledInputContainer = styled.div`
   position: relative;
@@ -25,13 +26,6 @@ const StyledButton = styled(Button)`
   &:hover {
     background-color: ${darken(0.1, green["bright"])};
   }
-
-  &::before {
-    display: none;
-    font-family: "Font Awesome 5 Pro";
-    font-weight: 900;
-    content: "\f002";
-  }
   svg {
     color: #000;
   }
@@ -44,7 +38,7 @@ const StyledButton = styled(Button)`
     overflow: hidden;
     padding: 0;
     position: absolute;
-    whiteSpace: nowrap;
+    white-space: nowrap;
     width: 1px;
   }
 `;
@@ -63,7 +57,7 @@ const FormInputSubmit = ({
   maxLength,
   minLength,
   error,
-  inputRef,
+  // inputRef,
   validate,
   help,
 }) => {
@@ -92,15 +86,14 @@ const FormInputSubmit = ({
           name={name}
           placeholder={placeholder}
           type={type}
-          ref={(e) => {
-            register(e, { required, minLength, maxLength, validate });
-            if (inputRef) inputRef.current = e;
-          }}
           defaultValue={defaultValue}
           aria-invalid={error ? "true" : "false"}
+          {...register(name, { required, minLength, maxLength, validate })}
         />
         {/* <StyledButton type="submit" label="Login" disabled={isLoading} /> */}
-        <StyledButton type="submit" label="Submit" />
+        <StyledButton type="submit" label="Submit" >
+          <FontAwesomeIcon icon={["fas", "search"]} />
+        </StyledButton>
       </StyledInputContainer>
     </>
   );

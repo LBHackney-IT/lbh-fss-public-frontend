@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import AppLoading from "../../AppLoading";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import Header from "../Header/Header";
@@ -6,16 +6,12 @@ import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import FormInput from "../FormInput/FormInput";
-import FormError from "../FormError/FormError";
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { applyStyleModifiers } from 'styled-components-modifiers';
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
-import { green, dark, red, light } from "../../settings";
-import breakpoint from 'styled-components-breakpoint';
+import { useNavigate } from "react-router-dom";
+import { green, dark, light } from "../../settings";
 import {FilterContainer} from "../../util/styled-components/FilterContainer";
 import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
@@ -23,7 +19,6 @@ import ServiceSearch from '../ServiceSearch/ServiceSearch';
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import CategoryCard from "../Category/CategoryCard";
-import CategoryExplorer from "../Category/CategoryExplorer";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 export const BUTTON_MODIFIERS = {
@@ -76,11 +71,13 @@ export const CategoryCardContainer = styled.div`
 const SelectDemographics = () => {
     const [data, setData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
-    const {url, setUrl} = useContext(UrlContext);
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     
     let defaultValues = {
         checkbox: "",
@@ -95,14 +92,14 @@ const SelectDemographics = () => {
                 }
                 // used if coming from url with demographic set
                 if (typeof value === 'string' && value.indexOf("+") > -1) {
-                    value = value.split("+");
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                    const valueArray = value.split("+");
+                    selectedObj = valueArray.reduce((a,b)=> (a[b]=true,a),{});
                 }
                 if (typeof value === 'string' && value.indexOf("+") === -1) {
                     selectedObj[value] = true;
                 }
             }
-        }
+        }        
     }
     defaultValues = selectedObj;
 
@@ -143,7 +140,7 @@ const SelectDemographics = () => {
         // redirect user back to home
         if (prevUrl.length === 0 && prevUrlParams.length === 0) {
             if (!(categoryExplorerObj || listServicesSearchObj || listServicesPostcodeObj)) {
-                history.push("?");
+                navigate("?");
                 setUrl("");
                 setUrlParams({});
             }
@@ -179,7 +176,7 @@ const SelectDemographics = () => {
         delete urlParams["select_demographics"];
         let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
         push = push.replaceAll("=undefined", "");
-        history.push(push);
+        navigate(push);
         setUrl(push);
         setUrlParams(urlParams);
         setPrevUrl([push]);

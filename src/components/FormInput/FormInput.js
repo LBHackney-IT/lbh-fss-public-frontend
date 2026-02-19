@@ -31,7 +31,7 @@ const FormInput = ({
   maxLength,
   minLength,
   error,
-  inputRef,
+  // inputRef,
   validate,
   help,
 }) => {
@@ -59,13 +59,10 @@ const FormInput = ({
         name={name}
         placeholder={placeholder}
         type={type}
-        ref={(e) => {
-          register(e, { required, minLength, maxLength, validate });
-          if (inputRef) inputRef.current = e;
-        }}
         defaultValue={defaultValue}
         autoComplete={autoComplete}
         aria-invalid={error ? "true" : "false"}
+        {...register(name, { required, minLength, maxLength, validate })}
       />
     </>
   );

@@ -1,0 +1,55 @@
+# Config files
+.circleci/config
+.github/CODEOWNERS
+.nvmrc
+sonar-project.properties
+robots.txt
+
+# Ignore files
+.prettierignore
+.gitignore
+.eslintignore
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+*.log
+*.env*
+
+# Images and binary files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.pdf
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Terraform files
+*.tf
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Git
+.git/

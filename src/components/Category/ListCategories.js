@@ -18,7 +18,8 @@ export const ListCategoriesContainer = styled.div`
     }
 `;
 
-const ListCategories = ({ categories = [], onClick }) => {
+// const ListCategories = ({ categories = [], onClick }) => {
+const ListCategories = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 

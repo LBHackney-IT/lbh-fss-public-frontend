@@ -1,0 +1,182 @@
+version: 2.1
+
+orbs:
+  sonarcloud: sonarsource/sonarcloud@2.0.0
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:20.20-browsers
+
+references:
+  workspace_root: &workspace_root "~"
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+commands:
+  build-and-package:
+    parameters:
+      environment:
+        type: string
+    steps:
+      - run:
+          name: Create .env file
+          command: |
+            cat \<<EOF > .env
+            REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+            EOF
+      - run:
+          name: Build
+          command: CI=false yarn build
+          environment:
+            REACT_APP_ENV: <<parameters.environment>>
+      - run:
+          name: Package WordPress plugin
+          command: |
+            mkdir -p wordpress/lbh-fss-public-frontend
+            cp -r build wordpress/lbh-fss-public-frontend/build
+            cd wordpress
+            zip -r ../fss-directory.zip . \
+              -x "*.git*" \
+              -x "*.zip" \
+              -x "export-plugin.sh" \
+              -x "lbh-fss-public-frontend/node_modules/*"
+      - store_artifacts:
+          path: fss-directory.zip
+          destination: fss-directory-<<parameters.environment>>.zip              
+
+  # deploy-wordpress:
+  #   parameters:
+  #     wp-host:
+  #       type: string
+  #     wp-user:
+  #       type: string
+  #   steps:
+  #     - run:
+  #         name: Deploy WordPress plugin
+  #         command: |
+  #           echo "$WP_SSH_KEY" | base64 -d > key.pem
+  #           chmod 600 key.pem
+  #           scp -i key.pem -o StrictHostKeyChecking=no \
+  #             fss-plugin.zip <<parameters.wp-user>>@<<parameters.wp-host>>:/tmp/
+  #           ssh -i key.pem -o StrictHostKeyChecking=no \
+  #             <<parameters.wp-user>>@<<parameters.wp-host>> \
+  #             "wp plugin install /tmp/fss-plugin.zip --force --activate \
+  #              && rm /tmp/fss-plugin.zip"
+
+jobs:
+  install-dependencies:
+    executor: node-executor
+    steps:
+      - checkout
+      - *attach_workspace
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .
+
+  lint-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run ESLint
+          command: yarn lint
+
+  format-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run Prettier
+          command: yarn format:check
+
+  security-audit:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run security audit (critical only)
+          command: yarn audit-ci --critical
+
+  sonar-scan:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - sonarcloud/scan
+
+  deploy-development:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: development
+      # - deploy-wordpress:
+      #     wp-host: $WP_HOST_DEVELOPMENT
+      #     wp-user: $WP_USER_DEVELOPMENT
+
+  deploy-staging:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: staging
+      # - deploy-wordpress:
+      #     wp-host: $WP_HOST_STAGING
+      #     wp-user: $WP_USER_STAGING
+
+  deploy-production:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: production
+      # - deploy-wordpress:
+      #     wp-host: $WP_HOST_PRODUCTION
+      #     wp-user: $WP_USER_PRODUCTION
+
+workflows:
+  version: 2
+  continuous-delivery:
+    jobs:
+      - install-dependencies
+      - sonar-scan:
+          context: SonarCloud
+      - lint-check:
+          requires: [install-dependencies]
+      - format-check:
+          requires: [install-dependencies]
+      - security-audit:
+          requires: [install-dependencies]
+
+      # Development
+      - deploy-development:
+          requires: [lint-check, format-check, security-audit, sonar-scan]
+          filters:
+            branches:
+              only: [develop, SSI-772-Remediation]
+
+      # Staging
+      - deploy-staging:
+          requires: [lint-check, format-check, security-audit, sonar-scan]
+          filters:
+            branches:
+              only: [master]
+
+      # Production - manual approval gate
+      - permit-deploy-production:
+          type: approval
+          requires: [deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - deploy-production:
+          requires: [permit-deploy-production]
+          filters:
+            branches:
+              only: [master]

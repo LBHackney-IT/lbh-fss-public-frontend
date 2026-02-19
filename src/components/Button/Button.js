@@ -19,7 +19,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ type, label, disabled, onClick = () => {}, className }) => {
+const Button = ({ type, label, disabled, onClick = () => {}, className, children }) => {
   return (
     <>
       <StyledButton
@@ -28,7 +28,7 @@ const Button = ({ type, label, disabled, onClick = () => {}, className }) => {
         onClick={onClick}
         className={className}
       >
-        <span>{label}</span>
+        {children || <span>{label}</span>}
       </StyledButton>
     </>
   );
@@ -39,6 +39,7 @@ Button.propTypes = {
   label: PropTypes.string,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
+  children: PropTypes.node,
 };
 
 export default Button;

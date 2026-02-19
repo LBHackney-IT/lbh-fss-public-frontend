@@ -1,12 +1,11 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import { applyStyleModifiers } from 'styled-components-modifiers';
 import UrlContext from "../../context/UrlContext/UrlContext";
-import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
+// import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
-import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
+// import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
+import { useNavigate } from "react-router-dom";
 import { green, yellow, light } from "../../settings";
 import { lighten } from 'polished';
 
@@ -71,46 +70,48 @@ const ClearButton = styled.button`
     margin-left: auto;
 `;
 
-const ServiceFilter = ({onClick}) => {
-    const {url, setUrl} = useContext(UrlContext);
-    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+const ServiceFilter = () => {
+    const navigate = useNavigate(); 
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
+    // const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-    const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
-    let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
-    let params = prevUrlParamsArrayLast;
-    const pathCategories = "&select_categories=true";
+    // const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+    // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    // const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+    // let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+");
+    // let params = prevUrlParamsArrayLast;
+    // const pathCategories = "&select_categories=true";
     const pathDemographics = "&select_demographics=true";
-    let showCategoriesButton = true;
+    // let showCategoriesButton = true;
     let showDemographicsButton = true;
     let showClearAllButton = false;
     let style = "";
     let grey = "";
 
-    const selectCategoriesEvent = e => {
-        const selectCategoriesObj = [urlParams].find(selectCategoriesObj => selectCategoriesObj.select_categories);
-        if (!selectCategoriesObj) {
-            let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+") + pathCategories;
-            push = push.replaceAll("=undefined", "");
-            history.push(push);
-            setUrl(push);
-            urlParams["select_categories"] = "true";
-            setUrlParams(urlParams);
-        }
-    };
-    const selectDemographicsEvent = e => {
+    // const selectCategoriesEvent = e => {
+    //     const selectCategoriesObj = [urlParams].find(selectCategoriesObj => selectCategoriesObj.select_categories);
+    //     if (!selectCategoriesObj) {
+    //         let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+") + pathCategories;
+    //         push = push.replaceAll("=undefined", "");
+    //         navigate(push);
+    //         setUrl(push);
+    //         urlParams["select_categories"] = "true";
+    //         setUrlParams(urlParams);
+    //     }
+    // };
+    const selectDemographicsEvent = () => {
         const selectDemographicsObj = [urlParams].find(selectDemographicsObj => selectDemographicsObj.select_demographics);
         if (!selectDemographicsObj) {
             let push = "?" + new URLSearchParams(urlParams).toString().replace(/%2C/g,"+").replace(/%2B/g,"+") + pathDemographics;
             push = push.replaceAll("=undefined", "");
-            history.push(push);
+            navigate(push);
             setUrl(push);
             urlParams["select_demographics"] = "true";
             setUrlParams(urlParams);
         }
     };
-    const clearTaxonomiesEvent = e => {
+    const clearTaxonomiesEvent = () => {
         let checks = document.querySelectorAll('input[type="checkbox"]');
         for (let i = 0; i < checks.length; i++) {
             let check = checks[i];
@@ -122,7 +123,7 @@ const ServiceFilter = ({onClick}) => {
 
     for (const [key, value] of Object.entries(urlParams)) {
         if (key == "category_explorer" && value !== "") {
-            showCategoriesButton = false;
+            // showCategoriesButton = false;
             grey = "grey";
         }
         if (key == "select_categories" && value === "true") {
@@ -131,7 +132,7 @@ const ServiceFilter = ({onClick}) => {
             style = "active";
         }
         if (key == "select_demographics" && value === "true") {
-            showCategoriesButton = false;
+            // showCategoriesButton = false;
             showClearAllButton = true;
             style = "active";
         }

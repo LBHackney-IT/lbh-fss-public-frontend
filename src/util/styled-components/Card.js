@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { applyStyleModifiers } from 'styled-components-modifiers';
 import { pink, dark, light } from "../../settings";
 import arrowRight from "../../assets/arrow-right.svg";
-import breakpoint from 'styled-components-breakpoint';
 
 export const CARD_MODIFIERS = {
     categoryCard: () => `
@@ -11,11 +10,6 @@ export const CARD_MODIFIERS = {
             background-color: ${pink[200]};
             height: 50px;
             width: 50px;
-            &::before {
-                display: none;
-                font-family: "Font Awesome 5 Pro";
-                content: "\f086";
-            }
             svg {
                 font-size: 30px;
                 color: ${light["white"]};

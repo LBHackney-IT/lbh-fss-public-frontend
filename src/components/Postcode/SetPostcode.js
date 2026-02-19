@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import AppLoading from "../../AppLoading";
 import Header from "../Header/Header";
 import UrlContext from "../../context/UrlContext/UrlContext";
@@ -6,14 +6,13 @@ import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import FormInput from "../FormInput/FormInput";
-import FormError from "../FormError/FormError";
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
+import { postcodeValidator } from 'postcode-validator';
 import { dark, red, light } from "../../settings";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
+import { useNavigate } from 'react-router-dom';
 
 export const SetPostcodeContainer = styled.div`
     padding: 20px 15px;
@@ -47,14 +46,21 @@ const StyledButton = styled(Button)`
 `;
 
 const SetPostcode = () => {
-    const {url, setUrl} = useContext(UrlContext);
-    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
-    const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
+    const {prevUrl} = useContext(PrevUrlContext);
+    // const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+    const {setUrlParams} = useContext(UrlParamsContext);
+    // const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+    const {prevUrlParams} = useContext(PrevUrlParamsContext);
+    // const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
-    const paramsArray = ["category_explorer", "postcode" , "service_search", "support_service"];
-    const { register, handleSubmit, errors, reset } = useForm();
+    // const paramsArray = ["category_explorer", "postcode" , "service_search", "support_service"];    
+    // const { register, handleSubmit, formState: { errors }, reset } = useForm();    
+    const { register, handleSubmit, formState: { errors } } = useForm();    
     const storedPostcode = localStorage.getItem("postcode");
+    
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(false);
@@ -108,7 +114,7 @@ const SetPostcode = () => {
                 params = {};
             }
 
-            history.push(push);
+            navigate(push);
             setUrl(push);
             setUrlParams(params);
         }
