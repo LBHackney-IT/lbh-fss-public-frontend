@@ -9,6 +9,9 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:20.20-browsers
+  node-aws-executor:
+    docker:
+      - image: cimg/aws:2024.03      
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -181,21 +184,21 @@ jobs:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
