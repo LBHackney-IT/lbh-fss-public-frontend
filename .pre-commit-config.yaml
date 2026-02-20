@@ -4,6 +4,12 @@ repos:
     hooks:
       - id: ggshield
 
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.105.0
+    hooks:
+      - id: terraform_fmt
+        args: [--args=-check]      
+
   # - repo: https://github.com/pre-commit/pre-commit-hooks
   #   rev: v4.5.0
   #   hooks:

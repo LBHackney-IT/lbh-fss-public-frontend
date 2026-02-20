@@ -2,11 +2,16 @@ version: 2.1
 
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0
+  aws-cli: circleci/aws-cli@5.1.1
+  aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
 
 executors:
   node-executor:
     docker:
       - image: cimg/node:20.20-browsers
+  docker-terraform:
+    docker:
+      - image: hashicorp/terraform:latest
 
 references:
   workspace_root: &workspace_root "~"
@@ -15,6 +20,22 @@ references:
       at: *workspace_root
 
 commands:
+  assume-role-and-persist-workspace:
+    description: "Assumes deployment role and persists credentials across jobs"
+    parameters:
+      aws-account:
+        type: string
+    steps:
+      - checkout
+      - aws_assume_role/assume_role:
+          account: <<parameters.aws-account>>
+          profile_name: default
+          role: "LBH_Circle_CI_Deployment_Role"
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .aws
+
   build-and-package:
     parameters:
       environment:
@@ -42,28 +63,46 @@ commands:
               -x "*.zip" \
               -x "export-plugin.sh" \
               -x "lbh-fss-public-frontend/node_modules/*"
-      - store_artifacts:
-          path: fss-directory.zip
-          destination: fss-directory-<<parameters.environment>>.zip              
+      - run:
+          name: Upload plugin zip to S3
+          command: |
+            aws s3 cp fss-directory.zip \
+              s3://fss-wp-plugins-<<parameters.environment>>/fss-directory.zip \
+              --acl private
 
-  # deploy-wordpress:
-  #   parameters:
-  #     wp-host:
-  #       type: string
-  #     wp-user:
-  #       type: string
-  #   steps:
-  #     - run:
-  #         name: Deploy WordPress plugin
-  #         command: |
-  #           echo "$WP_SSH_KEY" | base64 -d > key.pem
-  #           chmod 600 key.pem
-  #           scp -i key.pem -o StrictHostKeyChecking=no \
-  #             fss-plugin.zip <<parameters.wp-user>>@<<parameters.wp-host>>:/tmp/
-  #           ssh -i key.pem -o StrictHostKeyChecking=no \
-  #             <<parameters.wp-user>>@<<parameters.wp-host>> \
-  #             "wp plugin install /tmp/fss-plugin.zip --force --activate \
-  #              && rm /tmp/fss-plugin.zip"
+  preview-terraform:
+    description: "Previews terraform configuration changes"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          name: Preview terraform
+          command: |
+            terraform init \
+              -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
+              -backend-config="key=services/fss-portal-frontend/terraform.tfstate"
+            terraform validate
+            terraform plan -var="environment=<<parameters.environment>>"
+
+  deploy-terraform:
+    description: "Initializes and applies terraform configuration"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          name: Initialize and apply terraform
+          command: |
+            terraform init \
+              -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
+              -backend-config="key=services/fss-portal-frontend/terraform.tfstate"
+            terraform validate
+            terraform apply -auto-approve -var="environment=<<parameters.environment>>"
 
 jobs:
   install-dependencies:
@@ -108,13 +147,38 @@ jobs:
           name: Run security audit (critical only)
           command: yarn audit-ci --critical
 
+  dependency-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Check for outdated dependencies
+          command: yarn outdated || true          
+
   sonar-scan:
     docker:
       - image: cimg/python:3.11
-    steps:      
-      - checkout:
-          method: full
+    steps:
+      - checkout
       - sonarcloud/scan
+
+  assume-role-development:
+    executor: node-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_DEVELOPMENT
+
+  assume-role-staging:
+    executor: node-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_STAGING
+
+  assume-role-production:
+    executor: node-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
     executor: node-executor
@@ -122,9 +186,6 @@ jobs:
       - *attach_workspace
       - build-and-package:
           environment: development
-      # - deploy-wordpress:
-      #     wp-host: $WP_HOST_DEVELOPMENT
-      #     wp-user: $WP_USER_DEVELOPMENT
 
   deploy-staging:
     executor: node-executor
@@ -132,9 +193,6 @@ jobs:
       - *attach_workspace
       - build-and-package:
           environment: staging
-      # - deploy-wordpress:
-      #     wp-host: $WP_HOST_STAGING
-      #     wp-user: $WP_USER_STAGING
 
   deploy-production:
     executor: node-executor
@@ -142,9 +200,36 @@ jobs:
       - *attach_workspace
       - build-and-package:
           environment: production
-      # - deploy-wordpress:
-      #     wp-host: $WP_HOST_PRODUCTION
-      #     wp-user: $WP_USER_PRODUCTION
+
+  preview-development-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: development
+
+  terraform-init-and-apply-to-development:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: development
+
+  terraform-init-and-apply-to-staging:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: staging
+
+  preview-production-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: production
+
+  terraform-init-and-apply-to-production:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: production
 
 workflows:
   version: 2
@@ -159,25 +244,80 @@ workflows:
           requires: [install-dependencies]
       - security-audit:
           requires: [install-dependencies]
+      - dependency-check:
+          requires: [install-dependencies]          
+
+      # Feature branch terraform preview
+      - assume-role-development:
+          name: assume-role-development-preview
+          context: api-assume-role-development-context
+          filters:
+            branches:
+              ignore: [master, develop]
+      - preview-development-terraform:
+          requires: [assume-role-development-preview]
+          filters:
+            branches:
+              ignore: [master, develop]
 
       # Development
-      - deploy-development:
+      - assume-role-development:
+          name: assume-role-development-deploy
+          context: api-assume-role-development-context
           requires: [lint-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
-              only: [develop, SSI-772-Remediation]
+              only: [develop]
+      - terraform-init-and-apply-to-development:
+          requires: [assume-role-development-deploy]
+          filters:
+            branches:
+              only: [develop]
+      - deploy-development:
+          requires: [assume-role-development-deploy]
+          filters:
+            branches:
+              only: [develop]
 
       # Staging
-      - deploy-staging:
+      - assume-role-staging:
+          name: assume-role-staging-deploy
+          context: api-assume-role-staging-context
           requires: [lint-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [master]
+      - terraform-init-and-apply-to-staging:
+          requires: [assume-role-staging-deploy]
+          filters:
+            branches:
+              only: [master]
+      - deploy-staging:
+          requires: [assume-role-staging-deploy]
+          filters:
+            branches:
+              only: [master]
 
-      # Production - manual approval gate
+      # Production
+      - assume-role-production:
+          context: api-assume-role-production-context
+          requires: [deploy-staging, terraform-init-and-apply-to-staging]
+          filters:
+            branches:
+              only: [master]
+      - preview-production-terraform:
+          requires: [assume-role-production]
+          filters:
+            branches:
+              only: [master]
       - permit-deploy-production:
           type: approval
           requires: [deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - terraform-init-and-apply-to-production:
+          requires: [permit-deploy-production]
           filters:
             branches:
               only: [master]
