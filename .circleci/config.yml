@@ -1,17 +1,16 @@
 version: 2.1
 
 orbs:
-  sonarcloud: sonarsource/sonarcloud@2.0.0  
+  sonarcloud: sonarsource/sonarcloud@2.0.0
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
-  aws-cli: circleci/aws-cli@5.1.1  
 
 executors:
   node-executor:
     docker:
       - image: cimg/node:20.20-browsers
-  docker-python:
+  node-aws-executor:
     docker:
-      - image: cimg/python:3.11      
+      - image: cimg/aws:2024.03
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -51,6 +50,14 @@ commands:
             REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
             EOF
       - run:
+          name: Authenticate FontAwesome
+          command: |
+            echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
+            echo "//npm.fontawesome.com/:_authToken=${FONTAWESOME_TOKEN}" >> .npmrc
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
           name: Build
           command: CI=false yarn build
           environment:
@@ -70,8 +77,7 @@ commands:
           name: Upload plugin zip to S3
           command: |
             aws s3 cp fss-directory.zip \
-              s3://fss-wp-plugins-<<parameters.environment>>/fss-directory.zip \
-              --acl private
+              s3://fss-wordpress-plugin-<<parameters.environment>>/fss-directory.zip
 
   preview-terraform:
     description: "Previews terraform configuration changes"
@@ -156,7 +162,7 @@ jobs:
       - *attach_workspace
       - run:
           name: Check for outdated dependencies
-          command: yarn outdated || true          
+          command: yarn outdated || true
 
   sonar-scan:
     docker:
@@ -184,21 +190,21 @@ jobs:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: docker-python
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: docker-python
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: docker-python
+    executor: node-aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
@@ -248,7 +254,7 @@ workflows:
       - security-audit:
           requires: [install-dependencies]
       - dependency-check:
-          requires: [install-dependencies]          
+          requires: [install-dependencies]
 
       # Feature branch terraform preview
       - assume-role-development:
