@@ -172,19 +172,19 @@ jobs:
       - sonarcloud/scan
 
   assume-role-development:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DEVELOPMENT
 
   assume-role-staging:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_STAGING
 
   assume-role-production:
-    executor: node-executor
+    executor: node-aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
