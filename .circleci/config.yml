@@ -3,14 +3,15 @@ version: 2.1
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0  
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+  aws-cli: circleci/aws-cli@5.1.1  
 
 executors:
   node-executor:
     docker:
       - image: cimg/node:20.20-browsers
-  node-aws-executor:
+  docker-python:
     docker:
-      - image: cimg/aws:2024.03      
+      - image: cimg/python:3.11      
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -183,21 +184,21 @@ jobs:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: node-aws-executor
+    executor: docker-python
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: node-aws-executor
+    executor: docker-python
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: node-aws-executor
+    executor: docker-python
     steps:
       - *attach_workspace
       - build-and-package:
