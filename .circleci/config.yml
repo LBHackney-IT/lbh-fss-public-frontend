@@ -92,7 +92,7 @@ commands:
           command: |
             terraform init \
               -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
-              -backend-config="key=services/fss-portal-frontend/terraform.tfstate"
+              -backend-config="key=services/fss-public-frontend/terraform.tfstate"
             terraform validate
             terraform plan -var="environment=<<parameters.environment>>"
 
@@ -109,7 +109,7 @@ commands:
           command: |
             terraform init \
               -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
-              -backend-config="key=services/fss-portal-frontend/terraform.tfstate"
+              -backend-config="key=services/fss-public-frontend/terraform.tfstate"
             terraform validate
             terraform apply -auto-approve -var="environment=<<parameters.environment>>"
 
