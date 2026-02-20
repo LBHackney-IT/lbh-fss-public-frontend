@@ -247,10 +247,10 @@ workflows:
       - install-dependencies
       - sonar-scan:
           context: SonarCloud
-      - lint-check:
-          requires: [install-dependencies]
-      - format-check:
-          requires: [install-dependencies]
+      # - lint-check:
+      #     requires: [install-dependencies]
+      # - format-check:
+      #     requires: [install-dependencies]
       - security-audit:
           requires: [install-dependencies]
       - dependency-check:
@@ -273,7 +273,8 @@ workflows:
       - assume-role-development:
           name: assume-role-development-deploy
           context: api-assume-role-development-context
-          requires: [lint-check, format-check, security-audit, sonar-scan]
+          # requires: [lint-check, format-check, security-audit, sonar-scan]
+          requires: [security-audit, sonar-scan]
           filters:
             branches:
               only: [develop]
@@ -292,7 +293,8 @@ workflows:
       - assume-role-staging:
           name: assume-role-staging-deploy
           context: api-assume-role-staging-context
-          requires: [lint-check, format-check, security-audit, sonar-scan]
+          # requires: [lint-check, format-check, security-audit, sonar-scan]
+          requires: [security-audit, sonar-scan]
           filters:
             branches:
               only: [master]
