@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import AppLoading from "../../AppLoading";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import Header from "../Header/Header";
@@ -6,14 +6,11 @@ import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import FormInput from "../FormInput/FormInput";
-import FormError from "../FormError/FormError";
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
-import { dark, red, light } from "../../settings";
+import { useNavigate } from "react-router-dom";
+import { dark } from "../../settings";
 import {FilterContainer} from "../../util/styled-components/FilterContainer";
 import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
@@ -29,14 +26,16 @@ const StyledButton = styled(Button)`
 `;
 
 const SelectCategories = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
-    const {url, setUrl} = useContext(UrlContext);
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const [isLoading, setIsLoading] = useState(true);
-    const storedPostcode = localStorage.getItem("postcode");
-    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    // const storedPostcode = localStorage.getItem("postcode");
+    // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
     let defaultValues = {
@@ -52,8 +51,8 @@ const SelectCategories = () => {
                 }
                 // used if coming from url with categories set
                 if (typeof value === 'string' && value.indexOf("+") > -1) {
-                    value = value.split("+");
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
+                    const valueArray = value.split("+");
+                    selectedObj = valueArray.reduce((a,b)=> (a[b]=true,a),{});
                 }
                 if (typeof value === 'string' && value.indexOf("+") === -1) {
                     selectedObj[value] = true;
@@ -85,7 +84,7 @@ const SelectCategories = () => {
         // redirect user back to home
         if (prevUrl.length === 0 && prevUrlParams.length === 0) {
             if (!(listServicesSearchObj || listServicesPostcodeObj)) {
-                history.push("?");
+                navigate("?");
                 setUrl("");
                 setUrlParams({});
             }
@@ -116,14 +115,14 @@ const SelectCategories = () => {
             delete prevUrlParamsArrayLast["categories"];
             let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
             push = push.replaceAll("=undefined", "");
-            history.push(push);
+            navigate(push);
             setUrl(push);
             setUrlParams(prevUrlParamsArrayLast);
         } else {
             prevUrlParamsArrayLast["categories"] = categoriesArray;
             let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
             push = push.replaceAll("=undefined", "");
-            history.push(push);
+            navigate(push);
             setUrl(push);
             setUrlParams(prevUrlParamsArrayLast);
         }

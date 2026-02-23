@@ -1,13 +1,13 @@
-import React, {useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { applyStyleModifiers } from 'styled-components-modifiers';
 import Button from "../Button/Button";
 import { darken } from "polished";
 import { green, light } from "../../settings";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
-import history from '../../history';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ToggleViewContainer = styled.div`
     display: flex;
@@ -18,7 +18,6 @@ const ToggleViewContainer = styled.div`
     aside {
         font-size: 14px;
     }
-    
     div {
         display: flex;
     }
@@ -35,7 +34,6 @@ const ToggleViewContainer = styled.div`
                     color: ${light["white"]};
                 }
             }
-            
             svg {
                 color: ${green["main"]};
             }
@@ -68,14 +66,6 @@ const ToggleViewContainer = styled.div`
     }
 `;
 
-export const BUTTON_MODIFIERS = {
-    mapButton: () => `
-        &::before {
-            content: "\f3c5";
-        }
-    `
-}
-
 const StyledButton = styled(Button)`
     background: ${green["main"]};
     border: 1px solid ${green["ghost"]};
@@ -86,35 +76,27 @@ const StyledButton = styled(Button)`
     margin-bottom: 0;
     padding: 10px 5px;
     color: ${light["white"]};
-    cursor: pointer;
     &:hover {
         background-color: ${darken(0.1, green["bright"])};
         color: ${light["white"]};
-    }
-    &::before {
-        display: none;
-        font-family: "Font Awesome 5 Pro";
-        font-weight: 900;
-        content: "\f0c9";
-    }
+    }    
     svg {
         margin-right: 5px;
     }
-
-    ${applyStyleModifiers(BUTTON_MODIFIERS)};
 `;
 
 const ToggleView = () => {
-    const {url, setUrl} = useContext(UrlContext);
-    const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-    const {mapToggle, setMapToggle} = useContext(MapToggleContext);
+    const { url, setUrl } = useContext(UrlContext);
+    const { urlParams, setUrlParams } = useContext(UrlParamsContext);
+    const { mapToggle, setMapToggle } = useContext(MapToggleContext);
     const [style, setStyle] = useState("list-enabled");
-    
+    const navigate = useNavigate();
+
     let push = url;
     let params = urlParams;
 
     for (const [key, value] of Object.entries(urlParams)) {
-        if (key == "map_toggle" && value === "true") {
+        if (key === "map_toggle" && value === "true") {
             params["map_toggle"] = "true";
             setUrlParams(params);
             setMapToggle("true");
@@ -125,7 +107,7 @@ const ToggleView = () => {
         params["map_toggle"] = v;
         push = "?" + new URLSearchParams(params).toString();
         push = push.replaceAll("=undefined", "");
-        history.push(push);
+        navigate(push);
         setUrl(push);
         setUrlParams(params);
     }
@@ -138,11 +120,11 @@ const ToggleView = () => {
         }
     }, [mapToggle]);
 
-    const listEvent = e => {
+    const listEvent = () => {
         toggleView("false");
         setMapToggle("false");
     };
-    const mapEvent = e => {
+    const mapEvent = () => {
         toggleView("true");
         setMapToggle("true");
     };
@@ -151,8 +133,14 @@ const ToggleView = () => {
         <ToggleViewContainer className={style}>
             <aside>View as:</aside>
             <div>
-                <StyledButton className="list-services-button" type="button" label="List" onClick={listEvent} />
-                <StyledButton modifiers="mapButton" className="map-services-button" type="button" label="Map" onClick={mapEvent} />
+                <StyledButton className="list-services-button" type="button" onClick={listEvent}>
+                    <FontAwesomeIcon icon={["fas", "bars"]} /> 
+                    List
+                </StyledButton>
+                <StyledButton className="map-services-button" type="button" onClick={mapEvent}>
+                    <FontAwesomeIcon icon={["fas", "map-marker-alt"]} />
+                    Map
+                </StyledButton>
             </div>
         </ToggleViewContainer>
     );

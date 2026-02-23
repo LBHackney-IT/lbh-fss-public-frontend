@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import breakpoint from 'styled-components-breakpoint';
 
 export const StyledLabel = styled.label`
     border: 0;

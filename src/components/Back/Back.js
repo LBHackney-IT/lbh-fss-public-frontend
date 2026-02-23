@@ -1,11 +1,13 @@
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import styled from "styled-components";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import history from '../../history';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { light } from "../../settings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 const BackButton = styled.button`
     border: 0;
@@ -16,12 +18,6 @@ const BackButton = styled.button`
     cursor: pointer;
     display: flex;
     align-items: center;
-    &::before {
-        display: none;
-        font-family: "Font Awesome 5 Pro";
-        font-weight: 900;
-        content: "\f060";
-    }
     svg {
         margin-right: 10px;
         font-size: 16px;
@@ -29,16 +25,27 @@ const BackButton = styled.button`
 `;
 
 const Back = () => {
-    const {url, setUrl} = useContext(UrlContext);
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
     const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
     const storedPostcode = localStorage.getItem("postcode");
-    
-    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    const navigate = useNavigate();
+    const location = useLocation();
+    // const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
-    const select = e => {
+
+// handle browser back button. 
+    useEffect(() => {
+        const params = Object.fromEntries(new URLSearchParams(location.search));
+        setUrl(location.search || "/");
+        setUrlParams(params);
+    }, [location]);
+
+
+    const select = () => {
         let push = "/?";
         let params = {};
 
@@ -165,14 +172,17 @@ const Back = () => {
             push = push.replaceAll("=undefined", "");
         }
         
-        history.push(push);
+        navigate(push);
         setUrl(push);
         setUrlParams(params);
 
     }
 
     return (
-        <BackButton onClick={select}>Back</BackButton>
+        <BackButton onClick={select}>
+            <FontAwesomeIcon icon={["fas", "arrow-left"]} />
+            Back
+        </BackButton>
     );
 }
 

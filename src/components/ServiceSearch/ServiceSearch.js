@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import UrlContext from "../../context/UrlContext/UrlContext";
-import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import { useForm } from "react-hook-form";
 import FormInputSubmit from "../FormInputSubmit/FormInputSubmit";
-import { green, yellow, light, dark } from "../../settings";
+import { green, dark } from "../../settings";
 
 export const ServiceSearchContainer = styled.div`
     background: ${green["main"]};
@@ -47,15 +45,12 @@ export const ServiceSearchContainer = styled.div`
     }
 `;
 
-const ServiceSearch = ({onClick}) => {
-    const {url, setUrl} = useContext(UrlContext);
-    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+const ServiceSearch = () => {        
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
     const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const { register, handleSubmit, errors, reset } = useForm();
+    const { register, handleSubmit } = useForm();
     const [isLoading, setIsLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
+    const [searchTerm, setSearchTerm] = useState("");    
     const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
     const [hasSearch, setHasSearch] = useState("");
 

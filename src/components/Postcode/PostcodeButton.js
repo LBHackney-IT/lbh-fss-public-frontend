@@ -1,12 +1,13 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import UrlContext from "../../context/UrlContext/UrlContext";
-import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
+// import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
-import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
+// import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
+import { postcodeValidator } from 'postcode-validator';
+import { useNavigate } from 'react-router-dom';
 import { green, light } from "../../settings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PostcodeButtonContainer = styled.button`
     display: flex;
@@ -25,38 +26,28 @@ const PostcodeButtonContainer = styled.button`
         padding: 20px 15px;
         text-transform: uppercase;
     }
-    &::before {
-        display: none;
-        font-family: "Font Awesome 5 Duotone";
-        font-weight: 900;
-        content: "\f3c5";
-        margin-right: 5px;
-    }
     svg {
         margin-right: 10px;
         font-size: 24px;
-        path.fa-secondary {
-            color: #A4D65E;
-            opacity: 1;
-        }
-        path.fa-primary {
-            color: #fff;
-        }
+        --fa-primary-color: #fff;
+        --fa-secondary-color: #A4D65E;
+        --fa-secondary-opacity: 1;
     }
-
 `;
 
 const PostcodeButton = () => {
-    const {url, setUrl} = useContext(UrlContext);
-    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
+    const {setUrl} = useContext(UrlContext);
+    // const {url, setUrl} = useContext(UrlContext);
+    // const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
     const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
+    // const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);    
+    const navigate = useNavigate();    
     let postcode = "Set your postcode";
     const path = "?set_postcode=true";
     let buttonModifier = "";
 
-    const handleEvent = e => {
-        history.push(path);
+    const handleEvent = () => {
+        navigate(path);
         setUrl(path);
         setUrlParams({"set_postcode": "true"});
     };
@@ -80,6 +71,7 @@ const PostcodeButton = () => {
 
     return (
         <PostcodeButtonContainer className={buttonModifier} onClick={handleEvent}>
+            <FontAwesomeIcon icon={["fad", "map-marker-alt"]} />
             {postcode}
         </PostcodeButtonContainer>
     );

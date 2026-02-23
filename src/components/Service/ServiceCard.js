@@ -10,9 +10,10 @@ const ServiceCard = ({ service, onClick }) => {
         hero = service.images.medium;
     }
 
-    const select = e => {
+    const select = () => {
         onClick(service.id);
     }
+
 
     return (
         <Card modifiers="serviceCard" id={service.id} className="fss--card">
@@ -34,7 +35,7 @@ const ServiceCard = ({ service, onClick }) => {
                     });
 
                     return (
-                        (locationSorted[0].distance) !== null ? <p key={index} className="service--distance">Distance: <a className="service--distance--link" href={`https://www.google.com/maps/dir/${storedPostcode}/${locationSorted[0].address1}%20${locationSorted[0].address2}%20${locationSorted[0].city}%20${locationSorted[0].stateProvince}%20${locationSorted[0].postalCode}`} target="_blank">{locationSorted[0].distance}</a></p> : ""
+                        (locationSorted[0].distance) !== null ? <p key={index} className="service--distance">Distance: <a className="service--distance--link" href={`https://www.google.com/maps/dir/${storedPostcode}/${locationSorted[0].address1}%20${locationSorted[0].address2}%20${locationSorted[0].city}%20${locationSorted[0].stateProvince}%20${locationSorted[0].postalCode}`} target="_blank" rel="noreferrer">{locationSorted[0].distance}</a></p> : ""
                     )
                 })
             }

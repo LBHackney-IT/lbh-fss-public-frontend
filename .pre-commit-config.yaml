@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/GitGuardian/ggshield
+    rev: v1.47.0
+    hooks:
+      - id: ggshield
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.105.0
+    hooks:
+      - id: terraform_fmt
+        args: [--args=-check]      
+
+  # - repo: https://github.com/pre-commit/pre-commit-hooks
+  #   rev: v4.5.0
+  #   hooks:
+  #     - id: trailing-whitespace
+  #     - id: end-of-file-fixer
+  #     - id: check-yaml
+  #     - id: check-json
+  #     - id: check-merge-conflict
+
+  # - repo: local
+  #   hooks:
+  #     - id: prettier
+  #       name: prettier
+  #       entry: npx prettier --check --ignore-path .prettierignore
+  #       language: system
+
+  #     - id: eslint
+  #       name: eslint
+  #       entry: npx eslint
+  #       language: system
+  #       files: \.(js|jsx)$

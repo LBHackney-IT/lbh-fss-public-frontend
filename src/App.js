@@ -10,9 +10,9 @@ import MapToggleContext from "./context/MapToggleContext/MapToggleContext";
 import AppLoading from './AppLoading';
 import CookieBannerDisplay from "./components/CookieBanner/CookieBanner";
 import { SidebarContainer } from "./util/styled-components/SidebarContainer";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
+import { postcodeValidator } from 'postcode-validator';
 import {ThemeProvider} from 'styled-components';
-import "react-leaflet-markercluster/dist/styles.min.css";
+import "@changey/react-leaflet-markercluster/dist/styles.min.css";
 import "./App.scss";
 
 function App() {
@@ -79,13 +79,10 @@ function App() {
 
   }, [setUrl, setPrevUrl, setUrlParams, setIsLoading]);
 
-  // rewrite postcode param if changed from url
-  if (Object.keys(urlParams).length !== 0) {
-    let postcode = [urlParams].find(postcode => postcode);
-    postcode = postcode.postcode;
-    const validPostcode = postcodeValidator(postcode, 'UK');
+    if (Object.keys(urlParams).length !== 0 && urlParams.postcode) {
+    const validPostcode = postcodeValidator(urlParams.postcode, 'UK');
     if (validPostcode) {
-      localStorage.setItem("postcode", postcode);
+      localStorage.setItem("postcode", urlParams.postcode);
     }
   }
 

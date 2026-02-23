@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useRef, Fragment } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
-import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
+// import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import styled from "styled-components";
 import { darken } from "polished";
 import { green, blue, light, dark } from "../../settings";
@@ -20,13 +20,13 @@ import {
 import Address from "../Address/Address";
 import Header from "../Header/Header";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ActionSheet from 'actionsheet-react';
 import Share from "../Share/Share";
 import { MapContainer } from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import { useMediaQuery } from 'react-responsive';
 import ReactToPrint from 'react-to-print';
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
+import { categoryIconMap } from "../../helpers/FontAwesome/fontawesome";
 
 export const DetailContainer = styled.div`
     .service-info {
@@ -118,11 +118,6 @@ export const DetailContainer = styled.div`
         .fa-map-marker-alt {
             margin-top: -10px !important;
         }
-        .accordion__button {
-            .fa-plus, .fa-minus {
-                display: none;
-            }
-        }
         .accordion__panel {
             display: block;
         }
@@ -189,28 +184,33 @@ export const AccordionContainer = styled.div`
         cursor: pointer;
         font-size: 19px;
         font-weight: bold;
-        &::after {
-            display: none;
-            font-family: "Font Awesome 5 Pro";
-            font-weight: 900;
-            content: '\f067';
-        }
-        svg {
+        .accordion-chevron {
             margin-left: auto;
             color: #525A5B;
             font-size: 17px;
         }
+        .accordion-chevron--open {
+            display: none;
+        }
+        .accordion-chevron--closed {
+            display: block;
+        }
         &[aria-expanded="true"] {
-            &::after {
-                content: '\f068';
+            .accordion-chevron--open {
+                display: block;
+            }
+            .accordion-chevron--closed {
+                display: none;
             }
         }
         i {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 30px;
             height: 30px;
             margin-right: 5px;
             svg {
-                margin-right: auto;
                 font-size: 16px;
                 color: #fff;
             }
@@ -234,51 +234,68 @@ export const AccordionContainer = styled.div`
     }
 `;
 
-export const ActionSheetContainer = styled.div`
-    height: auto;
+export const ShareOverlay = styled.div`
+    display: ${({ isOpen }) => isOpen ? 'flex' : 'none'};
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.5);
+    align-items: flex-end;
+    justify-content: center;
+    @media print {
+        display: none !important;
+    }
+`;
+
+export const ShareSheet = styled.div`
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px 12px 0 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    @media print {
-        display: none !important;
-        visibility: hidden !important;
-    }
 `;
 
 const ServiceDetail = () => {
     const [ data, setData ] = useState( [] );
-    const [ demographicData, setDemographicData ] = useState( [] );
+    // const [ setDemographicData ] = useState( [] );
+    // const [ demographicData, setDemographicData ] = useState( [] );
     const [ isLoading, setIsLoading ] = useState( true );
+    const [ shareOpen, setShareOpen ] = useState( false );
     const { urlParams } = useContext( UrlParamsContext );
     const { prevUrl, setPrevUrl } = useContext( PrevUrlContext );
     const { prevUrlParams, setPrevUrlParams } = useContext( PrevUrlParamsContext );
     const storedPostcode = localStorage.getItem( "postcode" );
+    const componentRef = useRef();
+
+    const handleOpen = () => setShareOpen( true );
+    const handleClose = () => setShareOpen( false );
 
     useEffect( () => {
+    
         async function fetchData() {
             let serviceId = "";
             if ( Object.entries( urlParams )[ 0 ] && Object.entries( urlParams )[ 0 ][ 0 ] == "support_service" && Object.entries( urlParams )[ 0 ][ 1 ] !== "" ) {
                 serviceId = parseInt( Object.entries( urlParams )[ 0 ][ 1 ] );
             }
             const getService = await GetServices.getService( { id: serviceId, postcode: storedPostcode } );
-
             setData( getService || [] );
-            const getDemographics = await GetTaxonomies.retrieveTaxonomies( { vocabulary: "demographic" } );
-            setDemographicData( getDemographics || [] );
+            // const getDemographics = await GetTaxonomies.retrieveTaxonomies( { vocabulary: "demographic" } );
+            // setDemographicData( getDemographics || [] );
             setIsLoading( false );
         }
         fetchData();
 
-        const setPrevUrlVals = handleSetPrevUrl( {
-            prevUrl, prevUrlParams
-        } );
+        const setPrevUrlVals = handleSetPrevUrl( { prevUrl, prevUrlParams } );
         if ( setPrevUrlVals ) {
             setPrevUrl( setPrevUrlVals.prevUrlArray );
             setPrevUrlParams( setPrevUrlVals.prevUrlParamsArray );
         }
-
     }, [ setData, setIsLoading ] );
 
     const Desktop = ( { children } ) => {
@@ -296,19 +313,6 @@ const ServiceDetail = () => {
         hero = data.service.images.medium;
     }
 
-    const ref = useRef();
-    const componentRef = useRef();
-
-    const handleOpen = () => {
-        ref.current.open();
-        document.getElementById( "fss--social-share-overlay" ).childNodes[ 0 ].style.display = "block";
-    };
-
-    const handleClose = () => {
-        ref.current.close();
-        document.getElementById( "fss--social-share-overlay" ).childNodes[ 0 ].style.display = "none";
-    };
-
     const serviceArray = [ data.service ];
 
     let hasContact = false;
@@ -319,11 +323,9 @@ const ServiceDetail = () => {
         Object.keys( data.service.contact ).forEach( key => {
             if ( data.service.contact[ key ] ) hasContact = true;
         } );
-
         Object.keys( data.service.referral ).forEach( key => {
             if ( data.service.referral[ key ] ) hasReferral = true;
         } );
-
         Object.keys( data.service.social ).forEach( key => {
             if ( data.service.social[ key ] ) hasSocial = true;
         } );
@@ -372,12 +374,18 @@ const ServiceDetail = () => {
                                 <Accordion allowMultipleExpanded preExpanded={ [ 'hidden' ] }>
                                     { data.service.categories.map( ( category ) => {
                                         const categoryIconName = category.name.replaceAll( " ", "-" ).toLowerCase();
+                                        const categoryIcon = categoryIconMap[categoryIconName] || ["fas", "circle"];
                                         return (
                                             <AccordionItem key={ category.id }>
                                                 <AccordionItemHeading className="category-icons" data-category-icon={ categoryIconName }>
                                                     <AccordionItemButton>
-                                                        <i><span className="hideVisually">{ `Icon for ${category.name} ` }</span></i>
+                                                        <i>
+                                                            <FontAwesomeIcon icon={ categoryIcon } />
+                                                            <span className="hideVisually">{ `Icon for ${category.name} ` }</span>
+                                                        </i>
                                                         { category.name }
+                                                        <FontAwesomeIcon icon={["fas", "plus"]} className="accordion-chevron accordion-chevron--closed" />
+                                                        <FontAwesomeIcon icon={["fas", "minus"]} className="accordion-chevron accordion-chevron--open" />
                                                     </AccordionItemButton>
                                                 </AccordionItemHeading>
                                                 <AccordionItemPanel>
@@ -422,7 +430,7 @@ const ServiceDetail = () => {
                         <h3>Address</h3>
                         <ul className="ul-no-style">
                             {
-                                serviceArray.map( ( service, index ) => {
+                                serviceArray.map( ( service ) => {
                                     const locationSorted = service.locations.sort( function ( a, b ) {
                                         return parseFloat( a.distance ) - parseFloat( b.distance );
                                     } );
@@ -442,15 +450,14 @@ const ServiceDetail = () => {
                         <button onClick={ handleOpen } className="fss--social-share">
                             <FontAwesomeIcon icon={ [ "fas", "share-square" ] } />
                             Share
-                </button>
-                        <div id="fss--social-share-overlay" onClick={ handleClose }>
-                            <ActionSheet ref={ ref }>
-                                <ActionSheetContainer>
-                                    <h3>Share</h3>
-                                    <Share service={ data } />
-                                </ActionSheetContainer>
-                            </ActionSheet>
-                        </div>
+                        </button>
+                        <ShareOverlay isOpen={ shareOpen } onClick={ handleClose }>
+                            <ShareSheet onClick={ e => e.stopPropagation() }>
+                                <h3>Share</h3>
+                                <Share service={ data } />
+                                <button onClick={ handleClose }>Close</button>
+                            </ShareSheet>
+                        </ShareOverlay>
                         <ReactToPrint
                             trigger={ () => <button className="print-button"><FontAwesomeIcon icon={ [ "fas", "print" ] } />Print</button> }
                             content={ () => componentRef.current }

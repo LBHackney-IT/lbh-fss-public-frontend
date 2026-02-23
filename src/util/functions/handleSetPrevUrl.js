@@ -1,4 +1,4 @@
-function handleSetPrevUrl({prevUrl, prevUrlParams}){
+function handleSetPrevUrl({prevUrl}){
     const paramsArray = ["category_explorer", "postcode", "service_search", "support_service", "categories", "demographic"];
     const currentSearch = window.location.search;
     let paramObj = {};

@@ -9,7 +9,6 @@ import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
 import ToggleView from "../ToggleView/ToggleView";
 import Header from "../Header/Header";
 import ServiceFilter from '../ServiceFilter/ServiceFilter';
-import styled from "styled-components";
 import {MapContainer} from "../../util/styled-components/MapContainer";
 import { useMediaQuery } from 'react-responsive';
 import HackneyMap from "../HackneyMap/HackneyMap";
@@ -20,10 +19,12 @@ import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {urlParams, setUrlParams} = useContext(UrlParamsContext);
+  const {urlParams} = useContext(UrlParamsContext);
+  // const {urlParams, setUrlParams} = useContext(UrlParamsContext);
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-  const {mapToggle, setMapToggle} = useContext(MapToggleContext);
+  const {mapToggle} = useContext(MapToggleContext);
+  // const {mapToggle, setMapToggle} = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
 
@@ -95,7 +96,7 @@ const ListServices = ({ onClick }) => {
           <Header />
           <div className="no-results">
             <h2>No results found</h2>
-            <p>Please use the 'Back' button above to go back and try a different search term.</p>
+            <p>Please use the &apos;Back&apos; button above to go back and try a different search term.</p>
           </div>
           <MapPlaceholder />
         </div>

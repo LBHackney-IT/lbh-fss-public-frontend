@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import { Card } from "../../util/styled-components/Card"
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { categoryIconMap } from '../../helpers/FontAwesome/fontawesome';
 
 const CategoryCard = ({ category, onClick }) => {
     const {urlParams} = useContext(UrlParamsContext);
@@ -15,12 +17,16 @@ const CategoryCard = ({ category, onClick }) => {
     }
 
     const categoryIconName = category.name.replaceAll(" ", "-").toLowerCase();
+    const categoryIcon = categoryIconMap[categoryIconName] || ["fas", "circle"];
 
     return (
         <Card modifiers="categoryCard" id={category.id} className="fss--card" onClick={select}>
             <div className="fss--card--container category-icons" data-category-icon={categoryIconName}>
                 <div className="fss--icon-container">
-                    <i><span className="hideVisually">{`Icon for ${category.name} `}</span></i>
+                    <i>
+                        <FontAwesomeIcon icon={categoryIcon} />
+                        <span className="hideVisually">{`Icon for ${category.name} `}</span>
+                    </i>
                 </div>
                 <div className="fss--card--content">
                     <h4>{category.name}</h4>

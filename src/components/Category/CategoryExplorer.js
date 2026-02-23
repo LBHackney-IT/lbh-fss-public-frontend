@@ -46,14 +46,16 @@ export const CategoryCardContainer = styled.div`
   }
 `;
 
-const CategoryExplorer = ({ category, onClick }) => {
+const CategoryExplorer = ({ onClick }) => {
+// const CategoryExplorer = ({ category, onClick }) => {
   const [data, setData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const {urlParams} = useContext(UrlParamsContext);
   const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-  const {mapToggle, setMapToggle} = useContext(MapToggleContext);
+  const {mapToggle} = useContext(MapToggleContext);
+  // const {mapToggle, setMapToggle} = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
   const storedPostcode = localStorage.getItem("postcode");
@@ -127,7 +129,7 @@ const CategoryExplorer = ({ category, onClick }) => {
           <Header />
           <div className="no-results">
             <h2>No results found</h2>
-            <p>Please use the 'Back' button above to go back and select a category.</p>
+            <p>Please use the &apos;Back&apos; button above to go back and select a category.</p>
           </div>
           <MapPlaceholder />
       </div>
