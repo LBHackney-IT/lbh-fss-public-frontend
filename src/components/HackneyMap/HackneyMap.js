@@ -70,7 +70,7 @@ const HackneyMap = (data) => {
         if (newServiceUrl !== "") newServiceUrl = "&" + newServiceUrl;
         const updatedUrl = "?support_service=" + e;
         const newServiceObj = { support_service: e.toString() };
-        navigate(updatedUrl);        
+        navigate(updatedUrl);  
 
         setUrl(updatedUrl);
         setPage("ServiceDetail");

@@ -1,20 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 
-export const categoryIconMap = {
-    "loneliness-or-isolation":  ["fas", "comments"],
-    "anxiety-or-mental-health": ["fas", "head-side-brain"],
-    "safe-and-healthy-body":    ["fas", "heartbeat"],
-    "exercise-and-wellbeing":   ["fas", "walking"],
-    "arts-and-creativity":      ["fas", "palette"],
-    "food-or-shopping":         ["fas", "apple-alt"],
-    "faith-led-activities":     ["fas", "hand-holding-heart"],
-    "money-advice":             ["fas", "pound-sign"],
-    "employment-advice":        ["fas", "suitcase"],
-    "housing-advice":           ["fas", "house"],
-    "immigration-advice":       ["fas", "info"],
-};
-
-
 import {
     faMapMarkerAlt,
     faMapMarker,
@@ -88,3 +73,17 @@ library.add(
     faLinkedin,
     faChevronDown,
 );
+
+export const categoryIconMap = {
+    "loneliness-or-isolation":  ["fas", "comments"],
+    "anxiety-or-mental-health": ["fas", "head-side-brain"],
+    "safe-and-healthy-body":    ["fas", "heartbeat"],
+    "exercise-and-wellbeing":   ["fas", "walking"],
+    "arts-and-creativity":      ["fas", "palette"],
+    "food-or-shopping":         ["fas", "apple-alt"],
+    "faith-led-activities":     ["fas", "hand-holding-heart"],
+    "money-advice":             ["fas", "pound-sign"],
+    "employment-advice":        ["fas", "suitcase"],
+    "housing-advice":           ["fas", "house"],
+    "immigration-advice":       ["fas", "info"],
+};

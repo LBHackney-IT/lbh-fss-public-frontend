@@ -278,4 +278,69 @@ hr {
     background-color: ${category["greenDark"]};
   }
 }
+
+/**
+ * Leaflet map styles
+ */
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+  .leaflet-div-icon {
+    background: transparent;
+    border: 0;
+  }
+  .hackney-map-marker, .hackney-map-home-marker  {
+    position: relative;
+    left: -10px;
+  }
+  .hackney-map-home-marker {
+    .map-marker--foreground {
+      font-size: 37px;
+      top: -1px;
+      left: 0;
+      color: ${red["error"]} !important;
+    }
+    svg.fa-home {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      z-index: -1;
+      color: ${light["white"]};
+      font-size: 18px;
+    }
+  }
+  svg.fa-map-marker {
+    position: absolute;
+    top: -3px;
+    left: -2px;
+    z-index: -1;
+    color: ${light["white"]};
+    font-size: 42px;
+  }
+}
+
+.leaflet-popup {
+  .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    border: 0;
+  }
+  .leaflet-popup-content {
+    ${breakpoint('md')`
+      background: transparent;
+      margin: 0 !important;
+      border: 0;
+    `};
+  }
+  .leaflet-popup-tip-container {
+    display: none;
+  }
+  .card {
+    margin-bottom: 0;
+    border: 0;
+  }
+}
+  
 `;

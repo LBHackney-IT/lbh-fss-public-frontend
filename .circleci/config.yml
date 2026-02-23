@@ -45,10 +45,7 @@ commands:
     steps:
       - run:
           name: Create .env file
-          command: |
-            cat \<<EOF > .env
-            REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
-            EOF
+          command: echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
       - run:
           name: Authenticate FontAwesome
           command: |

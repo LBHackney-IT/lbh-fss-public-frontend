@@ -393,7 +393,7 @@ const ServiceDetail = () => {
                                                 </AccordionItemPanel>
                                             </AccordionItem>
                                         );
-                                    } ) }                                    
+                                    } ) }
                                     <AccordionItem key="hidden" uuid="hidden" className="hidden-item" />
                                 </Accordion>
                             </AccordionContainer>
