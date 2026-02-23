@@ -8,7 +8,7 @@ import openSansV17LatinRegularTtf from "../../fonts/open-sans-v17-latin/open-san
 import openSansV17LatinRegularWoff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff";
 import openSansV17LatinRegularWoff2 from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff2";
 import { darken } from "polished";
-import breakpoint from 'styled-components-breakpoint';
+import breakpoint from "styled-components-breakpoint";
 
 export const GlobalStyle = createGlobalStyle`
 ${normalize()}
@@ -142,10 +142,10 @@ hr {
 
 .App {
   position: relative;
-  ${breakpoint('sm')`
+  ${breakpoint("sm")`
       
   `}
-  ${breakpoint('md')`
+  ${breakpoint("md")`
     
   `}
 }
@@ -328,7 +328,7 @@ hr {
     border: 0;
   }
   .leaflet-popup-content {
-    ${breakpoint('md')`
+    ${breakpoint("md")`
       background: transparent;
       margin: 0 !important;
       border: 0;

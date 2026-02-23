@@ -15,7 +15,6 @@ for (let i = 0; i < demographic.length; i++) {
   demographics.push(newDemographic);
 }
 
-
 const mockDemographicFile = "./mock-api/taxonomy/demographic/mockDemographic.json";
 
 fs.writeFileSync(mockDemographicFile, JSON.stringify(demographics, null, 2));
