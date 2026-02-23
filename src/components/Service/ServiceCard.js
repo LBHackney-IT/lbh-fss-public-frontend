@@ -14,16 +14,10 @@ const ServiceCard = ({ service, onClick }) => {
         onClick(service.id);
     }
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onClick(service.id);
-        }
-    }    
 
     return (
         <Card modifiers="serviceCard" id={service.id} className="fss--card">
-            <div onClick={select} onKeyDown={handleKeyDown} role="button" tabIndex={0}>
+            <div onClick={select}>
                 {hero.length ? (
                     <div className="image-container">
                         <img src={hero} alt={service.name} />
