@@ -244,10 +244,10 @@ workflows:
       - install-dependencies
       - sonar-scan:
           context: SonarCloud
-      # - lint-check:
-      #     requires: [install-dependencies]
-      # - format-check:
-      #     requires: [install-dependencies]
+      - lint-check:
+          requires: [install-dependencies]
+      - format-check:
+          requires: [install-dependencies]
       - security-audit:
           requires: [install-dependencies]
       - dependency-check:
