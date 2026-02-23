@@ -47,7 +47,7 @@ const PostcodeButton = () => {
     let buttonModifier = "";
 
     const handleEvent = () => {
-        navigate(path);        
+        navigate(path);
         setUrl(path);
         setUrlParams({"set_postcode": "true"});
     };

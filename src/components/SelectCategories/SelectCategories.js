@@ -83,7 +83,7 @@ const SelectCategories = () => {
         // without category_explorer / service_search / postcode passed
         // redirect user back to home
         if (prevUrl.length === 0 && prevUrlParams.length === 0) {
-            if (!(listServicesSearchObj || listServicesPostcodeObj)) {                
+            if (!(listServicesSearchObj || listServicesPostcodeObj)) {
                 navigate("?");
                 setUrl("");
                 setUrlParams({});

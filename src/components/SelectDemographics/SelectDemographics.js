@@ -99,7 +99,7 @@ const SelectDemographics = () => {
                     selectedObj[value] = true;
                 }
             }
-        }        
+        }
     }
     defaultValues = selectedObj;
 
