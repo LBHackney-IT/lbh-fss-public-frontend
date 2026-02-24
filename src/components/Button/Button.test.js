@@ -31,6 +31,9 @@ describe("Button", () => {
 
   it("applies type attribute", () => {
     render(<Button label="Submit" type="submit" />);
-    expect(screen.getByText("Submit").closest("button")).toHaveAttribute("type", "submit");
+    expect(screen.getByText("Submit").closest("button")).toHaveAttribute(
+      "type",
+      "submit",
+    );
   });
 });

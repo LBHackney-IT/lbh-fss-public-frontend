@@ -33,10 +33,17 @@ const renderWithContext = (contextOverrides = {}) => {
   const ctx = { ...defaultContext, ...contextOverrides };
   return render(
     <UrlContext.Provider value={{ url: ctx.url, setUrl: ctx.setUrl }}>
-      <PrevUrlContext.Provider value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}>
-        <UrlParamsContext.Provider value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}>
+      <PrevUrlContext.Provider
+        value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}
+      >
+        <UrlParamsContext.Provider
+          value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}
+        >
           <PrevUrlParamsContext.Provider
-            value={{ prevUrlParams: ctx.prevUrlParams, setPrevUrlParams: ctx.setPrevUrlParams }}
+            value={{
+              prevUrlParams: ctx.prevUrlParams,
+              setPrevUrlParams: ctx.setPrevUrlParams,
+            }}
           >
             <Back />
           </PrevUrlParamsContext.Provider>

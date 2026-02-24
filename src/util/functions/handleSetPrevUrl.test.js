@@ -32,10 +32,7 @@ describe("handleSetPrevUrl", () => {
     const result = handleSetPrevUrl({ prevUrl: [""] });
     expect(result).toEqual({
       prevUrlArray: ["", "?postcode=E81AA&category_explorer=1"],
-      prevUrlParamsArray: [
-        {},
-        { postcode: "E81AA", category_explorer: "1" },
-      ],
+      prevUrlParamsArray: [{}, { postcode: "E81AA", category_explorer: "1" }],
     });
   });
 

@@ -11,7 +11,11 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-const renderWithContext = (urlParams = {}, setUrl = jest.fn(), setUrlParams = jest.fn()) => {
+const renderWithContext = (
+  urlParams = {},
+  setUrl = jest.fn(),
+  setUrlParams = jest.fn(),
+) => {
   return render(
     <UrlContext.Provider value={{ setUrl }}>
       <UrlParamsContext.Provider value={{ urlParams, setUrlParams }}>
@@ -35,7 +39,11 @@ describe("ServiceFilter", () => {
   it("clicking Filters navigates with select_demographics=true and updates context", () => {
     const setUrl = jest.fn();
     const setUrlParams = jest.fn();
-    renderWithContext({ category_explorer: "1", postcode: "E81AA" }, setUrl, setUrlParams);
+    renderWithContext(
+      { category_explorer: "1", postcode: "E81AA" },
+      setUrl,
+      setUrlParams,
+    );
     fireEvent.click(screen.getByRole("button", { name: "Filters" }));
     expect(mockNavigate).toHaveBeenCalledWith(
       expect.stringContaining("select_demographics=true"),

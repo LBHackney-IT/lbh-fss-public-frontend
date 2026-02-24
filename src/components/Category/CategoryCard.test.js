@@ -37,7 +37,9 @@ describe("CategoryCard", () => {
 
   it("renders category name and description", () => {
     renderWithContext();
-    expect(screen.getByRole("heading", { name: "Loneliness or isolation" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Loneliness or isolation" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Support for feeling connected")).toBeInTheDocument();
   });
 
@@ -70,7 +72,9 @@ describe("CategoryCard", () => {
 
   it("sets data-category-icon from category name", () => {
     renderWithContext();
-    const container = document.querySelector('[data-category-icon="loneliness-or-isolation"]');
+    const container = document.querySelector(
+      '[data-category-icon="loneliness-or-isolation"]',
+    );
     expect(container).toBeInTheDocument();
   });
 });

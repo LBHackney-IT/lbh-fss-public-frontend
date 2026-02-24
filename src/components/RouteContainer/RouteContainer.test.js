@@ -13,7 +13,9 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock("../Category/CategoryExplorer", () => () => <div data-testid="category-explorer">CategoryExplorer</div>);
+jest.mock("../Category/CategoryExplorer", () => () => (
+  <div data-testid="category-explorer">CategoryExplorer</div>
+));
 jest.mock("../Service/ListServices", () => ({ onClick }) => (
   <div data-testid="list-services">
     ListServices
@@ -22,9 +24,15 @@ jest.mock("../Service/ListServices", () => ({ onClick }) => (
     </button>
   </div>
 ));
-jest.mock("../Service/ServiceDetail", () => () => <div data-testid="service-detail">ServiceDetail</div>);
-jest.mock("../Postcode/SetPostcode", () => () => <div data-testid="set-postcode">SetPostcode</div>);
-jest.mock("../SelectCategories/SelectCategories", () => () => <div data-testid="select-categories">SelectCategories</div>);
+jest.mock("../Service/ServiceDetail", () => () => (
+  <div data-testid="service-detail">ServiceDetail</div>
+));
+jest.mock("../Postcode/SetPostcode", () => () => (
+  <div data-testid="set-postcode">SetPostcode</div>
+));
+jest.mock("../SelectCategories/SelectCategories", () => () => (
+  <div data-testid="select-categories">SelectCategories</div>
+));
 jest.mock("../SelectDemographics/SelectDemographics", () => () => (
   <div data-testid="select-demographics">SelectDemographics</div>
 ));
@@ -48,10 +56,17 @@ const renderWithContext = (contextOverrides = {}) => {
   const ctx = { ...defaultContext, ...contextOverrides };
   return render(
     <UrlContext.Provider value={{ url: ctx.url, setUrl: ctx.setUrl }}>
-      <PrevUrlContext.Provider value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}>
-        <UrlParamsContext.Provider value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}>
+      <PrevUrlContext.Provider
+        value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}
+      >
+        <UrlParamsContext.Provider
+          value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}
+        >
           <PrevUrlParamsContext.Provider
-            value={{ prevUrlParams: ctx.prevUrlParams, setPrevUrlParams: ctx.setPrevUrlParams }}
+            value={{
+              prevUrlParams: ctx.prevUrlParams,
+              setPrevUrlParams: ctx.setPrevUrlParams,
+            }}
           >
             <RouteContainer />
           </PrevUrlParamsContext.Provider>

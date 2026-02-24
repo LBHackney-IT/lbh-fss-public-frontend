@@ -28,7 +28,9 @@ describe("ServiceSearch", () => {
   it("renders search form with label and submit", () => {
     renderWithContext();
     expect(screen.getByTestId("form")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Enter keyword or organisation")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Enter keyword or organisation"),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button")).toBeInTheDocument();
   });
 

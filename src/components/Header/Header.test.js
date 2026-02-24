@@ -4,7 +4,9 @@ import Header from "./Header";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 
 jest.mock("../Back/Back", () => () => <div data-testid="back">Back</div>);
-jest.mock("../Postcode/PostcodeButton", () => () => <button type="button">Change postcode</button>);
+jest.mock("../Postcode/PostcodeButton", () => () => (
+  <button type="button">Change postcode</button>
+));
 
 const renderWithContext = (urlParams = {}) => {
   return render(
@@ -17,7 +19,9 @@ const renderWithContext = (urlParams = {}) => {
 describe("Header", () => {
   it("shows Find support services heading when urlParams is empty (home)", () => {
     renderWithContext({});
-    expect(screen.getByRole("heading", { name: "Find support services" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Find support services" }),
+    ).toBeInTheDocument();
     expect(screen.queryByTestId("back")).not.toBeInTheDocument();
   });
 
@@ -30,6 +34,8 @@ describe("Header", () => {
   it("hides postcode button on set_postcode page", () => {
     renderWithContext({ set_postcode: "1" });
     expect(screen.getByTestId("back")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Change postcode" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Change postcode" }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -12,9 +12,7 @@ describe("FormCheckbox", () => {
   it("renders label and checkbox", () => {
     render(
       <TestWrapper>
-        {(register) => (
-          <FormCheckbox name="agree" label="I agree" register={register} />
-        )}
+        {(register) => <FormCheckbox name="agree" label="I agree" register={register} />}
       </TestWrapper>,
     );
     expect(screen.getByText("I agree")).toBeInTheDocument();

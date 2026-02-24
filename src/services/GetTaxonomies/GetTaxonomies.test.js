@@ -42,7 +42,10 @@ describe("GetTaxonomies", () => {
 
       const result = await GetTaxonomies.getTaxonomy("1");
 
-      expect(axios.get).toHaveBeenCalledWith("https://api.example.com/v1/taxonomies/1", {});
+      expect(axios.get).toHaveBeenCalledWith(
+        "https://api.example.com/v1/taxonomies/1",
+        {},
+      );
       expect(result).toEqual(mockTaxonomy);
     });
 

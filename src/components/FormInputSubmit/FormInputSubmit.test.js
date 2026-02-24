@@ -56,7 +56,13 @@ describe("FormInputSubmit", () => {
     render(
       <TestWrapper>
         {(register) => (
-          <FormInputSubmit name="q" label="Search" register={register} type="text" error={{ type: "maxLength" }} />
+          <FormInputSubmit
+            name="q"
+            label="Search"
+            register={register}
+            type="text"
+            error={{ type: "maxLength" }}
+          />
         )}
       </TestWrapper>,
     );
@@ -78,7 +84,9 @@ describe("FormInputSubmit", () => {
         )}
       </TestWrapper>,
     );
-    expect(screen.getByRole("alert")).toHaveTextContent("Search must be at least 3 characters.");
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Search must be at least 3 characters.",
+    );
   });
 
   it("shows custom error message when error.message is set", () => {

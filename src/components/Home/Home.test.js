@@ -24,7 +24,9 @@ jest.mock("../Category/ListCategories", () => ({ onClick }) => (
     </button>
   </div>
 ));
-jest.mock("../MapPlaceholder/MapPlaceholder", () => () => <div data-testid="map">Map</div>);
+jest.mock("../MapPlaceholder/MapPlaceholder", () => () => (
+  <div data-testid="map">Map</div>
+));
 
 const originalLocation = window.location;
 
@@ -41,7 +43,9 @@ const renderWithContext = (contextOverrides = {}) => {
     <UrlContext.Provider value={{ setUrl: ctx.setUrl }}>
       <PrevUrlContext.Provider value={{ setPrevUrl: ctx.setPrevUrl }}>
         <UrlParamsContext.Provider value={{ setUrlParams: ctx.setUrlParams }}>
-          <PrevUrlParamsContext.Provider value={{ setPrevUrlParams: ctx.setPrevUrlParams }}>
+          <PrevUrlParamsContext.Provider
+            value={{ setPrevUrlParams: ctx.setPrevUrlParams }}
+          >
             <Home />
           </PrevUrlParamsContext.Provider>
         </UrlParamsContext.Provider>

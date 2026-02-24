@@ -7,7 +7,9 @@ jest.mock("styled-components-breakpoint", () => () => () => "");
 describe("Footer", () => {
   it("renders digital support heading", () => {
     render(<Footer />);
-    expect(screen.getByRole("heading", { name: "Do you need digital support?" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Do you need digital support?" }),
+    ).toBeInTheDocument();
   });
 
   it("renders Digital skills page link", () => {
@@ -28,9 +30,17 @@ describe("Footer", () => {
 
   it("renders all footer links", () => {
     render(<Footer />);
-    expect(screen.getByRole("link", { name: "Register your service to be listed" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "See if you are eligible for a grant" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Support to improve your online presence" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Log In to your account" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Register your service to be listed" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "See if you are eligible for a grant" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Support to improve your online presence" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Log In to your account" }),
+    ).toBeInTheDocument();
   });
 });

@@ -2,12 +2,12 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import ListServices from "./ListServices";
 import GetServices from "../../services/GetServices/GetServices";
-
-jest.mock("styled-components-breakpoint", () => () => () => "");
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
+
+jest.mock("styled-components-breakpoint", () => () => () => "");
 
 jest.mock("../../services/GetServices/GetServices", () => ({
   retrieveServices: jest.fn(),
@@ -16,11 +16,19 @@ jest.mock("react-responsive", () => ({
   useMediaQuery: () => true,
 }));
 jest.mock("../Header/Header", () => () => <div data-testid="header">Header</div>);
-jest.mock("../ServiceFilter/ServiceFilter", () => () => <div data-testid="service-filter">Filter</div>);
+jest.mock("../ServiceFilter/ServiceFilter", () => () => (
+  <div data-testid="service-filter">Filter</div>
+));
 jest.mock("../ToggleView/ToggleView", () => () => null);
-jest.mock("../ServiceSearch/ServiceSearch", () => () => <div data-testid="service-search">Search</div>);
-jest.mock("../HackneyMap/HackneyMap", () => () => <div data-testid="hackney-map">Map</div>);
-jest.mock("../MapPlaceholder/MapPlaceholder", () => () => <div data-testid="map-placeholder">MapPlaceholder</div>);
+jest.mock("../ServiceSearch/ServiceSearch", () => () => (
+  <div data-testid="service-search">Search</div>
+));
+jest.mock("../HackneyMap/HackneyMap", () => () => (
+  <div data-testid="hackney-map">Map</div>
+));
+jest.mock("../MapPlaceholder/MapPlaceholder", () => () => (
+  <div data-testid="map-placeholder">MapPlaceholder</div>
+));
 jest.mock("../../util/functions/handleSetPrevUrl", () => ({
   handleSetPrevUrl: jest.fn(() => null),
 }));
@@ -46,9 +54,14 @@ const renderWithContext = (contextOverrides = {}) => {
   const ctx = { ...defaultContext, ...contextOverrides };
   return render(
     <UrlParamsContext.Provider value={{ urlParams: ctx.urlParams }}>
-      <PrevUrlContext.Provider value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}>
+      <PrevUrlContext.Provider
+        value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}
+      >
         <PrevUrlParamsContext.Provider
-          value={{ prevUrlParams: ctx.prevUrlParams, setPrevUrlParams: ctx.setPrevUrlParams }}
+          value={{
+            prevUrlParams: ctx.prevUrlParams,
+            setPrevUrlParams: ctx.setPrevUrlParams,
+          }}
         >
           <MapToggleContext.Provider value={{ mapToggle: ctx.mapToggle }}>
             <ListServices onClick={jest.fn()} />
@@ -106,7 +119,13 @@ describe("ListServices", () => {
   it("renders service cards when retrieveServices returns services", async () => {
     GetServices.retrieveServices.mockResolvedValue({
       services: [
-        { id: "1", name: "Service A", description: "Desc", images: null, locations: [{ distance: "1 mile" }] },
+        {
+          id: "1",
+          name: "Service A",
+          description: "Desc",
+          images: null,
+          locations: [{ distance: "1 mile" }],
+        },
       ],
     });
     renderWithContext({ urlParams: { service_search: "test" } });

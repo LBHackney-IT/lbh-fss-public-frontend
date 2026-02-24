@@ -11,7 +11,9 @@ jest.mock("postcode-validator", () => ({
 }));
 jest.mock("styled-components-breakpoint", () => () => () => "");
 jest.mock("../Header/Header", () => () => <div data-testid="header">Header</div>);
-jest.mock("../MapPlaceholder/MapPlaceholder", () => () => <div data-testid="map">Map</div>);
+jest.mock("../MapPlaceholder/MapPlaceholder", () => () => (
+  <div data-testid="map">Map</div>
+));
 
 const mockNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
@@ -36,10 +38,17 @@ const renderWithContext = (contextOverrides = {}) => {
   const ctx = { ...defaultContext, ...contextOverrides };
   return render(
     <UrlContext.Provider value={{ url: ctx.url, setUrl: ctx.setUrl }}>
-      <PrevUrlContext.Provider value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}>
-        <UrlParamsContext.Provider value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}>
+      <PrevUrlContext.Provider
+        value={{ prevUrl: ctx.prevUrl, setPrevUrl: ctx.setPrevUrl }}
+      >
+        <UrlParamsContext.Provider
+          value={{ urlParams: ctx.urlParams, setUrlParams: ctx.setUrlParams }}
+        >
           <PrevUrlParamsContext.Provider
-            value={{ prevUrlParams: ctx.prevUrlParams, setPrevUrlParams: ctx.setPrevUrlParams }}
+            value={{
+              prevUrlParams: ctx.prevUrlParams,
+              setPrevUrlParams: ctx.setPrevUrlParams,
+            }}
           >
             <SetPostcode />
           </PrevUrlParamsContext.Provider>
@@ -65,7 +74,9 @@ describe("SetPostcode", () => {
   it("renders heading and form", async () => {
     renderWithContext();
     await waitFor(() => {
-      expect(screen.getByRole("heading", { name: "Enter full postcode" })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Enter full postcode" }),
+      ).toBeInTheDocument();
     });
     expect(screen.getByTestId("form")).toBeInTheDocument();
     expect(screen.getByLabelText("postcode")).toBeInTheDocument();

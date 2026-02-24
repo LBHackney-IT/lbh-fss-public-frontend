@@ -14,7 +14,9 @@ jest.mock("react-leaflet", () => ({
 }));
 
 jest.mock("../../util/styled-components/MapContainer", () => ({
-  MapContainer: ({ children }) => <div data-testid="styled-map-container">{children}</div>,
+  MapContainer: ({ children }) => (
+    <div data-testid="styled-map-container">{children}</div>
+  ),
 }));
 
 jest.mock("../../helpers/GlobalVariables/GlobalVariables", () => ({
