@@ -33,3 +33,6 @@ src/services/ApiKey/ApiKey.js
 .env.*
 !.env.example
 !example.npmrc
+
+# Coverage and test results
+junit.xml
