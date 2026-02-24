@@ -114,7 +114,8 @@ jobs:
   install-dependencies:
     executor: node-executor
     steps:
-      - checkout
+      - checkout:
+          method: full
       - *attach_workspace
       - run:
           name: Authenticate FontAwesome
