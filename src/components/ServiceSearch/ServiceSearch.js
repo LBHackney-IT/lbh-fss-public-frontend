@@ -63,7 +63,8 @@ const ServiceSearch = () => {
     }
     setIsLoading(false);
 
-    let searchValue = document.forms["fss--find-service"]["service_search"].value;
+    const form = document.forms["fss--find-service"];
+    const searchValue = form?.["service_search"]?.value ?? "";
     if (searchValue) {
       setHasSearch("searched");
     }
@@ -71,7 +72,8 @@ const ServiceSearch = () => {
 
   async function submitForm() {
     if (isLoading) return;
-    let searchValue = document.forms["fss--find-service"]["service_search"].value;
+    const form = document.forms["fss--find-service"];
+    let searchValue = form?.["service_search"]?.value ?? "";
     let prevUrlParamsArray = prevUrlParams;
     prevUrlParamsArrayLast["service_search"] = searchValue;
     prevUrlParamsArray.push(prevUrlParamsArrayLast);
@@ -83,6 +85,7 @@ const ServiceSearch = () => {
     <ServiceSearchContainer>
       <form
         id="fss--find-service"
+        name="fss--find-service"
         onSubmit={handleSubmit(submitForm)}
         data-testid="form"
         className={hasSearch}
