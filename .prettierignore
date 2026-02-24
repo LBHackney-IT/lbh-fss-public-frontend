@@ -17,6 +17,7 @@ node_modules/
 
 # Testing
 coverage/
+junit.xml
 
 # Production
 build/
@@ -57,6 +58,7 @@ yarn.lock
 # wordpress
 wordpress/
 
+# Local environment files
 .npmrc
 .env
 .npmrc.*
