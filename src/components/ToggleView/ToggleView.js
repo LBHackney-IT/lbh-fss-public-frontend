@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "../Button/Button";
 import { darken } from "polished";
@@ -6,144 +6,146 @@ import { green, light } from "../../settings";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ToggleViewContainer = styled.div`
+  display: flex;
+  padding: 20px 15px 0;
+  align-items: center;
+  z-index: 3;
+  position: relative;
+  aside {
+    font-size: 14px;
+  }
+  div {
     display: flex;
-    padding: 20px 15px 0;
-    align-items: center;
-    z-index: 3;
-    position: relative;
+  }
+  &.list-enabled {
+    .map-services-button {
+      background: transparent;
+      border: 1px solid ${green["ghost"]};
+      border-radius: 5px;
+      color: ${green["main"]};
+      &:hover,
+      &:focus {
+        background-color: ${darken(0.1, green["bright"])};
+        color: ${light["white"]};
+        svg {
+          color: ${light["white"]};
+        }
+      }
+      svg {
+        color: ${green["main"]};
+      }
+    }
+  }
+  &.map-enabled {
     aside {
-        font-size: 14px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(3px);
+      padding: 3px 5px;
+      margin-left: -5px;
+      margin-right: -5px;
     }
-    div {
-        display: flex;
-    }
-    &.list-enabled {
-        .map-services-button {
-            background: transparent;
-            border: 1px solid ${green["ghost"]};
-            border-radius: 5px;
-            color: ${green["main"]};
-            &:hover, &:focus {
-                background-color: ${darken(0.1, green["bright"])};
-                color: ${light["white"]};
-                svg {
-                    color: ${light["white"]};
-                }
-            }
-            svg {
-                color: ${green["main"]};
-            }
+    .list-services-button {
+      background: ${light["white"]};
+      border: 1px solid ${green["ghost"]};
+      border-radius: 5px;
+      color: ${green["main"]};
+      &:hover,
+      &:focus {
+        background-color: ${darken(0.1, green["bright"])};
+        color: ${light["white"]};
+        svg {
+          color: ${light["white"]};
         }
+      }
+      svg {
+        color: ${green["main"]};
+      }
     }
-    &.map-enabled {
-        aside {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(3px);
-            padding: 3px 5px;
-            margin-left: -5px;
-            margin-right: -5px;
-        }
-        .list-services-button {
-            background: ${light["white"]};
-            border: 1px solid ${green["ghost"]};
-            border-radius: 5px;
-            color: ${green["main"]};
-            &:hover, &:focus {
-                background-color: ${darken(0.1, green["bright"])};
-                color: ${light["white"]};
-                svg {
-                    color: ${light["white"]};
-                }
-            }
-            svg {
-                color: ${green["main"]};
-            }
-        }
-    }
+  }
 `;
 
 const StyledButton = styled(Button)`
-    background: ${green["main"]};
-    border: 1px solid ${green["ghost"]};
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-bottom: 0;
-    padding: 10px 5px;
+  background: ${green["main"]};
+  border: 1px solid ${green["ghost"]};
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-bottom: 0;
+  padding: 10px 5px;
+  color: ${light["white"]};
+  &:hover {
+    background-color: ${darken(0.1, green["bright"])};
     color: ${light["white"]};
-    &:hover {
-        background-color: ${darken(0.1, green["bright"])};
-        color: ${light["white"]};
-    }    
-    svg {
-        margin-right: 5px;
-    }
+  }
+  svg {
+    margin-right: 5px;
+  }
 `;
 
 const ToggleView = () => {
-    const { url, setUrl } = useContext(UrlContext);
-    const { urlParams, setUrlParams } = useContext(UrlParamsContext);
-    const { mapToggle, setMapToggle } = useContext(MapToggleContext);
-    const [style, setStyle] = useState("list-enabled");
-    const navigate = useNavigate();
+  const { url, setUrl } = useContext(UrlContext);
+  const { urlParams, setUrlParams } = useContext(UrlParamsContext);
+  const { mapToggle, setMapToggle } = useContext(MapToggleContext);
+  const [style, setStyle] = useState("list-enabled");
+  const navigate = useNavigate();
 
-    let push = url;
-    let params = urlParams;
+  let push = url;
+  let params = urlParams;
 
-    for (const [key, value] of Object.entries(urlParams)) {
-        if (key === "map_toggle" && value === "true") {
-            params["map_toggle"] = "true";
-            setUrlParams(params);
-            setMapToggle("true");
-        }
+  for (const [key, value] of Object.entries(urlParams)) {
+    if (key === "map_toggle" && value === "true") {
+      params["map_toggle"] = "true";
+      setUrlParams(params);
+      setMapToggle("true");
     }
+  }
 
-    function toggleView(v) {
-        params["map_toggle"] = v;
-        push = "?" + new URLSearchParams(params).toString();
-        push = push.replaceAll("=undefined", "");
-        navigate(push);
-        setUrl(push);
-        setUrlParams(params);
+  function toggleView(v) {
+    params["map_toggle"] = v;
+    push = "?" + new URLSearchParams(params).toString();
+    push = push.replaceAll("=undefined", "");
+    navigate(push);
+    setUrl(push);
+    setUrlParams(params);
+  }
+
+  useEffect(() => {
+    if (mapToggle === "true") {
+      setStyle("map-enabled");
+    } else {
+      setStyle("list-enabled");
     }
+  }, [mapToggle]);
 
-    useEffect(() => {
-        if (mapToggle === "true") {
-            setStyle("map-enabled");
-        } else {
-            setStyle("list-enabled");
-        }
-    }, [mapToggle]);
+  const listEvent = () => {
+    toggleView("false");
+    setMapToggle("false");
+  };
+  const mapEvent = () => {
+    toggleView("true");
+    setMapToggle("true");
+  };
 
-    const listEvent = () => {
-        toggleView("false");
-        setMapToggle("false");
-    };
-    const mapEvent = () => {
-        toggleView("true");
-        setMapToggle("true");
-    };
-
-    return (
-        <ToggleViewContainer className={style}>
-            <aside>View as:</aside>
-            <div>
-                <StyledButton className="list-services-button" type="button" onClick={listEvent}>
-                    <FontAwesomeIcon icon={["fas", "bars"]} /> 
-                    List
-                </StyledButton>
-                <StyledButton className="map-services-button" type="button" onClick={mapEvent}>
-                    <FontAwesomeIcon icon={["fas", "map-marker-alt"]} />
-                    Map
-                </StyledButton>
-            </div>
-        </ToggleViewContainer>
-    );
-}
+  return (
+    <ToggleViewContainer className={style}>
+      <aside>View as:</aside>
+      <div>
+        <StyledButton className="list-services-button" type="button" onClick={listEvent}>
+          <FontAwesomeIcon icon={["fas", "bars"]} />
+          List
+        </StyledButton>
+        <StyledButton className="map-services-button" type="button" onClick={mapEvent}>
+          <FontAwesomeIcon icon={["fas", "map-marker-alt"]} />
+          Map
+        </StyledButton>
+      </div>
+    </ToggleViewContainer>
+  );
+};
 
 export default ToggleView;

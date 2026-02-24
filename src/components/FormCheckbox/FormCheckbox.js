@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FormError from "../FormError/FormError";
@@ -49,7 +48,7 @@ const FormCheckbox = ({
       <StyledDiv>
         <StyledCheckbox
           name={name}
-          type="checkbox"          
+          type="checkbox"
           aria-invalid={error ? "true" : "false"}
           value={value}
           onClick={onClick}
@@ -58,9 +57,7 @@ const FormCheckbox = ({
         />
         <StyledLabel htmlFor={name}>{label}</StyledLabel>
       </StyledDiv>
-      {error && error.type === "required" && (
-        <FormError error="This is required" />
-      )}
+      {error && error.type === "required" && <FormError error="This is required" />}
     </>
   );
 };

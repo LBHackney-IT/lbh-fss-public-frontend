@@ -1,11 +1,14 @@
-const getHomeLocation = data => {
-    if (data.data.metadata !== undefined) {
-        if (data.data.metadata.postCodeLatitude !== null && data.data.metadata.postCodeLongitude !== null) {
-            let homeLocation = [data.data.metadata];
-            return homeLocation;
-        }
+const getHomeLocation = (data) => {
+  if (data.data.metadata !== undefined) {
+    if (
+      data.data.metadata.postCodeLatitude !== null &&
+      data.data.metadata.postCodeLongitude !== null
+    ) {
+      let homeLocation = [data.data.metadata];
+      return homeLocation;
     }
-    return [];
-}
-  
+  }
+  return [];
+};
+
 export default getHomeLocation;

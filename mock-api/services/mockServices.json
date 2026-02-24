@@ -381,7 +381,7 @@
     "locations": [
       {
         "latitude": "51.540730",
-        "longitude": "-0.067119", 
+        "longitude": "-0.067119",
         "uprn": 96511,
         "address1": "6255A Kohler Courts",
         "address2": "30840 Waelchi Freeway",
@@ -392,7 +392,7 @@
       },
       {
         "latitude": "51.540730",
-        "longitude": "-0.069119", 
+        "longitude": "-0.069119",
         "uprn": 96511,
         "address1": "6255B Kohler Courts",
         "address2": "30840 Waelchi Freeway",
@@ -403,7 +403,7 @@
       },
       {
         "latitude": "51.560730",
-        "longitude": "-0.069119", 
+        "longitude": "-0.069119",
         "uprn": 96511,
         "address1": "6255C Kohler Courts",
         "address2": "30840 Waelchi Freeway",

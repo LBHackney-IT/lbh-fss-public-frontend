@@ -10,8 +10,27 @@ let oid = 10;
 
 let services = [];
 
-const statuses = ["awaiting review", "awaiting reverification", "draft", "published", "rejected"];
-const categories = ["Benefits advice", "Chat and check-in", "Debt advice", "Employment advice", "Exercise and brain", "Faith-led activities", "Families", "Feeling anxious", "Food and shopping", "Get active", "Housing advice", "Stay safe and healthy"];
+const statuses = [
+  "awaiting review",
+  "awaiting reverification",
+  "draft",
+  "published",
+  "rejected",
+];
+const categories = [
+  "Benefits advice",
+  "Chat and check-in",
+  "Debt advice",
+  "Employment advice",
+  "Exercise and brain",
+  "Faith-led activities",
+  "Families",
+  "Feeling anxious",
+  "Food and shopping",
+  "Get active",
+  "Housing advice",
+  "Stay safe and healthy",
+];
 const demographic = ["Men", "Women", "Children", "Young people", "Families"];
 const vocabularies = ["category", "demographic"];
 
@@ -33,7 +52,7 @@ for (let i = 0; i < count; i++) {
         weight: faker.random.number(),
       },
     ],
-    contact: {  
+    contact: {
       email: faker.internet.email(),
       telephone: faker.phone.phoneNumber(),
       website: faker.internet.url(),
@@ -47,7 +66,8 @@ for (let i = 0; i < count; i++) {
     ],
     description: faker.lorem.sentences(),
     images: {
-      medium: "https://i.picsum.photos/id/76/500/300.jpg?hmac=SG6vTqxIU2jIrg9ovA4f7vaY-iZ3H4V2x_6k7KoPrxk",
+      medium:
+        "https://i.picsum.photos/id/76/500/300.jpg?hmac=SG6vTqxIU2jIrg9ovA4f7vaY-iZ3H4V2x_6k7KoPrxk",
       original: "https://picsum.photos/1200/600",
     },
     locations: [
@@ -60,8 +80,8 @@ for (let i = 0; i < count; i++) {
         city: faker.address.city(),
         stateProvince: faker.address.state(),
         postalCode: faker.address.zipCode(),
-        country: faker.address.country()
-      }
+        country: faker.address.country(),
+      },
     ],
     organization: {
       id: oid + i,
@@ -90,11 +110,11 @@ for (let i = 0; i < count; i++) {
       {
         id: tid + i,
         name: faker.random
-        .words(2)
-        .toLowerCase()
-        .split(" ")
-        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-        .join(" "),
+          .words(2)
+          .toLowerCase()
+          .split(" ")
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(" "),
         description: faker.lorem.sentences(),
         vocabulary: sample(vocabularies),
         weight: faker.random.number(),
@@ -104,7 +124,6 @@ for (let i = 0; i < count; i++) {
 
   services.push(newService);
 }
-
 
 const mockServiceFile = "./mock-api/services/mockServices.json";
 

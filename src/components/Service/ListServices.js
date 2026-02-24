@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from "react";
 import GetServices from "../../services/GetServices/GetServices";
 import ServiceCard from "./ServiceCard";
 import { CardContainer } from "../../util/styled-components/CardContainer";
@@ -8,35 +8,33 @@ import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlPara
 import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
 import ToggleView from "../ToggleView/ToggleView";
 import Header from "../Header/Header";
-import ServiceFilter from '../ServiceFilter/ServiceFilter';
-import {MapContainer} from "../../util/styled-components/MapContainer";
-import { useMediaQuery } from 'react-responsive';
+import ServiceFilter from "../ServiceFilter/ServiceFilter";
+import { MapContainer } from "../../util/styled-components/MapContainer";
+import { useMediaQuery } from "react-responsive";
 import HackneyMap from "../HackneyMap/HackneyMap";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
-import ServiceSearch from '../ServiceSearch/ServiceSearch';
+import ServiceSearch from "../ServiceSearch/ServiceSearch";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {urlParams} = useContext(UrlParamsContext);
-  // const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-  const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
-  const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-  const {mapToggle} = useContext(MapToggleContext);
-  // const {mapToggle, setMapToggle} = useContext(MapToggleContext);
+  const { urlParams } = useContext(UrlParamsContext);
+  const { prevUrl, setPrevUrl } = useContext(PrevUrlContext);
+  const { prevUrlParams, setPrevUrlParams } = useContext(PrevUrlParamsContext);
+  const { mapToggle } = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
 
   const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minWidth: 768 })
-    return isDesktop ? children : null
-  }
+    const isDesktop = useMediaQuery({ minWidth: 768 });
+    return isDesktop ? children : null;
+  };
 
   const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxWidth: 767 })
-    return isMobile ? children : null
-  }
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    return isMobile ? children : null;
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -55,7 +53,11 @@ const ListServices = ({ onClick }) => {
         }
       }
       // call retrieveServicesByCategory with taxonomyids param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({postcode: postcode, search: search, taxonomyids: taxonomyId});
+      const getServices = await GetServices.retrieveServices({
+        postcode: postcode,
+        search: search,
+        taxonomyids: taxonomyId,
+      });
 
       setData(getServices || []);
       setIsLoading(false);
@@ -66,7 +68,8 @@ const ListServices = ({ onClick }) => {
     }
 
     const setPrevUrlVals = handleSetPrevUrl({
-      prevUrl, prevUrlParams
+      prevUrl,
+      prevUrlParams,
     });
     if (setPrevUrlVals) {
       setPrevUrl(setPrevUrlVals.prevUrlArray);
@@ -78,25 +81,27 @@ const ListServices = ({ onClick }) => {
     } else {
       setShowMap("false");
     }
-
   });
 
   if (isLoading) {
     return <span>Loading</span>;
   }
 
-  const select = e => {
+  const select = (e) => {
     onClick(e);
-  }
+  };
 
-  return(
+  return (
     <div>
       {!data.services.length ? (
         <div>
           <Header />
           <div className="no-results">
             <h2>No results found</h2>
-            <p>Please use the &apos;Back&apos; button above to go back and try a different search term.</p>
+            <p>
+              Please use the &apos;Back&apos; button above to go back and try a different
+              search term.
+            </p>
           </div>
           <MapPlaceholder />
         </div>
@@ -107,34 +112,32 @@ const ListServices = ({ onClick }) => {
           <ServiceFilter />
           <Mobile>
             <ToggleView />
-            {
-              ( showMap == "false" ) ?
-                <CardContainer>
-                  {data.services.map((service, index) => {
-                    return (
-                      <ServiceCard key={index} service={service} onClick={select} />
-                    );
-                  })}
-                </CardContainer> : ""
-            }
+            {showMap == "false" ? (
+              <CardContainer>
+                {data.services.map((service, index) => {
+                  return <ServiceCard key={index} service={service} onClick={select} />;
+                })}
+              </CardContainer>
+            ) : (
+              ""
+            )}
           </Mobile>
           <Desktop>
             <CardContainer>
               {data.services.map((service, index) => {
-                return (
-                  <ServiceCard key={index} service={service} onClick={select} />
-                );
+                return <ServiceCard key={index} service={service} onClick={select} />;
               })}
             </CardContainer>
           </Desktop>
 
           <Mobile>
-          {
-            ( showMap == "true" ) ?
+            {showMap == "true" ? (
               <MapContainer>
                 <HackneyMap data={data} />
-              </MapContainer> : ""
-            }
+              </MapContainer>
+            ) : (
+              ""
+            )}
           </Mobile>
           <Desktop>
             <MapContainer>
@@ -145,8 +148,6 @@ const ListServices = ({ onClick }) => {
       )}
     </div>
   );
-
-}
-
+};
 
 export default ListServices;

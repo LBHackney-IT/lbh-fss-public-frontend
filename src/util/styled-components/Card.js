@@ -1,11 +1,10 @@
-// import React from 'react';
 import styled from "styled-components";
-import { applyStyleModifiers } from 'styled-components-modifiers';
+import { applyStyleModifiers } from "styled-components-modifiers";
 import { pink, dark, light } from "../../settings";
 import arrowRight from "../../assets/arrow-right.svg";
 
 export const CARD_MODIFIERS = {
-    categoryCard: () => `
+  categoryCard: () => `
         i {
             background-color: ${pink[200]};
             height: 50px;
@@ -28,7 +27,7 @@ export const CARD_MODIFIERS = {
             margin-right: 10px;
         }
     `,
-    serviceCard: () => `
+  serviceCard: () => `
         h1, h2, h3, h4 {
             font-size: 24px;
             font-weight: bold;
@@ -51,34 +50,37 @@ export const CARD_MODIFIERS = {
             width: 100%;
             height: auto;
         }
-    `
-}
+    `,
+};
 
 export const Card = styled.div`
-    background: ${light["grey"]};
-    border: 1px solid ${light["greyBorder"]};
-    box-sizing: border-box;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
-    margin-bottom: 10px;
-    cursor: pointer;
+  background: ${light["grey"]};
+  border: 1px solid ${light["greyBorder"]};
+  box-sizing: border-box;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  margin-bottom: 10px;
+  cursor: pointer;
 
-    .fss--card--container {
-        padding: 15px 10px;
-    }
-    h1, h2, h3, h4 {
-        margin-top: 0;
-        font-weight: normal;
-        font-size: 19px;
-        margin-bottom: 5px;
-        font-size: 19px;
-    }
-    p {
-        margin-top: 0;
-        margin-bottom: 0;
-        font-size: 14px;
-        color: ${dark["grey"]};
-    }
+  .fss--card--container {
+    padding: 15px 10px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-top: 0;
+    font-weight: normal;
+    font-size: 19px;
+    margin-bottom: 5px;
+    font-size: 19px;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: ${dark["grey"]};
+  }
 
-    ${applyStyleModifiers(CARD_MODIFIERS)};
+  ${applyStyleModifiers(CARD_MODIFIERS)};
 `;
