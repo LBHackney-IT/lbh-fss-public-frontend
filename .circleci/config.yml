@@ -146,7 +146,7 @@ jobs:
           command: yarn test:ci
           environment:
             CI: "true"
-            NODE_OPTIONS: "--max-old-space-size=4096"          
+            NODE_OPTIONS: "--max-old-space-size=4096"
             JEST_JUNIT_OUTPUT_DIR: test_results
             JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
       - store_test_results:
