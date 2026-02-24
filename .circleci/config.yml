@@ -144,6 +144,13 @@ jobs:
       - run:
           name: Run Tests
           command: yarn test:ci
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: test_results
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: 'true'
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: coverage          
 
   format-check:
     executor: node-executor
