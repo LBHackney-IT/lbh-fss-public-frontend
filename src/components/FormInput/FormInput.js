@@ -11,7 +11,7 @@ const StyledLabel = styled.label`
   overflow: hidden;
   padding: 0;
   position: absolute;
-  whitespace: nowrap;
+  white-space: nowrap;
   width: 1px;
 `;
 
