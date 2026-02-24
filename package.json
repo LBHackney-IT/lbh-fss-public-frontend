@@ -8,7 +8,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:watch": "react-scripts test --watch",
-    "test:coverage": "react-scripts test --coverage",
+    "test:ci": "react-scripts test --ci",
+    "test:coverage": "react-scripts test --ci --coverage",
     "eject": "react-scripts eject",
     "format": "prettier --write \"./**\" --ignore-path .prettierignore",
     "format:check": "prettier --check \"./**\" --ignore-path .prettierignore",
@@ -88,7 +89,9 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!src/index.js"
+      "!src/index.js",
+      "!src/serviceWorker.js",
+      "!src/setupProxy.js"
     ]
   }
 }

@@ -137,6 +137,14 @@ jobs:
           name: Run ESLint
           command: yarn lint
 
+  test-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run Tests
+          command: yarn test:ci
+
   format-check:
     executor: node-executor
     steps:
@@ -247,6 +255,8 @@ workflows:
           context: SonarCloud
       - lint-check:
           requires: [install-dependencies]
+      - test-check:
+          requires: [install-dependencies]
       - format-check:
           requires: [install-dependencies]
       - security-audit:
@@ -271,7 +281,7 @@ workflows:
       - assume-role-development:
           name: assume-role-development-deploy
           context: api-assume-role-development-context
-          requires: [lint-check, format-check, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [develop]
@@ -290,7 +300,7 @@ workflows:
       - assume-role-staging:
           name: assume-role-staging-deploy
           context: api-assume-role-staging-context
-          requires: [lint-check, format-check, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [master]

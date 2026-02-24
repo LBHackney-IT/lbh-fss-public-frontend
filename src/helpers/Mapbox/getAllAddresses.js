@@ -14,7 +14,7 @@ const getAllAddresses = (data) => {
       // store the locations for the specific service
       const locationsArray = data[i].locations;
       // iterate through each locationsArray and push to thisService.locations
-      for (const [value] of Object.entries(locationsArray.slice(1))) {
+      for (const value of locationsArray.slice(1)) {
         // duplicate the specific service
         let thisService = { ...data[i] };
         // reset the specific service locations array to be rewritten
