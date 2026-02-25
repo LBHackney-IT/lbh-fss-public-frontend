@@ -14,6 +14,9 @@ executors:
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
+  docker-python:
+    docker:
+      - image: cimg/python:3.11
 
 references:
   workspace_root: &workspace_root "~"
@@ -184,8 +187,7 @@ jobs:
           command: yarn outdated || true
 
   sonar-scan:
-    docker:
-      - image: cimg/python:3.11
+    executor: docker-python
     steps:
       - *attach_workspace
       - sonarcloud/scan
