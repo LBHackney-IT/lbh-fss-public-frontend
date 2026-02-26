@@ -41,9 +41,20 @@ dist/
 *.ttf
 *.eot
 
+# Git
+.git/
+.gitattributes
+
+# Pre-commit scripts (shell)
+.pre-commit/
+
 # Lock files
 package-lock.json
 yarn.lock
+composer.lock
+
+# Make
+Makefile
 
 # Terraform files
 *.tf
@@ -51,9 +62,6 @@ yarn.lock
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
-
-# Git
-.git/
 
 # wordpress
 wordpress/
