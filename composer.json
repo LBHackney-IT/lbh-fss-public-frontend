@@ -12,8 +12,8 @@
     }
   },
   "scripts": {
-    "php:lint": "phpcs -p",
-    "php:lint:ci": "phpcs -p --extensions=php --ignore=wordpress/lbh-fss-public-frontend",
-    "php:format": "phpcbf -p"
+    "php:lint": "vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend",
+    "php:lint:ci": "vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend",
+    "php:format": "vendor/bin/phpcbf -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend"
   }
 }

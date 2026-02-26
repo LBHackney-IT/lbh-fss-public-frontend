@@ -30,7 +30,6 @@ done
 
 [[ ${#FILES[@]} -eq 0 ]] && exit 0
 
-# Use project config (phpcs.xml.dist) so exclusions/ruleset stay in one place
-# Format first, then lint
-./vendor/bin/phpcbf -q "${FILES[@]}" || true
-./vendor/bin/phpcs -n "${FILES[@]}"
+# Use same ruleset as CI/local (phpcs.xml.dist)
+./vendor/bin/phpcbf -q --standard=phpcs.xml.dist --extensions=php "${FILES[@]}" || true
+./vendor/bin/phpcs -n --standard=phpcs.xml.dist --extensions=php "${FILES[@]}"
