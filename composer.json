@@ -13,6 +13,7 @@
   },
   "scripts": {
     "php:lint": "phpcs -p",
+    "php:lint:ci": "phpcs -p --extensions=php --ignore=wordpress/lbh-fss-public-frontend",
     "php:format": "phpcbf -p"
   }
 }

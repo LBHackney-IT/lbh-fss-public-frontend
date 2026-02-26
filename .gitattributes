@@ -1,0 +1,8 @@
+# Ensure consistent line endings (CI uses Linux; avoids local/CI lint mismatch)
+* text=auto eol=lf
+*.php text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

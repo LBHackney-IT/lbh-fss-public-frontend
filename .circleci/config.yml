@@ -181,6 +181,11 @@ jobs:
           name: Install Composer dependencies
           command: composer install --no-interaction --prefer-dist
       - run:
+          name: Show PHP and PHPCS versions (compare with local)
+          command: |
+            php -v
+            vendor/bin/phpcs --version
+      - run:
           name: Run PHP_CodeSniffer (WordPress)
           command: vendor/bin/phpcs -p --extensions=php --ignore=wordpress/lbh-fss-public-frontend
 
