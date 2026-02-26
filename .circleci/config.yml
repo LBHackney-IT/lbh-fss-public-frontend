@@ -182,7 +182,7 @@ jobs:
           command: composer install --no-interaction --prefer-dist
       - run:
           name: Run PHP_CodeSniffer (WordPress)
-          command: vendor/bin/phpcs --standard=WordPress -p wordpress/
+          command: vendor/bin/phpcs -p
 
   security-audit:
     executor: node-executor

@@ -30,7 +30,5 @@ class Fss_Directory_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
 	}
-
 }

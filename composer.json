@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "php:lint": "phpcs --standard=WordPress -p wordpress/",
-    "php:format": "phpcbf --standard=WordPress -p wordpress/"
+    "php:lint": "phpcs -p",
+    "php:format": "phpcbf -p"
   }
 }

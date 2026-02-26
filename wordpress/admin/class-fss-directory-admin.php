@@ -20,8 +20,8 @@
  * @subpackage Fss_Directory/admin
  * @author     Nudge Digital <developers@nudgedigital.co.uk>
  */
-class Fss_Directory_Admin
-{
+class Fss_Directory_Admin {
+
 
 	/**
 	 * The ID of this plugin.
@@ -45,14 +45,13 @@ class Fss_Directory_Admin
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string $plugin_name       The name of this plugin.
+	 * @param      string $version    The version of this plugin.
 	 */
-	public function __construct($plugin_name, $version)
-	{
+	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 	}
 
 	/**
@@ -60,8 +59,7 @@ class Fss_Directory_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles()
-	{
+	public function enqueue_styles() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -75,7 +73,7 @@ class Fss_Directory_Admin
 		 * class.
 		 */
 
-		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/fss-directory-admin.css', array(), $this->version, 'all');
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fss-directory-admin.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -83,8 +81,7 @@ class Fss_Directory_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts()
-	{
+	public function enqueue_scripts() {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -98,6 +95,6 @@ class Fss_Directory_Admin
 		 * class.
 		 */
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fss-directory-admin.js', array('jquery'), $this->version, false);
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fss-directory-admin.js', array( 'jquery' ), $this->version, false );
 	}
 }

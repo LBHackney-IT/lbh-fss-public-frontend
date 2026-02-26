@@ -26,7 +26,7 @@
  */
 
 // If this file is called directly, abort.
-if (!defined('WPINC')) {
+if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
@@ -35,15 +35,14 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('FSS_DIRECTORY_VERSION', '1.0.0');
+define( 'FSS_DIRECTORY_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-fss-directory-activator.php
  */
-function activate_fss_directory()
-{
-	require_once plugin_dir_path(__FILE__) . 'includes/class-fss-directory-activator.php';
+function activate_fss_directory() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fss-directory-activator.php';
 	Fss_Directory_Activator::activate();
 }
 
@@ -51,20 +50,19 @@ function activate_fss_directory()
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-fss-directory-deactivator.php
  */
-function deactivate_fss_directory()
-{
-	require_once plugin_dir_path(__FILE__) . 'includes/class-fss-directory-deactivator.php';
+function deactivate_fss_directory() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-fss-directory-deactivator.php';
 	Fss_Directory_Deactivator::deactivate();
 }
 
-register_activation_hook(__FILE__, 'activate_fss_directory');
-register_deactivation_hook(__FILE__, 'deactivate_fss_directory');
+register_activation_hook( __FILE__, 'activate_fss_directory' );
+register_deactivation_hook( __FILE__, 'deactivate_fss_directory' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path(__FILE__) . 'includes/class-fss-directory.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-fss-directory.php';
 
 /**
  * Begins execution of the plugin.
@@ -75,17 +73,16 @@ require plugin_dir_path(__FILE__) . 'includes/class-fss-directory.php';
  *
  * @since    1.0.0
  */
-function run_fss_directory()
-{
+function run_fss_directory() {
 
 	$plugin = new Fss_Directory();
 	$plugin->run();
 }
 run_fss_directory();
 
-define('ERW_WIDGET_PATH', plugin_dir_path(__FILE__) . '/lbh-fss-public-frontend');
-define('ERW_ASSET_MANIFEST', ERW_WIDGET_PATH . '/build/asset-manifest.json');
-define('ERW_INCLUDES', plugin_dir_path(__FILE__) . '/includes');
+define( 'ERW_WIDGET_PATH', plugin_dir_path( __FILE__ ) . '/lbh-fss-public-frontend' );
+define( 'ERW_ASSET_MANIFEST', ERW_WIDGET_PATH . '/build/asset-manifest.json' );
+define( 'ERW_INCLUDES', plugin_dir_path( __FILE__ ) . '/includes' );
 
-require_once(ERW_INCLUDES . '/enqueue.php');
-require_once(ERW_INCLUDES . '/shortcode.php');
+require_once ERW_INCLUDES . '/enqueue.php';
+require_once ERW_INCLUDES . '/shortcode.php';

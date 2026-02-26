@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="FSS WordPress">
+  <description>WordPress coding standards for FSS plugin. Excludes build output.</description>
+  <rule ref="WordPress"/>
+  <file>wordpress</file>
+  <exclude-pattern>*/lbh-fss-public-frontend/*</exclude-pattern>
+</ruleset>
