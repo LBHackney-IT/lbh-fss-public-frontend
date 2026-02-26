@@ -187,7 +187,7 @@ jobs:
             vendor/bin/phpcs --version
       - run:
           name: Run PHP_CodeSniffer (WordPress)
-          command: vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend
+          command: vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache
 
   security-audit:
     executor: node-executor
