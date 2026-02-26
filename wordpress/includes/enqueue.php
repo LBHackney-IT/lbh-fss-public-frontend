@@ -37,9 +37,32 @@ add_action(
 					wp_enqueue_style( 'erw', get_site_url() . $asset_manifest['main.css'], array(), null );
 				}
 
-				if ( isset( $asset_manifest['main.js'] ) ) {
+				if ( isset( $asset_manifest['runtime-main.js'] ) ) {
 					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
-					wp_enqueue_script( 'erw-main', get_site_url() . $asset_manifest['main.js'], array(), null, true );
+					wp_enqueue_script( 'erw-runtime', get_site_url() . $asset_manifest['runtime-main.js'], array(), null, true );
+				}
+
+				if ( isset( $asset_manifest['main.js'] ) ) {
+					$main_deps = isset( $asset_manifest['runtime-main.js'] ) ? array( 'erw-runtime' ) : array();
+					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
+					wp_enqueue_script( 'erw-main', get_site_url() . $asset_manifest['main.js'], $main_deps, null, true );
+				}
+
+				foreach ( $asset_manifest as $key => $value ) {
+					if ( preg_match( '@static/js/(.*)\.chunk\.js@', $key, $matches ) ) {
+						if ( ! empty( $matches[1] ) ) {
+							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
+							// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
+							wp_enqueue_script( $name, get_site_url() . $value, array( 'erw-main' ), null, true );
+						}
+					}
+					if ( preg_match( '@static/css/(.*)\.chunk\.css@', $key, $matches ) ) {
+						if ( ! empty( $matches[1] ) ) {
+							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
+							// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
+							wp_enqueue_style( $name, get_site_url() . $value, array( 'erw' ), null );
+						}
+					}
 				}
 			}
 		);
