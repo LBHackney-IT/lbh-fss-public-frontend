@@ -65,6 +65,7 @@ Makefile
 
 # wordpress
 wordpress/
+vendor/
 
 # Local environment files
 .npmrc
