@@ -28,9 +28,15 @@ add_action(
 		add_action(
 			'wp_enqueue_scripts',
 			function () {
-
+				if ( ! is_readable( ERW_ASSET_MANIFEST ) ) {
+					return;
+				}
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file, not remote.
-				$asset_manifest = json_decode( file_get_contents( ERW_ASSET_MANIFEST ), true )['files'];
+				$manifest       = json_decode( file_get_contents( ERW_ASSET_MANIFEST ), true );
+				$asset_manifest = isset( $manifest['files'] ) && is_array( $manifest['files'] ) ? $manifest['files'] : array();
+				if ( empty( $asset_manifest ) ) {
+					return;
+				}
 
 				if ( isset( $asset_manifest['main.css'] ) ) {
 					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
