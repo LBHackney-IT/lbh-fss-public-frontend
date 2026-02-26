@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/vendor
 /.pnp
 .pnp.js
 
@@ -36,3 +37,7 @@ src/services/ApiKey/ApiKey.js
 
 # Coverage and test results
 junit.xml
+
+# Duplicated build files
+wordpress/lbh-fss-public-frontend
+fss-directory.zip

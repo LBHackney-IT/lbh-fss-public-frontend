@@ -4,7 +4,7 @@
 
 You will need to have
 [git installed](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). You will
-also need [node and npm installed](https://nodejs.org/en/download/).
+also need [node and npm installed](https://nodejs.org/en/download/). For WordPress PHP lint/format in `wordpress/`, install [PHP](https://www.php.net/) and [Composer](https://getcomposer.org/) and run `composer install` once.
 
 ## Setting Up
 
@@ -77,3 +77,13 @@ Generates new dummy category data for the mock API.
 ### `yarn mock-gen:demographic`
 
 Generates new dummy demographic data for the mock API.
+
+### WordPress PHP (lint & format)
+
+The `wordpress/` directory is checked with [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) using the [WordPress Coding Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards). Pre-commit and CI run these checks on `wordpress/**/*.php`.
+
+- **First time:** Install PHP and Composer, then run `composer install` in the project root.
+- **Lint (check only):** `yarn php:lint` or `composer run php:lint`
+- **Format (auto-fix):** `yarn php:format` or `composer run php:format`
+
+Pre-commit will auto-format staged PHP files and then fail if any WordPress standard violations remain.

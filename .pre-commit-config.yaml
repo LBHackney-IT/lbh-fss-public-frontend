@@ -21,6 +21,13 @@ repos:
 
   - repo: local
     hooks:
+      - id: php-wordpress
+        name: PHP lint & format (WordPress)
+        entry: bash .pre-commit/php-wordpress.sh
+        language: system
+        pass_filenames: true
+        types: [php]
+        files: ^wordpress/.*\.php$
       - id: lint-staged
         name: lint-staged
         entry: npx lint-staged

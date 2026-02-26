@@ -1,6 +1,4 @@
 <?php
-// This file enqueues scripts and styles
-
 defined('ABSPATH') or die('Direct script access disallowed.');
 
 add_action('init', function () {
@@ -17,27 +15,12 @@ add_action('init', function () {
         $asset_manifest = json_decode(file_get_contents(ERW_ASSET_MANIFEST), true)['files'];
 
         if (isset($asset_manifest['main.css'])) {
-            wp_enqueue_style('erw', get_site_url() . $asset_manifest['main.css']);
+            wp_enqueue_style('erw', get_site_url() . $asset_manifest['main.css'], array(), null);
         }
 
-        wp_enqueue_script('erw-runtime', get_site_url() . $asset_manifest['runtime-main.js'], array(), null, true);
-
-        wp_enqueue_script('erw-main', get_site_url() . $asset_manifest['main.js'], array('erw-runtime'), null, true);
-
-        foreach ($asset_manifest as $key => $value) {
-            if (preg_match('@static/js/(.*)\.chunk\.js@', $key, $matches)) {
-                if ($matches && is_array($matches) && count($matches) === 2) {
-                    $name = "erw-" . preg_replace('/[^A-Za-z0-9_]/', '-', $matches[1]);
-                    wp_enqueue_script($name, get_site_url() . $value, array('erw-main'), null, true);
-                }
-            }
-
-            if (preg_match('@static/css/(.*)\.chunk\.css@', $key, $matches)) {
-                if ($matches && is_array($matches) && count($matches) == 2) {
-                    $name = "erw-" . preg_replace('/[^A-Za-z0-9_]/', '-', $matches[1]);
-                    wp_enqueue_style($name, get_site_url() . $value, array('erw'), null);
-                }
-            }
+        if (isset($asset_manifest['main.js'])) {
+            wp_enqueue_script('erw-main', get_site_url() . $asset_manifest['main.js'], array(), null, true);
         }
+
     });
 });
