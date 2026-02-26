@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # WordPress PHP lint & format (phpcs + phpcbf) for pre-commit.
-# Runs only on wordpress/**/*.php. Skips if PHP or vendor not available.
+# Runs only on wordpress/**/*.php, excluding build output. Skips if PHP or vendor not available.
 
 set -e
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
+
+# Must match phpcs.xml.dist <exclude-pattern>
+EXCLUDE_DIR="lbh-fss-public-frontend"
 
 if ! command -v php >/dev/null 2>&1; then
   echo "Skipping PHP checks (php not found). Install PHP to lint/format WordPress files."
@@ -17,14 +20,17 @@ if [[ ! -x vendor/bin/phpcs ]]; then
   exit 0
 fi
 
-# Filter to wordpress/*.php only (pre-commit may pass other php files)
+# Filter to wordpress/*.php only, excluding build output (same as phpcs.xml.dist)
 FILES=()
 for f in "$@"; do
-  [[ "$f" == wordpress/*.php ]] && FILES+=("$f")
+  if [[ "$f" == wordpress/*.php ]] && [[ "$f" != *"/${EXCLUDE_DIR}/"* ]]; then
+    FILES+=("$f")
+  fi
 done
 
 [[ ${#FILES[@]} -eq 0 ]] && exit 0
 
+# Use project config (phpcs.xml.dist) so exclusions/ruleset stay in one place
 # Format first, then lint
-./vendor/bin/phpcbf --standard=WordPress -q "${FILES[@]}" || true
-./vendor/bin/phpcs --standard=WordPress -n "${FILES[@]}"
+./vendor/bin/phpcbf -q "${FILES[@]}" || true
+./vendor/bin/phpcs -n "${FILES[@]}"

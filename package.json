@@ -89,7 +89,7 @@
       "eslint --fix"
     ],
     "wordpress/**/*.php": [
-      "./vendor/bin/phpcbf --standard=WordPress"
+      "./.pre-commit/phpcbf-staged.sh"
     ]
   },
   "jest": {
