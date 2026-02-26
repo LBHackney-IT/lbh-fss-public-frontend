@@ -182,7 +182,7 @@ jobs:
           command: composer install --no-interaction --prefer-dist
       - run:
           name: Run PHP_CodeSniffer (WordPress)
-          command: vendor/bin/phpcs -p
+          command: vendor/bin/phpcs -p --extensions=php --ignore=wordpress/lbh-fss-public-frontend
 
   security-audit:
     executor: node-executor

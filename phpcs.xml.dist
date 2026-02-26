@@ -2,6 +2,9 @@
 <ruleset name="FSS WordPress">
   <description>WordPress coding standards for FSS plugin. Excludes build output.</description>
   <rule ref="WordPress"/>
+  <!-- Only check PHP files (ignore .js, etc.) -->
+  <arg name="extensions" value="php"/>
   <file>wordpress</file>
-  <exclude-pattern>*/lbh-fss-public-frontend/*</exclude-pattern>
+  <!-- Exclude build output dir (any path containing this) -->
+  <exclude-pattern>*lbh-fss-public-frontend*</exclude-pattern>
 </ruleset>
