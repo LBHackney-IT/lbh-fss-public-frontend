@@ -1,6 +1,6 @@
 .PHONY: all install build package clean help
 
-ENVIRONMENT ?= development
+ENVIRONMENT ?= staging
 
 help:
 	@echo "Usage: make [target] ENVIRONMENT=[development|staging|production]"

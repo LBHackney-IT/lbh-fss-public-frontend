@@ -1,10 +1,8 @@
 <?php
 /**
- * Enqueue plugin scripts and styles.
+ * This file enqueues scripts and styles.
  *
- * @link       http://nudgedigital.co.uk
- * @since      1.0.0
- * @package    Fss_Directory
+ * @package Fss_Directory
  */
 
 defined( 'ABSPATH' ) || die( 'Direct script access disallowed.' );
@@ -28,44 +26,28 @@ add_action(
 		add_action(
 			'wp_enqueue_scripts',
 			function () {
-				if ( ! is_readable( ERW_ASSET_MANIFEST ) ) {
-					return;
-				}
-				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file, not remote.
-				$manifest       = json_decode( file_get_contents( ERW_ASSET_MANIFEST ), true );
-				$asset_manifest = isset( $manifest['files'] ) && is_array( $manifest['files'] ) ? $manifest['files'] : array();
-				if ( empty( $asset_manifest ) ) {
-					return;
-				}
+
+				$asset_manifest = json_decode( file_get_contents( ERW_ASSET_MANIFEST ), true )['files'];
 
 				if ( isset( $asset_manifest['main.css'] ) ) {
-					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
-					wp_enqueue_style( 'erw', get_site_url() . $asset_manifest['main.css'], array(), null );
+					wp_enqueue_style( 'erw', get_site_url() . $asset_manifest['main.css'] );
 				}
 
-				if ( isset( $asset_manifest['runtime-main.js'] ) ) {
-					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
-					wp_enqueue_script( 'erw-runtime', get_site_url() . $asset_manifest['runtime-main.js'], array(), null, true );
-				}
+				wp_enqueue_script( 'erw-runtime', get_site_url() . $asset_manifest['runtime-main.js'], array(), null, true );
 
-				if ( isset( $asset_manifest['main.js'] ) ) {
-					$main_deps = isset( $asset_manifest['runtime-main.js'] ) ? array( 'erw-runtime' ) : array();
-					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
-					wp_enqueue_script( 'erw-main', get_site_url() . $asset_manifest['main.js'], $main_deps, null, true );
-				}
+				wp_enqueue_script( 'erw-main', get_site_url() . $asset_manifest['main.js'], array( 'erw-runtime' ), null, true );
 
 				foreach ( $asset_manifest as $key => $value ) {
 					if ( preg_match( '@static/js/(.*)\.chunk\.js@', $key, $matches ) ) {
-						if ( ! empty( $matches[1] ) ) {
+						if ( $matches && is_array( $matches ) && count( $matches ) === 2 ) {
 							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
-							// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
 							wp_enqueue_script( $name, get_site_url() . $value, array( 'erw-main' ), null, true );
 						}
 					}
+
 					if ( preg_match( '@static/css/(.*)\.chunk\.css@', $key, $matches ) ) {
-						if ( ! empty( $matches[1] ) ) {
+						if ( $matches && is_array( $matches ) && count( $matches ) == 2 ) {
 							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
-							// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version from build.
 							wp_enqueue_style( $name, get_site_url() . $value, array( 'erw' ), null );
 						}
 					}
