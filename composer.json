@@ -12,8 +12,8 @@
     }
   },
   "scripts": {
-    "php:lint": "vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
-    "php:lint:ci": "vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
-    "php:format": "vendor/bin/phpcbf -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend"
+    "php:lint": "vendor/bin/phpcs -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
+    "php:lint:ci": "vendor/bin/phpcs -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
+    "php:format": "vendor/bin/phpcbf -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend"
   }
 }

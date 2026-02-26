@@ -18,4 +18,4 @@ done
 
 [[ ${#FILES[@]} -eq 0 ]] && exit 0
 
-./vendor/bin/phpcbf -q --standard=phpcs.xml.dist --extensions=php "${FILES[@]}" || true
+./vendor/bin/phpcbf -q --standard=WordPress --extensions=php "${FILES[@]}" || true

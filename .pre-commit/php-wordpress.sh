@@ -30,6 +30,6 @@ done
 
 [[ ${#FILES[@]} -eq 0 ]] && exit 0
 
-# Use same ruleset as CI/local (phpcs.xml.dist)
-./vendor/bin/phpcbf -q --standard=phpcs.xml.dist --extensions=php "${FILES[@]}" || true
-./vendor/bin/phpcs -n --standard=phpcs.xml.dist --extensions=php "${FILES[@]}"
+# Use WordPress standard (same as composer php:lint)
+./vendor/bin/phpcbf -q --standard=WordPress --extensions=php "${FILES[@]}" || true
+./vendor/bin/phpcs -n --standard=WordPress --extensions=php "${FILES[@]}"

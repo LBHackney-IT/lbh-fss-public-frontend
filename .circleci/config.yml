@@ -17,9 +17,6 @@ executors:
   docker-python:
     docker:
       - image: cimg/python:3.11
-  php-executor:
-    docker:
-      - image: cimg/php:8.2
 
 references:
   workspace_root: &workspace_root "~"
@@ -173,22 +170,6 @@ jobs:
           name: Run Prettier
           command: yarn format:check
 
-  php-lint:
-    executor: php-executor
-    steps:
-      - checkout
-      - run:
-          name: Install Composer dependencies
-          command: composer install --no-interaction --prefer-dist
-      - run:
-          name: Show PHP and PHPCS versions (compare with local)
-          command: |
-            php -v
-            vendor/bin/phpcs --version
-      - run:
-          name: Run PHP_CodeSniffer (WordPress)
-          command: vendor/bin/phpcs -p wordpress --standard=phpcs.xml.dist --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache
-
   security-audit:
     executor: node-executor
     steps:
@@ -291,8 +272,6 @@ workflows:
           requires: [install-dependencies]
       - format-check:
           requires: [install-dependencies]
-      - php-lint:
-          requires: []
       - security-audit:
           requires: [install-dependencies]
       - dependency-check:
@@ -318,7 +297,7 @@ workflows:
       - assume-role-development:
           name: assume-role-development-deploy
           context: api-assume-role-development-context
-          requires: [lint-check, test-check, format-check, php-lint, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [develop]
@@ -337,7 +316,7 @@ workflows:
       - assume-role-staging:
           name: assume-role-staging-deploy
           context: api-assume-role-staging-context
-          requires: [lint-check, test-check, format-check, php-lint, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [master]

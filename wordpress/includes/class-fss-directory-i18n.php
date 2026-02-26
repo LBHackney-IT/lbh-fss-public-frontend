@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Define the internationalization functionality
  *
@@ -24,7 +23,7 @@
  * @subpackage Fss_Directory/includes
  * @author     Nudge Digital <developers@nudgedigital.co.uk>
  */
-class Fss_Directory_i18n {
+class Fss_Directory_I18n {
 
 
 	/**

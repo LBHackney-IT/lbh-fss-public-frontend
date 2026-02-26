@@ -1,7 +1,13 @@
 <?php
-// This file enqueues a shortcode.
+/**
+ * Shortcode registration for the plugin.
+ *
+ * @link       http://nudgedigital.co.uk
+ * @since      1.0.0
+ * @package    Fss_Directory
+ */
 
-defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' );
+defined( 'ABSPATH' ) || die( 'Direct script access disallowed.' );
 
 add_shortcode(
 	'erw_widget',
