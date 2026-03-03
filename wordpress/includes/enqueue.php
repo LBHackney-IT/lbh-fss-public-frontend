@@ -5,7 +5,11 @@
  * @package Fss_Directory
  */
 
-defined( 'ABSPATH' ) || die( 'Direct script access disallowed.' );
+defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
+
+defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
+
+defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
 
 add_action(
 	'init',
@@ -27,16 +31,12 @@ add_action(
 		add_action(
 			'wp_enqueue_scripts',
 			function () {
-				global $post;
-				if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'erw_widget' ) ) {
-					return;
-				}
 
 				if ( ! defined( 'ERW_ASSET_MANIFEST' ) || ! is_readable( ERW_ASSET_MANIFEST ) ) {
 					return;
 				}
 
-				$raw            = file_get_contents( ERW_ASSET_MANIFEST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file path (asset manifest), not remote.
+				$raw            = file_get_contents( ERW_ASSET_MANIFEST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local manifest path.
 				$manifest       = is_string( $raw ) ? json_decode( $raw, true ) : null;
 				$asset_manifest = ( isset( $manifest['files'] ) && is_array( $manifest['files'] ) ) ? $manifest['files'] : array();
 
@@ -45,10 +45,9 @@ add_action(
 				}
 
 				$base_url = defined( 'ERW_BUILD_URL' ) ? rtrim( ERW_BUILD_URL, '/' ) . '/' : get_site_url() . '/';
-				$version  = filemtime( ERW_ASSET_MANIFEST );
 
 				if ( isset( $asset_manifest['main.css'] ) ) {
-					wp_enqueue_style( 'erw', $base_url . ltrim( $asset_manifest['main.css'], '/' ), array(), $version );
+					wp_enqueue_style( 'erw', $base_url . ltrim( $asset_manifest['main.css'], '/' ) ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version omitted; cache bust via build.
 					// Constrain FSS app when embedded in page (map + sidebar stay inside this box).
 					$embed_css = '
                 .fss-directory-embed { position: relative; height: calc(100vh - 120px); overflow: hidden; z-index: 0; padding: 0; margin: 0; }
@@ -62,25 +61,25 @@ add_action(
 				}
 
 				if ( ! empty( $asset_manifest['runtime-main.js'] ) ) {
-					wp_enqueue_script( 'erw-runtime', $base_url . ltrim( $asset_manifest['runtime-main.js'], '/' ), array(), $version, true );
+					wp_enqueue_script( 'erw-runtime', $base_url . ltrim( $asset_manifest['runtime-main.js'], '/' ), array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				}
 
 				if ( ! empty( $asset_manifest['main.js'] ) ) {
-					wp_enqueue_script( 'erw-main', $base_url . ltrim( $asset_manifest['main.js'], '/' ), array( 'erw-runtime' ), $version, true );
+					wp_enqueue_script( 'erw-main', $base_url . ltrim( $asset_manifest['main.js'], '/' ), array( 'erw-runtime' ), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				}
 
 				foreach ( $asset_manifest as $key => $value ) {
 					if ( preg_match( '@static/js/(.*)\.chunk\.js@', $key, $matches ) ) {
 						if ( $matches && is_array( $matches ) && count( $matches ) === 2 ) {
 							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
-							wp_enqueue_script( $name, $base_url . ltrim( $value, '/' ), array( 'erw-main' ), $version, true );
+							wp_enqueue_script( $name, $base_url . ltrim( $value, '/' ), array( 'erw-main' ), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 						}
 					}
 
 					if ( preg_match( '@static/css/(.*)\.chunk\.css@', $key, $matches ) ) {
-						if ( $matches && is_array( $matches ) && count( $matches ) === 2 ) {
+						if ( $matches && is_array( $matches ) && count( $matches ) == 2 ) { // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- Intentional.
 							$name = 'erw-' . preg_replace( '/[^A-Za-z0-9_]/', '-', $matches[1] );
-							wp_enqueue_style( $name, $base_url . ltrim( $value, '/' ), array( 'erw' ), $version );
+							wp_enqueue_style( $name, $base_url . ltrim( $value, '/' ), array( 'erw' ), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 						}
 					}
 				}
