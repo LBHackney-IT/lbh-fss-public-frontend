@@ -3,6 +3,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faMapMarkerAlt,
   faMapMarker,
+  faLocationDot,
+  faLocationPin,
   faHome,
   faPhone,
   faEnvelope,
@@ -56,6 +58,8 @@ library.add(
   faBars,
   faMapMarkerAlt,
   faMapMarker,
+  faLocationDot,
+  faLocationPin,
   faHome,
   faPhone,
   faEnvelope,

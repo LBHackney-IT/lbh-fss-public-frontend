@@ -14,7 +14,17 @@ add_shortcode(
 	function ( $atts ) {
 		$default_atts = array();
 		$args         = shortcode_atts( $default_atts, $atts );
+		if ( ! defined( 'ERW_WIDGET_SHORTCODE_USED' ) ) {
+			define( 'ERW_WIDGET_SHORTCODE_USED', true );
+		}
+		$manifest_ok = defined( 'ERW_ASSET_MANIFEST' ) && is_readable( ERW_ASSET_MANIFEST );
+		$path        = defined( 'ERW_ASSET_MANIFEST' ) ? ERW_ASSET_MANIFEST : '(not set)';
 
-		return "<div id='root'></div>";
+		$out = "<div class='fss-directory-embed'><div id='root' class='fss-directory-app' data-erw-manifest='" . esc_attr( $path ) . "' data-erw-readable='" . ( $manifest_ok ? 'yes' : 'no' ) . "'></div></div>";
+
+		if ( ! $manifest_ok ) {
+			$out .= '<p class="erw-build-missing" style="padding:1em;background:#fef3cd;color:#856404;">FSS Directory: build not loaded. Plugin cannot read <code>asset-manifest.json</code>. Path: <code>' . esc_html( $path ) . '</code></p>';
+		}
+		return $out;
 	}
 );

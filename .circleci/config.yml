@@ -59,20 +59,22 @@ commands:
           command: yarn install
       - run:
           name: Build
-          command: CI=false yarn build
+          command: CI=false GENERATE_SOURCEMAP=false yarn build
           environment:
             REACT_APP_ENV: <<parameters.environment>>
       - run:
           name: Package WordPress plugin
           command: |
-            mkdir -p wordpress/lbh-fss-public-frontend
-            cp -r build wordpress/lbh-fss-public-frontend/build
+            rm -rf wordpress/lbh-fss-public-frontend
+            mkdir -p wordpress/lbh-fss-public-frontend/build
+            cp -r build/. wordpress/lbh-fss-public-frontend/build/
             cd wordpress
             zip -r ../fss-directory.zip . \
               -x "*.git*" \
               -x "*.zip" \
               -x "export-plugin.sh" \
-              -x "lbh-fss-public-frontend/node_modules/*"
+              -x "lbh-fss-public-frontend/node_modules/*" \
+              -x "*.map"
       - run:
           name: Upload plugin zip to S3
           command: |

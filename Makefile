@@ -20,17 +20,20 @@ install:
 
 build:
 	@echo "Building React app for $(ENVIRONMENT)..."
-	CI=false REACT_APP_ENV=$(ENVIRONMENT) yarn build
+	CI=false GENERATE_SOURCEMAP=false REACT_APP_ENV=$(ENVIRONMENT) yarn build
 
 package:
 	@echo "Packaging WordPress plugin..."
-	mkdir -p wordpress/lbh-fss-public-frontend
-	cp -r build wordpress/lbh-fss-public-frontend/build
+	@test -f build/asset-manifest.json || (echo "Error: Run 'make build' first to create the React build."; exit 1)
+	rm -rf wordpress/lbh-fss-public-frontend
+	mkdir -p wordpress/lbh-fss-public-frontend/build
+	cp -r build/. wordpress/lbh-fss-public-frontend/build/
 	cd wordpress && zip -r ../fss-directory.zip . \
 		-x "*.git*" \
 		-x "*.zip" \
 		-x "export-plugin.sh" \
-		-x "lbh-fss-public-frontend/node_modules/*"
+		-x "lbh-fss-public-frontend/node_modules/*" \
+		-x "*.map"
 	@echo "Plugin packaged at fss-directory.zip"
 	@echo "Contents:"
 	@unzip -l fss-directory.zip | grep "static/"
@@ -42,4 +45,4 @@ clean:
 	@echo "Cleaning build artifacts..."
 	rm -rf build
 	rm -f fss-directory.zip
-	rm -rf wordpress/lbh-fss-public-frontend/build
+	rm -rf wordpress/lbh-fss-public-frontend

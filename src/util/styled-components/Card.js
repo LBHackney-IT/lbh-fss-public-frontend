@@ -5,6 +5,7 @@ import arrowRight from "../../assets/arrow-right.svg";
 
 export const CARD_MODIFIERS = {
   categoryCard: () => `
+        margin-bottom: 10px;
         i {
             background-color: ${pink[200]};
             height: 50px;

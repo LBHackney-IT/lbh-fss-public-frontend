@@ -81,6 +81,7 @@ run_fss_directory();
 
 define( 'ERW_WIDGET_PATH', plugin_dir_path( __FILE__ ) . '/lbh-fss-public-frontend' );
 define( 'ERW_ASSET_MANIFEST', ERW_WIDGET_PATH . '/build/asset-manifest.json' );
+define( 'ERW_BUILD_URL', plugin_dir_url( __FILE__ ) . 'lbh-fss-public-frontend/build/' );
 define( 'ERW_INCLUDES', plugin_dir_path( __FILE__ ) . '/includes' );
 
 require_once ERW_INCLUDES . '/enqueue.php';

@@ -12,6 +12,7 @@ import { divIcon, Map as LeafletMap } from "leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster";
 import { ReactLeafletMarkerClusterStyles } from "../../helpers/Mapbox/ReactLeafletMarkerClusterStyles";
+import MapResizeHandler from "./MapResizeHandler";
 import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
 import getHomeLocation from "../../helpers/Mapbox/getHomeLocation";
 import { GestureHandling } from "leaflet-gesture-handling";
@@ -100,8 +101,9 @@ const HackneyMap = (data) => {
       zoomControl={false}
       dragging={false}
       scrollWheelZoom={false}
-      gestureHandling
+      gestureHandling={false}
     >
+      <MapResizeHandler />
       <ReactLeafletMarkerClusterStyles />
       <ZoomControl position="topright" />
       <TileLayer attribution={ATTRIBUTION} url={MAPBOX_TILES_URL} />
@@ -128,8 +130,12 @@ const HackneyMap = (data) => {
 
           const iconMarkup = renderToStaticMarkup(
             <div className="hackney-map-marker" data-category-icon={categoryIconName}>
-              <FontAwesomeIcon icon={["fas", "map-marker-alt"]} size="3x" />
-              <FontAwesomeIcon icon={["fas", "map-marker"]} size="3x" />
+              <FontAwesomeIcon
+                icon={["fas", "location-dot"]}
+                size="3x"
+                className="map-marker--foreground"
+              />
+              <FontAwesomeIcon icon={["fas", "location-pin"]} size="3x" />
             </div>,
           );
           const customMarkerIcon = divIcon({ html: iconMarkup });
