@@ -251,6 +251,12 @@ jobs:
       - deploy-terraform:
           environment: staging
 
+  preview-staging-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: staging
+
   preview-production-terraform:
     executor: docker-terraform
     steps:
@@ -322,13 +328,24 @@ workflows:
           filters:
             branches:
               only: [master]
-      - terraform-init-and-apply-to-staging:
+      - preview-staging-terraform:
           requires: [assume-role-staging-deploy]
           filters:
             branches:
               only: [master]
+      - permit-deploy-staging:
+          type: approval
+          requires: [preview-staging-terraform]
+          filters:
+            branches:
+              only: [master]
+      - terraform-init-and-apply-to-staging:
+          requires: [permit-deploy-staging]
+          filters:
+            branches:
+              only: [master]
       - deploy-staging:
-          requires: [assume-role-staging-deploy]
+          requires: [terraform-init-and-apply-to-staging]
           filters:
             branches:
               only: [master]
@@ -347,7 +364,12 @@ workflows:
               only: [master]
       - permit-deploy-production:
           type: approval
-          requires: [deploy-staging]
+          requires:
+            [
+              preview-production-terraform,
+              deploy-staging,
+              terraform-init-and-apply-to-staging,
+            ]
           filters:
             branches:
               only: [master]
@@ -357,7 +379,7 @@ workflows:
             branches:
               only: [master]
       - deploy-production:
-          requires: [permit-deploy-production]
+          requires: [terraform-init-and-apply-to-production]
           filters:
             branches:
               only: [master]
