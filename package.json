@@ -15,6 +15,9 @@
     "format:check": "prettier --check \"./**\" --ignore-path .prettierignore",
     "lint": "eslint src --ext .js,.jsx",
     "lint:fix": "eslint src --ext .js,.jsx --fix",
+    "php:lint": "composer run php:lint",
+    "php:lint:ci": "composer run php:lint:ci",
+    "php:format": "composer run php:format",
     "mock-api": "node ./mock-api/app.js",
     "dev": "concurrently \"yarn start\" \"yarn mock-api\"",
     "mock-gen:categories": "node ./scripts/generateMockCategories.js",
@@ -85,6 +88,9 @@
     ],
     "*.{js,jsx}": [
       "eslint --fix"
+    ],
+    "wordpress/**/*.php": [
+      "./.pre-commit/phpcbf-staged.sh"
     ]
   },
   "jest": {

@@ -1,0 +1,19 @@
+{
+  "name": "lbh/fss-public-frontend",
+  "description": "FSS public frontend (React + WordPress plugin)",
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "squizlabs/php_codesniffer": "^3.7",
+    "wp-coding-standards/wpcs": "^3.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
+    "php:lint": "vendor/bin/phpcs -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
+    "php:lint:ci": "vendor/bin/phpcs -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend --no-cache",
+    "php:format": "vendor/bin/phpcbf -p wordpress --standard=WordPress --extensions=php --ignore=wordpress/lbh-fss-public-frontend"
+  }
+}

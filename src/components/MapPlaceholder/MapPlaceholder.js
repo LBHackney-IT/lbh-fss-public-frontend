@@ -2,6 +2,7 @@ import "leaflet/dist/leaflet.css";
 import { useMediaQuery } from "react-responsive";
 import { MapContainer as StyledMapContainer } from "../../util/styled-components/MapContainer";
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
+import MapResizeHandler from "../HackneyMap/MapResizeHandler";
 import L from "leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css";
@@ -37,8 +38,9 @@ const MapPlaceholder = () => {
           zoomControl={false}
           dragging={false}
           scrollWheelZoom={false}
-          gestureHandling
+          gestureHandling={false}
         >
+          <MapResizeHandler />
           <ZoomControl position="topright" />
           <TileLayer attribution={ATTRIBUTION} url={MAPBOX_TILES_URL} />
         </MapContainer>

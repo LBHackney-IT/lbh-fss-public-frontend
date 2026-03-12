@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import styled from "styled-components";
 import { applyStyleModifiers } from "styled-components-modifiers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import { useNavigate } from "react-router-dom";
@@ -31,11 +32,6 @@ export const BUTTON_MODIFIERS = {
   active: () => `
         color: ${yellow["selected"]};
     `,
-  filter: () => `
-        &::before {
-            content: "\f0b0";
-        }
-    `,
 };
 
 const FilterButton = styled.button`
@@ -45,12 +41,8 @@ const FilterButton = styled.button`
   padding: 20px 15px;
   cursor: pointer;
   background: transparent;
-  &::before {
-    display: none;
-    font-family: "Font Awesome 5 Pro";
-    font-weight: 900;
-    content: "\f0b0";
-  }
+  display: inline-flex;
+  align-items: center;
   svg {
     margin-right: 10px;
   }
@@ -126,6 +118,7 @@ const ServiceFilter = () => {
     <ServiceFilterContainer modifiers={grey}>
       {showDemographicsButton ? (
         <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
+          <FontAwesomeIcon icon={["fas", "filter"]} />
           Filters
         </FilterButton>
       ) : (

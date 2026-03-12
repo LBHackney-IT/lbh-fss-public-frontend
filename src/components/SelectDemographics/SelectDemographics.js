@@ -13,6 +13,7 @@ import { applyStyleModifiers } from "styled-components-modifiers";
 import { useNavigate } from "react-router-dom";
 import { green, dark, light } from "../../settings";
 import { FilterContainer } from "../../util/styled-components/FilterContainer";
+import breakpoint from "styled-components-breakpoint";
 import { CheckboxContainer } from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
 import ServiceSearch from "../ServiceSearch/ServiceSearch";
@@ -46,6 +47,18 @@ const StyledButton = styled(Button)`
   border-radius: 3px;
   border-bottom: 2px solid ${dark["black"]};
   ${applyStyleModifiers(BUTTON_MODIFIERS)};
+`;
+
+const ApplyButtonWrap = styled.div`
+  flex-shrink: 0;
+  padding: 0 15px 20px;
+  ${breakpoint("md")`
+    padding: 15px 15px 20px;
+    position: sticky;
+    bottom: 0;
+    background: ${light["white"]};
+    z-index: 2;
+  `}
 `;
 
 export const CategoryCardContainer = styled.div`
@@ -235,8 +248,10 @@ const SelectDemographics = () => {
                 />
               );
             })}
-            <StyledButton type="submit" label="Apply filters" disabled={isLoading} />
           </CheckboxContainer>
+          <ApplyButtonWrap>
+            <StyledButton type="submit" label="Apply filters" disabled={isLoading} />
+          </ApplyButtonWrap>
         </form>
       </FilterContainer>
       <MapPlaceholder />

@@ -1,12 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { defaultTheme, blue, dark, light, red, category } from "../../settings";
 import { normalize } from "polished";
-import openSansV17Latin700Ttf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.ttf";
-import openSansV17Latin700Woff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff";
-import openSansV17Latin700Woff2 from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-700.woff2";
-import openSansV17LatinRegularTtf from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.ttf";
-import openSansV17LatinRegularWoff from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff";
-import openSansV17LatinRegularWoff2 from "../../fonts/open-sans-v17-latin/open-sans-v17-latin-regular.woff2";
 import { darken } from "polished";
 import breakpoint from "styled-components-breakpoint";
 
@@ -15,6 +9,7 @@ ${normalize()}
 html {
   box-sizing: border-box;
   font-size: 16px;
+  height: 100%;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -22,15 +17,29 @@ html {
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
   font-family: ${defaultTheme.primaryFont};
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* erw-root */
-#erw-root {
+#root,
+#root .App {
+  height: 100%;
+  position: relative;
+}
+
+/* erw-root: same reset when mounted as #root (plugin) or #erw-root (prod) */
+#erw-root,
+#root {
   overflow: auto;
+  /* Hide scrollbar like production; scrolling still works */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   * {
     margin-top: unset;
   }
@@ -45,26 +54,7 @@ body {
   }
 }
 
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans Regular'), local('OpenSans-Regular'),
-    url(${openSansV17LatinRegularWoff2}) format('woff2'),
-    url(${openSansV17LatinRegularWoff}) format('woff'),
-    url(${openSansV17LatinRegularTtf}) format('truetype');
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Regular'), local('OpenSans-Regular'),
-    url(${openSansV17Latin700Woff2}) format('woff2'),
-    url(${openSansV17Latin700Woff}) format('woff'),
-    url(${openSansV17Latin700Ttf}) format('truetype');
-}
-
+/* Open Sans loaded from CDN (see index.html and index.js) */
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 1em;
@@ -143,10 +133,10 @@ hr {
 .App {
   position: relative;
   ${breakpoint("sm")`
-      
+
   `}
   ${breakpoint("md")`
-    
+
   `}
 }
 
@@ -183,7 +173,8 @@ hr {
 }
 
 [data-category-icon] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["pink"]};
   }
   i {
@@ -191,7 +182,8 @@ hr {
   }
 }
 [data-category-icon="loneliness-or-isolation"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["pink"]};
   }
   i {
@@ -199,7 +191,8 @@ hr {
   }
 }
 [data-category-icon="anxiety-or-mental-health"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["orange"]};
   }
   i {
@@ -207,7 +200,8 @@ hr {
   }
 }
 [data-category-icon="safe-and-healthy-body"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["greenLight"]};
   }
   i {
@@ -215,7 +209,8 @@ hr {
   }
 }
 [data-category-icon="exercise-and-wellbeing"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["red"]};
   }
   i {
@@ -223,7 +218,8 @@ hr {
   }
 }
 [data-category-icon="arts-and-creativity"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["blueDark"]};
   }
   i {
@@ -231,7 +227,8 @@ hr {
   }
 }
 [data-category-icon="food-or-shopping"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["green"]};
   }
   i {
@@ -239,7 +236,8 @@ hr {
   }
 }
 [data-category-icon="faith-led-activities"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["blue"]};
   }
   i {
@@ -247,7 +245,8 @@ hr {
   }
 }
 [data-category-icon="money-advice"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["brown"]};
   }
   i {
@@ -255,7 +254,8 @@ hr {
   }
 }
 [data-category-icon="employment-advice"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["purple"]};
   }
   i {
@@ -263,7 +263,8 @@ hr {
   }
 }
 [data-category-icon="housing-advice"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["blueLight"]};
   }
   i {
@@ -271,7 +272,8 @@ hr {
   }
 }
 [data-category-icon="immigration-advice"] {
-  svg.fa-map-marker-alt {
+  svg.fa-map-marker-alt,
+  svg.fa-location-dot {
     color: ${category["greenDark"]};
   }
   i {
@@ -285,14 +287,28 @@ hr {
 
 .leaflet-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  /* Match production: no gap between zoom in/out buttons */
+  .leaflet-control-zoom .leaflet-bar a {
+    border-bottom: none;
+  }
+  .leaflet-control-zoom .leaflet-bar a + a {
+    border-top: none;
+  }
   .leaflet-div-icon {
     background: transparent;
     border: 0;
+    overflow: visible;
   }
   .hackney-map-marker, .hackney-map-home-marker  {
     position: relative;
     left: -10px;
+  }
+  .hackney-map-marker .map-marker--foreground {
+    position: relative;
+    font-size: 37px;
+    top: -1px;
+    left: 0;
   }
   .hackney-map-home-marker {
     .map-marker--foreground {
@@ -310,7 +326,8 @@ hr {
       font-size: 18px;
     }
   }
-  svg.fa-map-marker {
+  svg.fa-map-marker,
+  svg.fa-location-pin {
     position: absolute;
     top: -3px;
     left: -2px;
@@ -342,5 +359,5 @@ hr {
     border: 0;
   }
 }
-  
+
 `;

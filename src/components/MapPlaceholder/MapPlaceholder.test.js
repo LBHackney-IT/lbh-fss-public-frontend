@@ -13,6 +13,14 @@ jest.mock("react-leaflet", () => ({
   ZoomControl: () => <div data-testid="zoom-control">ZoomControl</div>,
 }));
 
+jest.mock(
+  "../HackneyMap/MapResizeHandler",
+  () =>
+    function MapResizeHandler() {
+      return null;
+    },
+);
+
 jest.mock("../../util/styled-components/MapContainer", () => ({
   MapContainer: ({ children }) => (
     <div data-testid="styled-map-container">{children}</div>

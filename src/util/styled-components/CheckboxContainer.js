@@ -5,7 +5,8 @@ export const CheckboxContainer = styled.div`
   padding: 0 15px 0;
   ${breakpoint("md")`
         padding: 0 15px;
-        overflow-y: scroll;
-        height: calc(100vh - 320px);
+        overflow-y: auto;
+        flex: 1;
+        min-height: 0;
     `}
 `;

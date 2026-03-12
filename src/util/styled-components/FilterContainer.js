@@ -7,7 +7,10 @@ export const FilterContainer = styled.div`
         position: relative;
         z-index: 1;
         background: ${light["white"]};
-        height: 100vh;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
     `}
   h2 {
     margin: 30px 15px 15px !important;
@@ -15,5 +18,11 @@ export const FilterContainer = styled.div`
   }
   form {
     position: relative;
+    ${breakpoint("md")`
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    `}
   }
 `;
