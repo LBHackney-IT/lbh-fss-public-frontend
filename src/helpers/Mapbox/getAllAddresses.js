@@ -1,9 +1,8 @@
-const getAllAddresses = data => {
+const getAllAddresses = (data) => {
   // check to see if an array of services is passed through data
   if (data.data.services !== undefined && data.data.services.constructor === Array) {
     data = data.data.services;
   } else {
-
     data = [data.data.service];
   }
   let duplicateService = [...data];
@@ -15,9 +14,9 @@ const getAllAddresses = data => {
       // store the locations for the specific service
       const locationsArray = data[i].locations;
       // iterate through each locationsArray and push to thisService.locations
-      for (const [key, value] of Object.entries(locationsArray.slice(1))) {
+      for (const value of locationsArray.slice(1)) {
         // duplicate the specific service
-        let thisService = {...data[i]};
+        let thisService = { ...data[i] };
         // reset the specific service locations array to be rewritten
         thisService.locations = [];
         // push specific service location object value into the empty array
@@ -29,6 +28,6 @@ const getAllAddresses = data => {
     i++;
   }
   return duplicateService;
-}
+};
 
 export default getAllAddresses;

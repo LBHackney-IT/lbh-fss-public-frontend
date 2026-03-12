@@ -3,7 +3,19 @@ var faker = require("faker");
 
 let categories = [];
 
-const category = ["Loneliness or isolation", "Anxiety or mental health", "Safe and healthy body", "Exercise and wellbeing", "Arts and creativity", "Food or shopping", "Faith-led activities", "Money advice", "Employment advice", "Housing advice", "Immigration advice"];
+const category = [
+  "Loneliness or isolation",
+  "Anxiety or mental health",
+  "Safe and healthy body",
+  "Exercise and wellbeing",
+  "Arts and creativity",
+  "Food or shopping",
+  "Faith-led activities",
+  "Money advice",
+  "Employment advice",
+  "Housing advice",
+  "Immigration advice",
+];
 
 for (let i = 0; i < category.length; i++) {
   const newCategory = {
@@ -16,7 +28,6 @@ for (let i = 0; i < category.length; i++) {
 
   categories.push(newCategory);
 }
-
 
 const mockCategoryFile = "./mock-api/taxonomy/category/mockCategories.json";
 

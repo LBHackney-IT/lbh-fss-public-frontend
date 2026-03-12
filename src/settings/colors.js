@@ -10,7 +10,7 @@ export const blue = {
   link: "#025EA6",
 };
 
-export const pink = { 
+export const pink = {
   100: "#EB6FBD",
   200: "#DF1995",
   300: "#AA0061",
@@ -50,4 +50,4 @@ export const category = {
   purple: "#8031A7",
   blueLight: "#2B8CC4",
   greenDark: "#00664F",
-}
+};

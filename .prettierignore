@@ -1,0 +1,74 @@
+# Config files
+.circleci/config
+.github/CODEOWNERS
+.nvmrc
+sonar-project.properties
+robots.txt
+
+# Ignore files
+.prettierignore
+.gitignore
+.eslintignore
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+junit.xml
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+*.log
+*.env*
+
+# Images and binary files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.pdf
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# Git
+.git/
+.gitattributes
+
+# Pre-commit scripts (shell)
+.pre-commit/
+
+# Lock files
+package-lock.json
+yarn.lock
+composer.lock
+
+# Make
+Makefile
+
+# Terraform files
+*.tf
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# wordpress
+wordpress/
+vendor/
+
+# Local environment files
+.npmrc
+.env
+.npmrc.*
+.env.*

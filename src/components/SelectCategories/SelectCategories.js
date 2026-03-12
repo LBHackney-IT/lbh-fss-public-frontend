@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import AppLoading from "../../AppLoading";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import Header from "../Header/Header";
@@ -6,163 +6,174 @@ import UrlContext from "../../context/UrlContext/UrlContext";
 import PrevUrlContext from "../../context/PrevUrlContext/PrevUrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
-import FormInput from "../FormInput/FormInput";
-import FormError from "../FormError/FormError";
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { postcodeValidator, postcodeValidatorExists } from 'postcode-validator';
-import history from '../../history';
-import { dark, red, light } from "../../settings";
-import {FilterContainer} from "../../util/styled-components/FilterContainer";
-import {CheckboxContainer} from "../../util/styled-components/CheckboxContainer";
+import { useNavigate } from "react-router-dom";
+import { dark } from "../../settings";
+import { FilterContainer } from "../../util/styled-components/FilterContainer";
+import { CheckboxContainer } from "../../util/styled-components/CheckboxContainer";
 import FormCheckbox from "../FormCheckbox/FormCheckbox";
-import ServiceSearch from '../ServiceSearch/ServiceSearch';
-import ServiceFilter from '../ServiceFilter/ServiceFilter';
+import ServiceSearch from "../ServiceSearch/ServiceSearch";
+import ServiceFilter from "../ServiceFilter/ServiceFilter";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 const StyledButton = styled(Button)`
-    width: 100%;
-    border-radius: 3px;
-    border-bottom: 2px solid ${dark["black"]};
+  width: 100%;
+  border-radius: 3px;
+  border-bottom: 2px solid ${dark["black"]};
 `;
 
 const SelectCategories = () => {
-    const [data, setData] = useState([]);
-    const {url, setUrl} = useContext(UrlContext);
-    const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
-    const {urlParams, setUrlParams} = useContext(UrlParamsContext);
-    const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-    const [isLoading, setIsLoading] = useState(true);
-    const storedPostcode = localStorage.getItem("postcode");
-    const prevUrlArrayLast = prevUrl[prevUrl.length - 1];
-    const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const { setUrl } = useContext(UrlContext);
+  const { prevUrl, setPrevUrl } = useContext(PrevUrlContext);
+  const { urlParams, setUrlParams } = useContext(UrlParamsContext);
+  const { prevUrlParams, setPrevUrlParams } = useContext(PrevUrlParamsContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const prevUrlParamsArrayLast = prevUrlParams[prevUrlParams.length - 1];
 
-    let defaultValues = {
-        checkbox: "",
-    };
+  let defaultValues = {
+    checkbox: "",
+  };
 
-    let selectedObj = {};
-    if (prevUrlParamsArrayLast !== undefined) {
-        for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
-            if (key == "categories" && value !== "") {
-                if (Array.isArray(value) && value.length >= 1) {
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
-                }
-                // used if coming from url with categories set
-                if (typeof value === 'string' && value.indexOf("+") > -1) {
-                    value = value.split("+");
-                    selectedObj = value.reduce((a,b)=> (a[b]=true,a),{});
-                }
-                if (typeof value === 'string' && value.indexOf("+") === -1) {
-                    selectedObj[value] = true;
-                }
-            }
+  let selectedObj = {};
+  if (prevUrlParamsArrayLast !== undefined) {
+    for (const [key, value] of Object.entries(prevUrlParamsArrayLast)) {
+      if (key == "categories" && value !== "") {
+        if (Array.isArray(value) && value.length >= 1) {
+          selectedObj = value.reduce((a, b) => ((a[b] = true), a), {});
         }
+        // used if coming from url with categories set
+        if (typeof value === "string" && value.indexOf("+") > -1) {
+          const valueArray = value.split("+");
+          selectedObj = valueArray.reduce((a, b) => ((a[b] = true), a), {});
+        }
+        if (typeof value === "string" && value.indexOf("+") === -1) {
+          selectedObj[value] = true;
+        }
+      }
     }
-    defaultValues = selectedObj;
+  }
+  defaultValues = selectedObj;
 
-    let listServicesSearchObj, listServicesPostcodeObj = null;
-    if (urlParams !== 0) {
-        listServicesSearchObj = [urlParams].find(listServicesSearchObj => listServicesSearchObj.service_search);
-        listServicesPostcodeObj = [urlParams].find(listServicesPostcodeObj => listServicesPostcodeObj.postcode);
+  let listServicesSearchObj,
+    listServicesPostcodeObj = null;
+  if (urlParams !== 0) {
+    listServicesSearchObj = [urlParams].find(
+      (listServicesSearchObj) => listServicesSearchObj.service_search,
+    );
+    listServicesPostcodeObj = [urlParams].find(
+      (listServicesPostcodeObj) => listServicesPostcodeObj.postcode,
+    );
+  }
+
+  const { register, handleSubmit } = useForm({
+    defaultValues: defaultValues,
+  });
+
+  useEffect(() => {
+    async function fetchData() {
+      const getCategories = await GetTaxonomies.retrieveTaxonomies({
+        vocabulary: "category",
+      });
+      setData(getCategories || []);
+      setIsLoading(false);
     }
 
-    const { register, handleSubmit } = useForm({
-        defaultValues: defaultValues,
+    // if directly accessing this page
+    // without category_explorer / service_search / postcode passed
+    // redirect user back to home
+    if (prevUrl.length === 0 && prevUrlParams.length === 0) {
+      if (!(listServicesSearchObj || listServicesPostcodeObj)) {
+        navigate("?");
+        setUrl("");
+        setUrlParams({});
+      }
+    }
+    fetchData();
+
+    const setPrevUrlVals = handleSetPrevUrl({
+      prevUrl,
+      prevUrlParams,
     });
+    if (setPrevUrlVals) {
+      setPrevUrl(setPrevUrlVals.prevUrlArray);
+      setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
+    }
+  }, [setData, setIsLoading]);
 
-    useEffect(() => {
-        async function fetchData() {
-            const getCategories = await GetTaxonomies.retrieveTaxonomies({vocabulary: "category"});
-            setData(getCategories || []);
-            setIsLoading(false);
-        }
-    
-        // if directly accessing this page
-        // without category_explorer / service_search / postcode passed
-        // redirect user back to home
-        if (prevUrl.length === 0 && prevUrlParams.length === 0) {
-            if (!(listServicesSearchObj || listServicesPostcodeObj)) {
-                history.push("?");
-                setUrl("");
-                setUrlParams({});
-            }
-        }
-        fetchData();
+  async function submitForm() {
+    if (isLoading) return;
 
-        const setPrevUrlVals = handleSetPrevUrl({
-            prevUrl, prevUrlParams
-        });
-        if (setPrevUrlVals) {
-            setPrevUrl(setPrevUrlVals.prevUrlArray);
-            setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
-        }
-    
-    }, [setData, setIsLoading]);
+    let categoriesArray = [];
+    let checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
 
-    async function submitForm() {
-        if (isLoading) return;
-
-        let categoriesArray = [];
-        let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-
-        for (let i = 0; i < checkboxes.length; i++) {
-            categoriesArray.push(checkboxes[i].value);
-        }
-
-        if (categoriesArray.length === 0) {
-            delete prevUrlParamsArrayLast["categories"];
-            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
-            push = push.replaceAll("=undefined", "");
-            history.push(push);
-            setUrl(push);
-            setUrlParams(prevUrlParamsArrayLast);
-        } else {
-            prevUrlParamsArrayLast["categories"] = categoriesArray;
-            let push = "?" + new URLSearchParams(prevUrlParamsArrayLast).toString().replace(/%2C/g,"+").replace(/%2B/g,"+");
-            push = push.replaceAll("=undefined", "");
-            history.push(push);
-            setUrl(push);
-            setUrlParams(prevUrlParamsArrayLast);
-        }
+    for (let i = 0; i < checkboxes.length; i++) {
+      categoriesArray.push(checkboxes[i].value);
     }
 
-    return (
-        isLoading ? (
-            <AppLoading />
-        ) : (
-            <>
-            <FilterContainer>
-                <Header />
-                <ServiceSearch />
-                <ServiceFilter />
-                <h2>Select categories</h2>
-                <form onSubmit={handleSubmit(submitForm)} data-testid="form">
-                    <CheckboxContainer>
-                        {data.map((category, index) => {
-                            const categoryIdString = category.id.toString();
-                            return (
-                                <FormCheckbox
-                                    key={index}
-                                    taxonomyId={category.id}
-                                    type="checkbox"
-                                    label={category.name}
-                                    name={categoryIdString}
-                                    register={register}
-                                    value={category.id}
-                                />
-                            );
-                        })}
-                        <StyledButton type="submit" label="Select categories" disabled={isLoading} />
-                    </CheckboxContainer>
-                </form>
-            </FilterContainer>
-            <MapPlaceholder />
-            </>
-        )
-    )
-}
+    if (categoriesArray.length === 0) {
+      delete prevUrlParamsArrayLast["categories"];
+      let push =
+        "?" +
+        new URLSearchParams(prevUrlParamsArrayLast)
+          .toString()
+          .replace(/%2C/g, "+")
+          .replace(/%2B/g, "+");
+      push = push.replaceAll("=undefined", "");
+      navigate(push);
+      setUrl(push);
+      setUrlParams(prevUrlParamsArrayLast);
+    } else {
+      prevUrlParamsArrayLast["categories"] = categoriesArray;
+      let push =
+        "?" +
+        new URLSearchParams(prevUrlParamsArrayLast)
+          .toString()
+          .replace(/%2C/g, "+")
+          .replace(/%2B/g, "+");
+      push = push.replaceAll("=undefined", "");
+      navigate(push);
+      setUrl(push);
+      setUrlParams(prevUrlParamsArrayLast);
+    }
+  }
+
+  return isLoading ? (
+    <AppLoading />
+  ) : (
+    <>
+      <FilterContainer>
+        <Header />
+        <ServiceSearch />
+        <ServiceFilter />
+        <h2>Select categories</h2>
+        <form onSubmit={handleSubmit(submitForm)} data-testid="form">
+          <CheckboxContainer>
+            {data.map((category, index) => {
+              const categoryIdString = category.id.toString();
+              return (
+                <FormCheckbox
+                  key={index}
+                  taxonomyId={category.id}
+                  type="checkbox"
+                  label={category.name}
+                  name={categoryIdString}
+                  register={register}
+                  value={category.id}
+                />
+              );
+            })}
+            <StyledButton type="submit" label="Select categories" disabled={isLoading} />
+          </CheckboxContainer>
+        </form>
+      </FilterContainer>
+      <MapPlaceholder />
+    </>
+  );
+};
 
 export default SelectCategories;

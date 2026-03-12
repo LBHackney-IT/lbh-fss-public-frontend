@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/GitGuardian/ggshield
+    rev: v1.47.0
+    hooks:
+      - id: ggshield
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.105.0
+    hooks:
+      - id: terraform_fmt
+        args: [--args=-check]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+
+  - repo: local
+    hooks:
+      - id: php-wordpress
+        name: PHP lint & format (WordPress)
+        entry: bash .pre-commit/php-wordpress.sh
+        language: system
+        pass_filenames: true
+        types: [php]
+        files: ^wordpress/.*\.php$
+      - id: lint-staged
+        name: lint-staged
+        entry: npx lint-staged
+        language: system
+        pass_filenames: false

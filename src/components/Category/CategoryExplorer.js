@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from "react";
 import GetServices from "../../services/GetServices/GetServices";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import { CardContainer } from "../../util/styled-components/CardContainer";
@@ -11,20 +11,20 @@ import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlParamsContext";
 import MapToggleContext from "../../context/MapToggleContext/MapToggleContext";
 import styled from "styled-components";
-import ServiceFilter from '../ServiceFilter/ServiceFilter';
-import {MapContainer} from "../../util/styled-components/MapContainer";
+import ServiceFilter from "../ServiceFilter/ServiceFilter";
+import { MapContainer } from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from "react-responsive";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { light } from "../../settings";
-import { lighten } from 'polished';
+import { lighten } from "polished";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
 export const FILTER_MODIFIER = {
-    grey: () => `
+  grey: () => `
         background: ${lighten(0.09, light["greyBorder"])};
     `,
-}
+};
 
 export const CategoryCardContainer = styled.div`
   .fss--card {
@@ -37,7 +37,7 @@ export const CategoryCardContainer = styled.div`
     .fss--card--container {
       padding: 20px 15px;
       &::after {
-          content: none;
+        content: none;
       }
     }
     .fss--card--content {
@@ -46,36 +46,40 @@ export const CategoryCardContainer = styled.div`
   }
 `;
 
-const CategoryExplorer = ({ category, onClick }) => {
+const CategoryExplorer = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {urlParams} = useContext(UrlParamsContext);
-  const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
-  const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
-  const {mapToggle, setMapToggle} = useContext(MapToggleContext);
+  const { urlParams } = useContext(UrlParamsContext);
+  const { prevUrl, setPrevUrl } = useContext(PrevUrlContext);
+  const { prevUrlParams, setPrevUrlParams } = useContext(PrevUrlParamsContext);
+  const { mapToggle } = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
   const [fetchOnce, setfetchOnce] = useState(false);
   const storedPostcode = localStorage.getItem("postcode");
 
   const Desktop = ({ children }) => {
-    const isDesktop = useMediaQuery({ minWidth: 768 })
-    return isDesktop ? children : null
-  }
+    const isDesktop = useMediaQuery({ minWidth: 768 });
+    return isDesktop ? children : null;
+  };
 
   const Mobile = ({ children }) => {
-    const isMobile = useMediaQuery({ maxWidth: 767 })
-    return isMobile ? children : null
-  }
-  
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+    return isMobile ? children : null;
+  };
+
   useEffect(() => {
     async function fetchData() {
       let taxonomyId = [];
       let categoryId = "";
-      if (Object.entries(urlParams)[0] && Object.entries(urlParams)[0][0] == "category_explorer" && Object.entries(urlParams)[0][1] !== "") {
+      if (
+        Object.entries(urlParams)[0] &&
+        Object.entries(urlParams)[0][0] == "category_explorer" &&
+        Object.entries(urlParams)[0][1] !== ""
+      ) {
         categoryId = parseInt(Object.entries(urlParams)[0][1]);
       }
-      
+
       for (const [key, value] of Object.entries(urlParams)) {
         if ((key == "category_explorer" || key == "demographic") && value !== "") {
           taxonomyId.push(value);
@@ -83,8 +87,11 @@ const CategoryExplorer = ({ category, onClick }) => {
       }
 
       // call retrieveServices with categoryId param passed to return all services associated with the category
-      const getServices = await GetServices.retrieveServices({postcode: storedPostcode, taxonomyids: taxonomyId});
-      
+      const getServices = await GetServices.retrieveServices({
+        postcode: storedPostcode,
+        taxonomyids: taxonomyId,
+      });
+
       setData(getServices || []);
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
@@ -95,9 +102,10 @@ const CategoryExplorer = ({ category, onClick }) => {
       fetchData();
       setfetchOnce(true);
     }
-    
+
     const setPrevUrlVals = handleSetPrevUrl({
-      prevUrl, prevUrlParams
+      prevUrl,
+      prevUrlParams,
     });
     if (setPrevUrlVals) {
       setPrevUrl(setPrevUrlVals.prevUrlArray);
@@ -109,67 +117,64 @@ const CategoryExplorer = ({ category, onClick }) => {
     } else {
       setShowMap("false");
     }
-
   });
 
   if (isLoading) {
     return <span>Loading</span>;
   }
 
-  const select = e => {
+  const select = (e) => {
     onClick(e);
-  }
+  };
 
-  return(
+  return (
     <div>
       {Object.keys(categoryData).length === 0 ? (
         <div>
           <Header />
           <div className="no-results">
             <h2>No results found</h2>
-            <p>Please use the 'Back' button above to go back and select a category.</p>
+            <p>
+              Please use the &apos;Back&apos; button above to go back and select a
+              category.
+            </p>
           </div>
           <MapPlaceholder />
-      </div>
+        </div>
       ) : (
         <div>
           <Header />
           <CategoryCardContainer>
-            <CategoryCard
-              key={categoryData.id}
-              category={categoryData}
-            />
+            <CategoryCard key={categoryData.id} category={categoryData} />
           </CategoryCardContainer>
           <ServiceFilter modifiers="grey" />
           <Mobile>
             <ToggleView />
-            {
-              ( showMap == "false" ) ?
-                <CardContainer>
-                  {data.services.map((service, index) => {
-                    return (
-                      <ServiceCard key={index} service={service} onClick={select} />
-                    );
-                  })}
-                </CardContainer> : ""
-            }
+            {showMap == "false" ? (
+              <CardContainer>
+                {data.services.map((service, index) => {
+                  return <ServiceCard key={index} service={service} onClick={select} />;
+                })}
+              </CardContainer>
+            ) : (
+              ""
+            )}
           </Mobile>
           <Desktop>
             <CardContainer>
               {data.services.map((service, index) => {
-                return (
-                  <ServiceCard key={index} service={service} onClick={select} />
-                );
+                return <ServiceCard key={index} service={service} onClick={select} />;
               })}
             </CardContainer>
           </Desktop>
           <Mobile>
-          {
-            ( showMap == "true" ) ?
+            {showMap == "true" ? (
               <MapContainer>
                 <HackneyMap data={data} />
-              </MapContainer> : ""
-          }
+              </MapContainer>
+            ) : (
+              ""
+            )}
           </Mobile>
           <Desktop>
             <MapContainer>
@@ -180,8 +185,6 @@ const CategoryExplorer = ({ category, onClick }) => {
       )}
     </div>
   );
-
-}
-
+};
 
 export default CategoryExplorer;

@@ -1,0 +1,385 @@
+version: 2.1
+
+orbs:
+  sonarcloud: sonarsource/sonarcloud@2.0.0
+  aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:20.20-browsers
+  node-aws-executor:
+    docker:
+      - image: cimg/aws:2024.03
+  docker-terraform:
+    docker:
+      - image: hashicorp/terraform:latest
+  docker-python:
+    docker:
+      - image: cimg/python:3.11
+
+references:
+  workspace_root: &workspace_root "~"
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+commands:
+  assume-role-and-persist-workspace:
+    description: "Assumes deployment role and persists credentials across jobs"
+    parameters:
+      aws-account:
+        type: string
+    steps:
+      - checkout
+      - aws_assume_role/assume_role:
+          account: <<parameters.aws-account>>
+          profile_name: default
+          role: "LBH_Circle_CI_Deployment_Role"
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .aws
+
+  build-and-package:
+    parameters:
+      environment:
+        type: string
+    steps:
+      - run:
+          name: Create .env file
+          command: echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+      - run:
+          name: Authenticate FontAwesome
+          command: |
+            echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
+            echo "//npm.fontawesome.com/:_authToken=${FONTAWESOME_TOKEN}" >> .npmrc
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Build
+          command: CI=false GENERATE_SOURCEMAP=false yarn build
+          environment:
+            REACT_APP_ENV: <<parameters.environment>>
+      - run:
+          name: Package WordPress plugin
+          command: |
+            rm -rf wordpress/lbh-fss-public-frontend
+            mkdir -p wordpress/lbh-fss-public-frontend/build
+            cp -r build/. wordpress/lbh-fss-public-frontend/build/
+            cd wordpress
+            zip -r ../fss-directory.zip . \
+              -x "*.git*" \
+              -x "*.zip" \
+              -x "export-plugin.sh" \
+              -x "lbh-fss-public-frontend/node_modules/*" \
+              -x "*.map"
+      - run:
+          name: Upload plugin zip to S3
+          command: |
+            aws s3 cp fss-directory.zip \
+              s3://fss-wordpress-plugin-<<parameters.environment>>/fss-directory.zip
+
+  preview-terraform:
+    description: "Previews terraform configuration changes"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          name: Preview terraform
+          command: |
+            terraform init \
+              -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
+              -backend-config="key=services/fss-public-frontend/terraform.tfstate"
+            terraform validate
+            terraform plan -var="environment=<<parameters.environment>>"
+
+  deploy-terraform:
+    description: "Initializes and applies terraform configuration"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          name: Initialize and apply terraform
+          command: |
+            terraform init \
+              -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
+              -backend-config="key=services/fss-public-frontend/terraform.tfstate"
+            terraform validate
+            terraform apply -auto-approve -var="environment=<<parameters.environment>>"
+
+jobs:
+  install-dependencies:
+    executor: node-executor
+    steps:
+      - checkout:
+          method: full
+      - *attach_workspace
+      - run:
+          name: Authenticate FontAwesome
+          command: |
+            echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
+            echo "//npm.fontawesome.com/:_authToken=${FONTAWESOME_TOKEN}" >> .npmrc
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .
+
+  lint-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run ESLint
+          command: yarn lint
+
+  test-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run Tests
+          command: yarn test:ci
+          environment:
+            CI: "true"
+            NODE_OPTIONS: "--max-old-space-size=4096"
+            JEST_JUNIT_OUTPUT_DIR: test_results
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: coverage
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - project/coverage
+
+  format-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run Prettier
+          command: yarn format:check
+
+  security-audit:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Run security audit (critical only)
+          command: yarn audit-ci --critical
+
+  dependency-check:
+    executor: node-executor
+    steps:
+      - *attach_workspace
+      - run:
+          name: Check for outdated dependencies
+          command: yarn outdated || true
+
+  sonar-scan:
+    executor: docker-python
+    steps:
+      - *attach_workspace
+      - sonarcloud/scan
+
+  assume-role-development:
+    executor: node-aws-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_DEVELOPMENT
+
+  assume-role-staging:
+    executor: node-aws-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_STAGING
+
+  assume-role-production:
+    executor: node-aws-executor
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_PRODUCTION
+
+  deploy-development:
+    executor: node-aws-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: development
+
+  deploy-staging:
+    executor: node-aws-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: staging
+
+  deploy-production:
+    executor: node-aws-executor
+    steps:
+      - *attach_workspace
+      - build-and-package:
+          environment: production
+
+  preview-development-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: development
+
+  terraform-init-and-apply-to-development:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: development
+
+  terraform-init-and-apply-to-staging:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: staging
+
+  preview-staging-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: staging
+
+  preview-production-terraform:
+    executor: docker-terraform
+    steps:
+      - preview-terraform:
+          environment: production
+
+  terraform-init-and-apply-to-production:
+    executor: docker-terraform
+    steps:
+      - deploy-terraform:
+          environment: production
+
+workflows:
+  version: 2
+  continuous-delivery:
+    jobs:
+      - install-dependencies
+      - lint-check:
+          requires: [install-dependencies]
+      - test-check:
+          requires: [install-dependencies]
+      - format-check:
+          requires: [install-dependencies]
+      - security-audit:
+          requires: [install-dependencies]
+      - dependency-check:
+          requires: [install-dependencies]
+      - sonar-scan:
+          context: SonarCloud
+          requires: [test-check]
+
+      # Feature branch terraform preview
+      - assume-role-development:
+          name: assume-role-development-preview
+          context: api-assume-role-development-context
+          filters:
+            branches:
+              ignore: [master, develop]
+      - preview-development-terraform:
+          requires: [assume-role-development-preview]
+          filters:
+            branches:
+              ignore: [master, develop]
+
+      # Development
+      - assume-role-development:
+          name: assume-role-development-deploy
+          context: api-assume-role-development-context
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
+          filters:
+            branches:
+              only: [develop]
+      - terraform-init-and-apply-to-development:
+          requires: [assume-role-development-deploy]
+          filters:
+            branches:
+              only: [develop]
+      - deploy-development:
+          requires: [terraform-init-and-apply-to-development]
+          filters:
+            branches:
+              only: [develop]
+
+      # Staging
+      - assume-role-staging:
+          name: assume-role-staging-deploy
+          context: api-assume-role-staging-context
+          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
+          filters:
+            branches:
+              only: [master]
+      - preview-staging-terraform:
+          requires: [assume-role-staging-deploy]
+          filters:
+            branches:
+              only: [master]
+      - permit-deploy-staging:
+          type: approval
+          requires: [preview-staging-terraform]
+          filters:
+            branches:
+              only: [master]
+      - terraform-init-and-apply-to-staging:
+          requires: [permit-deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - deploy-staging:
+          requires: [terraform-init-and-apply-to-staging]
+          filters:
+            branches:
+              only: [master]
+
+      # Production
+      - assume-role-production:
+          context: api-assume-role-production-context
+          requires: [deploy-staging, terraform-init-and-apply-to-staging]
+          filters:
+            branches:
+              only: [master]
+      - preview-production-terraform:
+          requires: [assume-role-production]
+          filters:
+            branches:
+              only: [master]
+      - permit-deploy-production:
+          type: approval
+          requires:
+            [
+              preview-production-terraform,
+              deploy-staging,
+              terraform-init-and-apply-to-staging,
+            ]
+          filters:
+            branches:
+              only: [master]
+      - terraform-init-and-apply-to-production:
+          requires: [permit-deploy-production]
+          filters:
+            branches:
+              only: [master]
+      - deploy-production:
+          requires: [terraform-init-and-apply-to-production]
+          filters:
+            branches:
+              only: [master]

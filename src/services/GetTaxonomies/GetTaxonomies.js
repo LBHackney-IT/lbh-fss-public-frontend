@@ -2,11 +2,7 @@ import axios from "axios";
 import BASE_API_URL from "../BaseApiUrl/BaseApiUrl";
 
 const GetTaxonomies = {
-  async retrieveTaxonomies({
-    sort = "weight",
-    direction = "asc",
-    vocabulary = "",
-  }) {
+  async retrieveTaxonomies({ sort = "weight", direction = "asc", vocabulary = "" }) {
     try {
       const response = await axios.get(`${BASE_API_URL}/taxonomies`, {
         params: {
@@ -21,15 +17,13 @@ const GetTaxonomies = {
       console.error(error);
 
       return {
-        "taxonomies": []
+        taxonomies: [],
       };
     }
   },
   async getTaxonomy(id) {
     try {
-      const response = await axios.get(`${BASE_API_URL}/taxonomies/${id}`, {
-
-      });
+      const response = await axios.get(`${BASE_API_URL}/taxonomies/${id}`, {});
 
       return response.data;
     } catch (error) {

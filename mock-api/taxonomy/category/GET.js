@@ -5,10 +5,9 @@ module.exports = (req, res) => {
   const direction = req.query.direction || "asc";
   const id = req.query.id || "";
 
-  const categories = [...mockCategories]
-    .sort(function (a, b) {
-      return a.weight - b.weight;
-    });
+  const categories = [...mockCategories].sort(function (a, b) {
+    return a.weight - b.weight;
+  });
 
   return res.status(200).send({
     entries: categories,

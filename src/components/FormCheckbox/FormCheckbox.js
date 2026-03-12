@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import FormError from "../FormError/FormError";
@@ -50,17 +49,15 @@ const FormCheckbox = ({
         <StyledCheckbox
           name={name}
           type="checkbox"
-          ref={register({ required })}
           aria-invalid={error ? "true" : "false"}
           value={value}
           onClick={onClick}
           data-taxonomy-id={taxonomyId}
+          {...register(name, { required })}
         />
         <StyledLabel htmlFor={name}>{label}</StyledLabel>
       </StyledDiv>
-      {error && error.type === "required" && (
-        <FormError error="This is required" />
-      )}
+      {error && error.type === "required" && <FormError error="This is required" />}
     </>
   );
 };
