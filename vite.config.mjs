@@ -99,9 +99,13 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      "process.env.NODE_ENV": JSON.stringify(mode === "production" ? "production" : "development"),
+      "process.env.NODE_ENV": JSON.stringify(
+        mode === "production" ? "production" : "development",
+      ),
       "process.env.PUBLIC_URL": JSON.stringify(""),
-      "process.env.VITE_MAPBOX_ACCESS_TOKEN": JSON.stringify(env.VITE_MAPBOX_ACCESS_TOKEN ?? ""),
+      "process.env.VITE_MAPBOX_ACCESS_TOKEN": JSON.stringify(
+        env.VITE_MAPBOX_ACCESS_TOKEN ?? "",
+      ),
     },
   };
 });
