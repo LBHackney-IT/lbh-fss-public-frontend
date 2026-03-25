@@ -1,4 +1,4 @@
-function handleSetPrevUrl({ prevUrl }) {
+function handleSetPrevUrl({ prevUrl, locationSearch = window.location.search }) {
   const paramsArray = [
     "category_explorer",
     "postcode",
@@ -7,7 +7,7 @@ function handleSetPrevUrl({ prevUrl }) {
     "categories",
     "demographic",
   ];
-  const currentSearch = window.location.search;
+  const currentSearch = locationSearch;
   let paramObj = {};
 
   if (currentSearch) {

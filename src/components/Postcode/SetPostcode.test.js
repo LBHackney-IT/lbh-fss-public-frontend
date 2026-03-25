@@ -64,11 +64,11 @@ describe("SetPostcode", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     setItemSpy = jest.spyOn(Storage.prototype, "setItem");
-    Object.defineProperty(window, "localStorage", {
-      value: { getItem: jest.fn(() => null), setItem: setItemSpy },
-      writable: true,
-    });
     postcodeValidator.mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    setItemSpy.mockRestore();
   });
 
   it("renders heading and form", async () => {

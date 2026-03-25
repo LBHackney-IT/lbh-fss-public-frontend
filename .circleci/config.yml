@@ -7,7 +7,7 @@ orbs:
 executors:
   node-executor:
     docker:
-      - image: cimg/node:20.20-browsers
+      - image: cimg/node:24.14-browsers
   node-aws-executor:
     docker:
       - image: cimg/aws:2024.03
@@ -48,7 +48,7 @@ commands:
     steps:
       - run:
           name: Create .env file
-          command: echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+          command: echo "VITE_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
       - run:
           name: Authenticate FontAwesome
           command: |
@@ -59,9 +59,7 @@ commands:
           command: yarn install
       - run:
           name: Build
-          command: CI=false GENERATE_SOURCEMAP=false yarn build
-          environment:
-            REACT_APP_ENV: <<parameters.environment>>
+          command: CI=false yarn build --mode <<parameters.environment>>
       - run:
           name: Package WordPress plugin
           command: |
