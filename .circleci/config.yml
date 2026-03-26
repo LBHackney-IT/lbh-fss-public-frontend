@@ -125,7 +125,12 @@ jobs:
     steps:
       - checkout:
           method: full
-      - *attach_workspace
+      - run:
+          name: Verify Node (debug engine / image mismatches)
+          command: |
+            node -v
+            which node
+            echo "CIRCLE_SHA1=${CIRCLE_SHA1}"
       - run:
           name: Authenticate FontAwesome
           command: |
