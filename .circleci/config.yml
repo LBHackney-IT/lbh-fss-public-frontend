@@ -9,10 +9,6 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
-  # cimg/aws bundles Node 20.x; yarn install here hits package.json engines (>=24).
-  node-aws-executor:
-    docker:
-      - image: cimg/node:24.14-browsers
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -27,10 +23,10 @@ references:
       at: *workspace_root
 
 commands:
-  prepare-aws-cli:
-    description: "AWS CLI on Node image (replaces cimg/aws for Node 24 + engines)"
-    steps:
-      - aws-cli/setup
+  # prepare-aws-cli:
+  #   description: "Install AWS CLI v2 (cimg/node does not include it; needed for SSM/S3/assume-role)"
+  #   steps:
+  #     - aws-cli/setup
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -52,7 +48,8 @@ commands:
       environment:
         type: string
     steps:
-      - prepare-aws-cli
+      - aws-cli/setup
+      # - prepare-aws-cli
       - run:
           name: Create .env file
           command: |
@@ -211,42 +208,42 @@ jobs:
       - sonarcloud/scan
 
   assume-role-development:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
-      - prepare-aws-cli
+      # - prepare-aws-cli
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DEVELOPMENT
 
   assume-role-staging:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
-      - prepare-aws-cli
+      # - prepare-aws-cli
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_STAGING
 
   assume-role-production:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
-      - prepare-aws-cli
+      # - prepare-aws-cli
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:
