@@ -22,6 +22,26 @@ references:
       at: *workspace_root
 
 commands:
+  install-aws-cli:
+    description:
+      "Install AWS CLI v2 (official bundle; cimg/node has no awscli apt package)"
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            set -euo pipefail
+            if command -v aws >/dev/null 2>&1; then
+              aws --version
+              exit 0
+            fi
+            export DEBIAN_FRONTEND=noninteractive
+            sudo apt-get update
+            sudo apt-get install -y unzip curl
+            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+            unzip -q /tmp/awscliv2.zip -d /tmp
+            sudo /tmp/aws/install --update
+            rm -rf /tmp/aws /tmp/awscliv2.zip
+            aws --version
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -29,13 +49,7 @@ commands:
         type: string
     steps:
       - checkout
-      - run:
-          name: Install AWS CLI
-          command: |
-            export DEBIAN_FRONTEND=noninteractive
-            sudo apt-get update
-            sudo apt-get install -y awscli
-            aws --version
+      - install-aws-cli
       - aws_assume_role/assume_role:
           account: <<parameters.aws-account>>
           profile_name: default
@@ -50,13 +64,7 @@ commands:
       environment:
         type: string
     steps:
-      - run:
-          name: Install AWS CLI
-          command: |
-            export DEBIAN_FRONTEND=noninteractive
-            sudo apt-get update
-            sudo apt-get install -y awscli
-            aws --version
+      - install-aws-cli
       - run:
           name: Create .env file
           command: |
