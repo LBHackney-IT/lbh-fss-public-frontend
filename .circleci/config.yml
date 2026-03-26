@@ -29,6 +29,13 @@ commands:
         type: string
     steps:
       - checkout
+      - run:
+          name: Install AWS CLI
+          command: |
+            export DEBIAN_FRONTEND=noninteractive
+            sudo apt-get update
+            sudo apt-get install -y awscli
+            aws --version
       - aws_assume_role/assume_role:
           account: <<parameters.aws-account>>
           profile_name: default
