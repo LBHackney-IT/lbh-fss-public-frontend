@@ -8,6 +8,10 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
+  # AWS CLI v2 preinstalled; Node comes from nvm + .nvmrc (see setup-node-nvm).
+  aws-executor:
+    docker:
+      - image: cimg/aws:2024.03
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -22,26 +26,31 @@ references:
       at: *workspace_root
 
 commands:
-  install-aws-cli:
+  setup-node-nvm:
     description:
-      "Install AWS CLI v2 (official bundle; cimg/node has no awscli apt package)"
+      "Install Node from .nvmrc + Yarn 1 (for cimg/aws deploy jobs; AWS CLI is on the
+      image)"
     steps:
       - run:
-          name: Install AWS CLI
+          name: Install nvm
           command: |
             set -euo pipefail
-            if command -v aws >/dev/null 2>&1; then
-              aws --version
-              exit 0
-            fi
-            export DEBIAN_FRONTEND=noninteractive
-            sudo apt-get update
-            sudo apt-get install -y unzip curl
-            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
-            unzip -q /tmp/awscliv2.zip -d /tmp
-            sudo /tmp/aws/install --update
-            rm -rf /tmp/aws /tmp/awscliv2.zip
-            aws --version
+            curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> "$BASH_ENV"
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"' >> "$BASH_ENV"
+      - run:
+          name: Install Node and Yarn from .nvmrc
+          command: |
+            set -euo pipefail
+            cd "$CIRCLE_WORKING_DIRECTORY"
+            test -f .nvmrc
+            nvm install
+            nvm use
+            NODE_VER=$(tr -d '\n\r' < .nvmrc)
+            echo "nvm use ${NODE_VER}" >> "$BASH_ENV"
+            node -v
+            npm install -g yarn@1.22.22
+            yarn -v
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -49,7 +58,6 @@ commands:
         type: string
     steps:
       - checkout
-      - install-aws-cli
       - aws_assume_role/assume_role:
           account: <<parameters.aws-account>>
           profile_name: default
@@ -64,7 +72,7 @@ commands:
       environment:
         type: string
     steps:
-      - install-aws-cli
+      - setup-node-nvm
       - run:
           name: Create .env file
           command: |
@@ -144,7 +152,6 @@ jobs:
     steps:
       - checkout:
           method: full
-      - *attach_workspace
       - run:
           name: Authenticate FontAwesome
           command: |
@@ -218,39 +225,39 @@ jobs:
       - sonarcloud/scan
 
   assume-role-development:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DEVELOPMENT
 
   assume-role-staging:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_STAGING
 
   assume-role-production:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: node-executor
+    executor: aws-executor
     steps:
       - *attach_workspace
       - build-and-package:
