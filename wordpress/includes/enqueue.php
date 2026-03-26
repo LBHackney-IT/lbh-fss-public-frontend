@@ -7,10 +7,6 @@
 
 defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
 
-defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
-
-defined( 'ABSPATH' ) or die( 'Direct script access disallowed.' ); // phpcs:ignore Squiz.Operators.ValidLogicalOperators.NotAllowed -- Common WordPress pattern.
-
 add_action(
 	'init',
 	function () {
@@ -60,12 +56,14 @@ add_action(
 					wp_add_inline_style( 'erw', $embed_css );
 				}
 
+				$main_deps = array();
 				if ( ! empty( $asset_manifest['runtime-main.js'] ) ) {
 					wp_enqueue_script( 'erw-runtime', $base_url . ltrim( $asset_manifest['runtime-main.js'], '/' ), array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+					$main_deps[] = 'erw-runtime';
 				}
 
 				if ( ! empty( $asset_manifest['main.js'] ) ) {
-					wp_enqueue_script( 'erw-main', $base_url . ltrim( $asset_manifest['main.js'], '/' ), array( 'erw-runtime' ), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+					wp_enqueue_script( 'erw-main', $base_url . ltrim( $asset_manifest['main.js'], '/' ), $main_deps, null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				}
 
 				foreach ( $asset_manifest as $key => $value ) {

@@ -7,7 +7,7 @@ orbs:
 executors:
   node-executor:
     docker:
-      - image: cimg/node:20.20-browsers
+      - image: cimg/node:24.14-browsers
   node-aws-executor:
     docker:
       - image: cimg/aws:2024.03
@@ -48,7 +48,13 @@ commands:
     steps:
       - run:
           name: Create .env file
-          command: echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+          command: |
+            MAP_BOX_URL=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-url --query Parameter.Value --output text)
+            MAP_BOX_TOKEN=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-token --query Parameter.Value --output text)
+            cat \<<EOF >.env
+            VITE_MAP_BOX_URL=${MAP_BOX_URL}
+            VITE_MAP_BOX_TOKEN=${MAP_BOX_TOKEN}
+            EOF
       - run:
           name: Authenticate FontAwesome
           command: |
@@ -59,9 +65,7 @@ commands:
           command: yarn install
       - run:
           name: Build
-          command: CI=false GENERATE_SOURCEMAP=false yarn build
-          environment:
-            REACT_APP_ENV: <<parameters.environment>>
+          command: CI=false yarn build --mode <<parameters.environment>>
       - run:
           name: Package WordPress plugin
           command: |
