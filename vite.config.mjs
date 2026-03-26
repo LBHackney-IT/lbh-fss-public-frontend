@@ -103,9 +103,6 @@ export default defineConfig(({ mode }) => {
         mode === "production" ? "production" : "development",
       ),
       "process.env.PUBLIC_URL": JSON.stringify(""),
-      "process.env.VITE_MAPBOX_ACCESS_TOKEN": JSON.stringify(
-        env.VITE_MAPBOX_ACCESS_TOKEN ?? "",
-      ),
     },
   };
 });

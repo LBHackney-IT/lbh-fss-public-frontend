@@ -48,7 +48,13 @@ commands:
     steps:
       - run:
           name: Create .env file
-          command: echo "VITE_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+          command: |
+            MAP_BOX_URL=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-url --query Parameter.Value --output text)
+            MAP_BOX_TOKEN=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-token --query Parameter.Value --output text)
+            cat \<<EOF >.env
+            VITE_MAP_BOX_URL=${MAP_BOX_URL}
+            VITE_MAP_BOX_TOKEN=${MAP_BOX_TOKEN}
+            EOF
       - run:
           name: Authenticate FontAwesome
           command: |

@@ -20,7 +20,6 @@ const HACKNEY_GEOSERVER_WFS =
   "https://map.hackney.gov.uk/geoserver/ows?service=WFS&version=2.0&request=GetFeature&outputFormat=json&SrsName=EPSG:4326&typeName=";
 const HACKNEY_GEOSERVER_WMS = "https://map.hackney.gov.uk/geoserver/wms";
 // Vite inlines via define (vite.config.mjs); Jest sees process.env without import.meta.
-const MAPBOX_TILES_URL = `https://api.mapbox.com/styles/v1/hackneygis/ck7ounc2t0cg41imjb3j53dp8/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.VITE_MAPBOX_ACCESS_TOKEN ?? ""}`;
 const GENERIC_GEOLOCATION_ERROR =
   "We cannot find your location. Please enable Location Services for your browser in Settings or try again outside of your office as your network may block geolocation.";
 const GENERIC_OUTSIDE_HACKNEY_ERROR = "This map only covers Hackney";
@@ -44,7 +43,6 @@ export {
   HACKNEY_BOUNDS_2,
   HACKNEY_GEOSERVER_WMS,
   HACKNEY_GEOSERVER_WFS,
-  MAPBOX_TILES_URL,
   GENERIC_GEOLOCATION_ERROR,
   GENERIC_OUTSIDE_HACKNEY_ERROR,
   ATTRIBUTION,

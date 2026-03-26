@@ -15,7 +15,6 @@ import {
   HACKNEY_BOUNDS_2,
   HACKNEY_GEOSERVER_WMS,
   HACKNEY_GEOSERVER_WFS,
-  MAPBOX_TILES_URL,
   GENERIC_GEOLOCATION_ERROR,
   GENERIC_OUTSIDE_HACKNEY_ERROR,
   ATTRIBUTION,
@@ -58,11 +57,6 @@ describe("GlobalVariables", () => {
   it("exports geoserver URLs as strings", () => {
     expect(HACKNEY_GEOSERVER_WMS).toContain("hackney.gov.uk");
     expect(HACKNEY_GEOSERVER_WFS).toContain("GetFeature");
-  });
-
-  it("exports MAPBOX_TILES_URL as string", () => {
-    expect(typeof MAPBOX_TILES_URL).toBe("string");
-    expect(MAPBOX_TILES_URL).toContain("mapbox.com");
   });
 
   it("exports error messages", () => {
