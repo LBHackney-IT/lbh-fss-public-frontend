@@ -17,4 +17,4 @@ export function computeBaseApiUrl(getOrigin) {
   return STAGING_API_URL;
 }
 
-export default computeBaseApiUrl(() => window.location.origin);
+export default computeBaseApiUrl(() => globalThis.window?.location?.origin ?? "");

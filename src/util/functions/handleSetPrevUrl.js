@@ -1,4 +1,7 @@
-function handleSetPrevUrl({ prevUrl, locationSearch = window.location.search }) {
+function handleSetPrevUrl({
+  prevUrl,
+  locationSearch = globalThis.window?.location?.search ?? "",
+}) {
   const paramsArray = [
     "category_explorer",
     "postcode",
