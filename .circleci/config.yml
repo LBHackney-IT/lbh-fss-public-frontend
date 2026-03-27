@@ -10,7 +10,7 @@ executors:
       - image: cimg/node:24.14-browsers
   node-aws-executor:
     docker:
-      - image: cimg/aws:2024.03
+      - image: cimg/aws:2025.01
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -25,30 +25,6 @@ references:
       at: *workspace_root
 
 commands:
-  setup-node-nvm:
-    description:
-      "Install Node from .nvmrc + Yarn 1 (for cimg/aws deploy jobs; AWS CLI is on the
-      image)"
-    steps:
-      - run:
-          name: Install Node and Yarn from .nvmrc (nvm)
-          command: |
-            set -euo pipefail
-            curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            cd /tmp
-            . "$NVM_DIR/nvm.sh"
-            cd "$CIRCLE_WORKING_DIRECTORY"
-            test -f .nvmrc
-            nvm install
-            nvm use
-            NODE_VER=$(tr -d '\n\r' < .nvmrc)
-            NODE_BIN="$(dirname "$(command -v node)")"
-            echo "export PATH=\"${NODE_BIN}:\$PATH\"" >> "$BASH_ENV"
-            node -v
-            npm install -g yarn@1.22.22
-            yarn -v
-            echo "Using Node ${NODE_VER} at ${NODE_BIN}"
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -70,7 +46,6 @@ commands:
       environment:
         type: string
     steps:
-      - setup-node-nvm
       - run:
           name: Create .env file
           command: |
@@ -150,6 +125,7 @@ jobs:
     steps:
       - checkout:
           method: full
+      - *attach_workspace
       - run:
           name: Authenticate FontAwesome
           command: |
