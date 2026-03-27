@@ -8,7 +8,7 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
-  node-node-aws-executor:
+  node-aws-executor:
     docker:
       - image: cimg/aws:2024.03
   docker-terraform:
