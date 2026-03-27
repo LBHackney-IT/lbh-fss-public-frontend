@@ -8,8 +8,7 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
-  # AWS CLI v2 preinstalled; Node comes from nvm + .nvmrc (see setup-node-nvm).
-  aws-executor:
+  node-aws-executor:
     docker:
       - image: cimg/aws:2024.03
   docker-terraform:
@@ -35,8 +34,6 @@ commands:
           name: Install Node and Yarn from .nvmrc (nvm)
           command: |
             set -euo pipefail
-            # Source nvm from a dir without .nvmrc: with set -e, sourcing nvm.sh in a
-            # project dir before the version is installed exits 3 (nvm-sh/nvm#1985).
             curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
             cd /tmp
