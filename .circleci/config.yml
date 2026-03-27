@@ -23,6 +23,14 @@ references:
       at: *workspace_root
 
 commands:
+  install-python3:
+    description: "pip install for aws-cli"
+    steps:
+      - run:
+          name: Install python3.12-venv
+          command: |
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3.12-venv
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -30,12 +38,7 @@ commands:
         type: string
     steps:
       - checkout
-      - run:
-          name: Install python3.12-venv
-          command: |
-            sudo apt-get update
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3.12-venv
-      # - aws-cli/install
+      - install-python3
       - aws_assume_role/assume_role:
           account: <<parameters.aws-account>>
           profile_name: default
@@ -50,11 +53,7 @@ commands:
       environment:
         type: string
     steps:
-      - run:
-          name: Install python3.12-venv
-          command: |
-            sudo apt-get update
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3.12-venv
+      - install-python3
       - aws-cli/install
       - run:
           name: Create .env file
@@ -307,12 +306,12 @@ workflows:
           context: api-assume-role-development-context
           filters:
             branches:
-              ignore: [master, develop, bugfix/node-breaking]
+              ignore: [master, develop]
       - preview-development-terraform:
           requires: [assume-role-development-preview]
           filters:
             branches:
-              ignore: [master, develop, bugfix/node-breaking]
+              ignore: [master, develop]
 
       # Development
       - assume-role-development:
@@ -321,17 +320,17 @@ workflows:
           requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
-              only: [develop, bugfix/node-breaking]
+              only: [develop]
       - terraform-init-and-apply-to-development:
           requires: [assume-role-development-deploy]
           filters:
             branches:
-              only: [develop, bugfix/node-breaking]
+              only: [develop]
       - deploy-development:
           requires: [terraform-init-and-apply-to-development]
           filters:
             branches:
-              only: [develop, bugfix/node-breaking]
+              only: [develop]
 
       # Staging
       - assume-role-staging:
