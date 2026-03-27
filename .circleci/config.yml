@@ -8,7 +8,7 @@ executors:
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
-  # AWS CLI v2 preinstalled; Node major from .nvmrc via NodeSource (see setup-node-from-nvmrc).
+  # AWS CLI v2 preinstalled; Node comes from nvm + .nvmrc (see setup-node-nvm).
   aws-executor:
     docker:
       - image: cimg/aws:2024.03
@@ -26,21 +26,33 @@ references:
       at: *workspace_root
 
 commands:
-  setup-node-from-nvmrc:
+  setup-node-nvm:
     description:
-      "Node (major from .nvmrc) + Yarn 1 via NodeSource apt; for cimg/aws deploy jobs"
+      "Install Node from .nvmrc + Yarn 1 (for cimg/aws deploy jobs; AWS CLI is on the
+      image)"
     steps:
+      - run:
+          name: Install nvm
+          command: |
+            set -euo pipefail
+            curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> "$BASH_ENV"
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"' >> "$BASH_ENV"
       - run:
           name: Install Node and Yarn from .nvmrc
           command: |
             set -euo pipefail
             cd "$CIRCLE_WORKING_DIRECTORY"
             test -f .nvmrc
-            NODE_MAJOR=$(sed 's/^v//' .nvmrc | cut -d. -f1 | tr -d '\n\r')
-            curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" | sudo -E bash -
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
-            sudo npm install -g yarn@1.22.22
-            node -v && yarn -v
+            nvm install
+            nvm use
+            NODE_VER=$(tr -d '\n\r' < .nvmrc)
+            echo "nvm use ${NODE_VER}" >> "$BASH_ENV"
+            node -v
+            if ! command -v yarn >/dev/null 2>&1; then
+              npm install -g yarn@1.22.22
+            fi
+            yarn -v
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -62,7 +74,7 @@ commands:
       environment:
         type: string
     steps:
-      - setup-node-from-nvmrc
+      - setup-node-nvm
       - run:
           name: Create .env file
           command: |
