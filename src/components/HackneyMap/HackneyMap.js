@@ -17,6 +17,7 @@ import getAllAddresses from "../../helpers/Mapbox/getAllAddresses";
 import getHomeLocation from "../../helpers/Mapbox/getHomeLocation";
 import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.min.css";
+import { getMapboxTileUrl } from "../../settings/mapboxTiles";
 
 import {
   MAX_ZOOM,
@@ -24,7 +25,6 @@ import {
   ZOOM,
   CENTER_DESKTOP_LEGEND_FULLSCREEN,
   MAP_BOUNDS,
-  MAPBOX_TILES_URL,
   ATTRIBUTION,
 } from "../../helpers/GlobalVariables/GlobalVariables";
 
@@ -106,7 +106,7 @@ const HackneyMap = (data) => {
       <MapResizeHandler />
       <ReactLeafletMarkerClusterStyles />
       <ZoomControl position="topright" />
-      <TileLayer attribution={ATTRIBUTION} url={MAPBOX_TILES_URL} />
+      <TileLayer attribution={ATTRIBUTION} url={getMapboxTileUrl()} />
 
       <MarkerClusterGroup>
         {getAllAddresses(data).map((service, index) => {

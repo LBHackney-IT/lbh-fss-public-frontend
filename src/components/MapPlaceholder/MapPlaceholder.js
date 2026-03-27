@@ -12,9 +12,9 @@ import {
   ZOOM,
   CENTER_DESKTOP_LEGEND_FULLSCREEN,
   MAP_BOUNDS,
-  MAPBOX_TILES_URL,
   ATTRIBUTION,
 } from "../../helpers/GlobalVariables/GlobalVariables";
+import { getMapboxTileUrl } from "../../settings/mapboxTiles";
 
 L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
@@ -42,7 +42,7 @@ const MapPlaceholder = () => {
         >
           <MapResizeHandler />
           <ZoomControl position="topright" />
-          <TileLayer attribution={ATTRIBUTION} url={MAPBOX_TILES_URL} />
+          <TileLayer attribution={ATTRIBUTION} url={getMapboxTileUrl()} />
         </MapContainer>
       </StyledMapContainer>
     </Desktop>

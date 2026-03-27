@@ -1,4 +1,6 @@
+import "./instrument";
 import { createRoot } from "react-dom/client";
+import * as Sentry from "@sentry/react";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
@@ -21,7 +23,11 @@ const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <App />
+    <Sentry.ErrorBoundary
+      fallback={<p role="alert">Something went wrong. Please refresh the page.</p>}
+    >
+      <App />
+    </Sentry.ErrorBoundary>
   </BrowserRouter>,
 );
 

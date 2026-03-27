@@ -2,15 +2,13 @@ version: 2.1
 
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0
+  aws-cli: circleci/aws-cli@4.0.0
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
 
 executors:
   node-executor:
     docker:
-      - image: cimg/node:20.20-browsers
-  node-aws-executor:
-    docker:
-      - image: cimg/aws:2024.03
+      - image: cimg/node:24.14-browsers
   docker-terraform:
     docker:
       - image: hashicorp/terraform:latest
@@ -25,6 +23,14 @@ references:
       at: *workspace_root
 
 commands:
+  install-python3:
+    description: "pip install for aws-cli"
+    steps:
+      - run:
+          name: Install python3.12-venv
+          command: |
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3.12-venv
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -32,6 +38,7 @@ commands:
         type: string
     steps:
       - checkout
+      - install-python3
       - aws_assume_role/assume_role:
           account: <<parameters.aws-account>>
           profile_name: default
@@ -46,9 +53,17 @@ commands:
       environment:
         type: string
     steps:
+      - install-python3
+      - aws-cli/install
       - run:
           name: Create .env file
-          command: echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+          command: |
+            MAP_BOX_URL=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-url --query Parameter.Value --output text)
+            MAP_BOX_TOKEN=$(aws ssm get-parameter --name /fss-portal-api/<<parameters.environment>>/map-box-token --query Parameter.Value --output text)
+            cat \<<EOF >.env
+            VITE_MAP_BOX_URL=${MAP_BOX_URL}
+            VITE_MAP_BOX_TOKEN=${MAP_BOX_TOKEN}
+            EOF
       - run:
           name: Authenticate FontAwesome
           command: |
@@ -59,9 +74,7 @@ commands:
           command: yarn install
       - run:
           name: Build
-          command: CI=false GENERATE_SOURCEMAP=false yarn build
-          environment:
-            REACT_APP_ENV: <<parameters.environment>>
+          command: CI=false yarn build --mode <<parameters.environment>>
       - run:
           name: Package WordPress plugin
           command: |
@@ -121,7 +134,6 @@ jobs:
     steps:
       - checkout:
           method: full
-      - *attach_workspace
       - run:
           name: Authenticate FontAwesome
           command: |
@@ -195,39 +207,39 @@ jobs:
       - sonarcloud/scan
 
   assume-role-development:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DEVELOPMENT
 
   assume-role-staging:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_STAGING
 
   assume-role-production:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
 
   deploy-development:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: development
 
   deploy-staging:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:
           environment: staging
 
   deploy-production:
-    executor: node-aws-executor
+    executor: node-executor
     steps:
       - *attach_workspace
       - build-and-package:

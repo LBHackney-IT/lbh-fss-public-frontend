@@ -20,7 +20,7 @@ install:
 
 build:
 	@echo "Building React app for $(ENVIRONMENT)..."
-	CI=false GENERATE_SOURCEMAP=false REACT_APP_ENV=$(ENVIRONMENT) yarn build
+	CI=false yarn build --mode $(ENVIRONMENT)
 
 package:
 	@echo "Packaging WordPress plugin..."
@@ -36,7 +36,7 @@ package:
 		-x "*.map"
 	@echo "Plugin packaged at fss-directory.zip"
 	@echo "Contents:"
-	@unzip -l fss-directory.zip | grep "static/"
+	@unzip -l fss-directory.zip | grep "assets/"
 
 deploy: install build package
 	@echo "Done! Upload fss-directory.zip to WordPress."

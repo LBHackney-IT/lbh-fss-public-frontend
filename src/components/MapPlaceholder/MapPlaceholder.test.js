@@ -36,7 +36,6 @@ jest.mock("../../helpers/GlobalVariables/GlobalVariables", () => ({
     [51.4, -0.2],
     [51.6, 0],
   ],
-  MAPBOX_TILES_URL: "https://example.com/tiles",
   ATTRIBUTION: "© Mapbox",
 }));
 
