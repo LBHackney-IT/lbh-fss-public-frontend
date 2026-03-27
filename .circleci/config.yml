@@ -32,25 +32,26 @@ commands:
       image)"
     steps:
       - run:
-          name: Install nvm
+          name: Install Node and Yarn from .nvmrc (nvm)
           command: |
             set -euo pipefail
+            # Source nvm from a dir without .nvmrc: with set -e, sourcing nvm.sh in a
+            # project dir before the version is installed exits 3 (nvm-sh/nvm#1985).
             curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-            echo 'export NVM_DIR="$HOME/.nvm"' >> "$BASH_ENV"
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"' >> "$BASH_ENV"
-      - run:
-          name: Install Node and Yarn from .nvmrc
-          command: |
-            set -euo pipefail
+            export NVM_DIR="$HOME/.nvm"
+            cd /tmp
+            . "$NVM_DIR/nvm.sh"
             cd "$CIRCLE_WORKING_DIRECTORY"
             test -f .nvmrc
             nvm install
             nvm use
             NODE_VER=$(tr -d '\n\r' < .nvmrc)
-            echo "nvm use ${NODE_VER}" >> "$BASH_ENV"
+            NODE_BIN="$(dirname "$(command -v node)")"
+            echo "export PATH=\"${NODE_BIN}:\$PATH\"" >> "$BASH_ENV"
             node -v
             npm install -g yarn@1.22.22
             yarn -v
+            echo "Using Node ${NODE_VER} at ${NODE_BIN}"
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
