@@ -49,9 +49,7 @@ commands:
             NODE_VER=$(tr -d '\n\r' < .nvmrc)
             echo "nvm use ${NODE_VER}" >> "$BASH_ENV"
             node -v
-            if ! command -v yarn >/dev/null 2>&1; then
-              npm install -g yarn@1.22.22
-            fi
+            npm install -g yarn@1.22.22
             yarn -v
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
