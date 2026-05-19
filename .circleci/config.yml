@@ -194,10 +194,10 @@ jobs:
     executor: docker-python
     steps:
       - *attach_workspace
-      - run:
-          name: Keep alive during sonar scan
-          background: true
-          command: while true; do echo "Sonar scan in progress..."; sleep 60; done
+      # - run:
+      #     name: Keep alive during sonar scan
+      #     background: true
+      #     command: while true; do echo "Sonar scan in progress..."; sleep 60; done
       - sonarcloud/scan
 
   assume-role-development:
