@@ -13,5 +13,8 @@ export const SidebarContainer = styled.div`
         overflow: hidden;
         height: 100%;
         float: left;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
     `}
 `;
