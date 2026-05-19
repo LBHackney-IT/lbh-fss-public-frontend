@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   sonarcloud: sonarsource/sonarcloud@2.0.0
-  aws-cli: circleci/aws-cli@4.0.0
+  aws-cli: circleci/aws-cli@5.1.1
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
 
 executors:
@@ -11,7 +11,7 @@ executors:
       - image: cimg/node:24.14-browsers
   docker-terraform:
     docker:
-      - image: hashicorp/terraform:latest
+      - image: hashicorp/terraform:1.14.5
   docker-python:
     docker:
       - image: cimg/python:3.11
@@ -24,7 +24,7 @@ references:
 
 commands:
   install-python3:
-    description: "pip install for aws-cli"
+    description: "Installs python3.12-venv required by aws-cli"
     steps:
       - run:
           name: Install python3.12-venv
@@ -51,7 +51,8 @@ commands:
   build-and-package:
     parameters:
       environment:
-        type: string
+        type: enum
+        enum: ["development", "staging", "production"]
     steps:
       - install-python3
       - aws-cli/install
@@ -69,9 +70,6 @@ commands:
           command: |
             echo "@fortawesome:registry=https://npm.fontawesome.com/" >> .npmrc
             echo "//npm.fontawesome.com/:_authToken=${FONTAWESOME_TOKEN}" >> .npmrc
-      - run:
-          name: Install dependencies
-          command: yarn install
       - run:
           name: Build
           command: CI=false yarn build --mode <<parameters.environment>>
@@ -192,14 +190,6 @@ jobs:
           name: Run security audit (critical only)
           command: yarn audit-ci --critical
 
-  dependency-check:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: Check for outdated dependencies
-          command: yarn outdated || true
-
   sonar-scan:
     executor: docker-python
     steps:
@@ -282,7 +272,6 @@ jobs:
           environment: production
 
 workflows:
-  version: 2
   continuous-delivery:
     jobs:
       - install-dependencies
@@ -294,78 +283,134 @@ workflows:
           requires: [install-dependencies]
       - security-audit:
           requires: [install-dependencies]
-      - dependency-check:
-          requires: [install-dependencies]
       - sonar-scan:
           context: SonarCloud
           requires: [test-check]
 
-      # Feature branch terraform preview
+      # Terraform preview for feature branches
       - assume-role-development:
           name: assume-role-development-preview
           context: api-assume-role-development-context
           filters:
             branches:
-              ignore: [master, develop]
+              ignore: [master, develop, build/decouple-tf]
       - preview-development-terraform:
           requires: [assume-role-development-preview]
           filters:
             branches:
-              ignore: [master, develop]
+              ignore: [master, develop, build/decouple-tf]
 
-      # Development
-      - assume-role-development:
-          name: assume-role-development-deploy
-          context: api-assume-role-development-context
+      # Development deployment
+      - permit-deploy-development:
+          type: approval
           requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
-              only: [develop]
-      - terraform-init-and-apply-to-development:
+              only: [develop, build/decouple-tf]
+      - assume-role-development:
+          name: assume-role-development-deploy
+          context: api-assume-role-development-context
+          requires: [permit-deploy-development]
+          filters:
+            branches:
+              only: [develop, build/decouple-tf]
+      - deploy-development:
           requires: [assume-role-development-deploy]
           filters:
             branches:
-              only: [develop]
-      - deploy-development:
-          requires: [terraform-init-and-apply-to-development]
-          filters:
-            branches:
-              only: [develop]
+              only: [develop, build/decouple-tf]
 
-      # Staging
-      - assume-role-staging:
-          name: assume-role-staging-deploy
-          context: api-assume-role-staging-context
+      # Staging deployment
+      - permit-deploy-staging:
+          type: approval
           requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
           filters:
             branches:
               only: [master]
-      - preview-staging-terraform:
+      - assume-role-staging:
+          name: assume-role-staging-deploy
+          context: api-assume-role-staging-context
+          requires: [permit-deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - deploy-staging:
           requires: [assume-role-staging-deploy]
           filters:
             branches:
               only: [master]
-      - permit-deploy-staging:
+
+      # Production deployment
+      - assume-role-production:
+          context: api-assume-role-production-context
+          requires: [deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - permit-deploy-production:
+          type: approval
+          requires: [deploy-staging]
+          filters:
+            branches:
+              only: [master]
+      - deploy-production:
+          requires: [permit-deploy-production, assume-role-production]
+          filters:
+            branches:
+              only: [master]
+
+  terraform-release:
+    jobs:
+      # Development terraform
+      - assume-role-development:
+          context: api-assume-role-development-context
+          filters:
+            branches:
+              only: [develop, build/decouple-tf]
+      - preview-development-terraform:
+          requires: [assume-role-development]
+          filters:
+            branches:
+              only: [develop, build/decouple-tf]
+      - permit-terraform-development-release:
+          type: approval
+          requires: [preview-development-terraform]
+          filters:
+            branches:
+              only: [develop, build/decouple-tf]
+      - terraform-init-and-apply-to-development:
+          requires: [permit-terraform-development-release]
+          filters:
+            branches:
+              only: [develop, build/decouple-tf]
+
+      # Staging terraform
+      - assume-role-staging:
+          context: api-assume-role-staging-context
+          filters:
+            branches:
+              only: [master]
+      - preview-staging-terraform:
+          requires: [assume-role-staging]
+          filters:
+            branches:
+              only: [master]
+      - permit-terraform-staging-release:
           type: approval
           requires: [preview-staging-terraform]
           filters:
             branches:
               only: [master]
       - terraform-init-and-apply-to-staging:
-          requires: [permit-deploy-staging]
-          filters:
-            branches:
-              only: [master]
-      - deploy-staging:
-          requires: [terraform-init-and-apply-to-staging]
+          requires: [permit-terraform-staging-release]
           filters:
             branches:
               only: [master]
 
-      # Production
+      # Production terraform
       - assume-role-production:
           context: api-assume-role-production-context
-          requires: [deploy-staging, terraform-init-and-apply-to-staging]
+          requires: [terraform-init-and-apply-to-staging]
           filters:
             branches:
               only: [master]
@@ -374,24 +419,14 @@ workflows:
           filters:
             branches:
               only: [master]
-      - permit-deploy-production:
+      - permit-terraform-production-release:
           type: approval
-          requires:
-            [
-              preview-production-terraform,
-              deploy-staging,
-              terraform-init-and-apply-to-staging,
-            ]
+          requires: [preview-production-terraform]
           filters:
             branches:
               only: [master]
       - terraform-init-and-apply-to-production:
-          requires: [permit-deploy-production]
-          filters:
-            branches:
-              only: [master]
-      - deploy-production:
-          requires: [terraform-init-and-apply-to-production]
+          requires: [permit-terraform-production-release]
           filters:
             branches:
               only: [master]

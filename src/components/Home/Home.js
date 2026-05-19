@@ -23,15 +23,46 @@ const HomeHeader = styled.div`
     `}
 `;
 
+const HomeRoot = styled.div`
+  ${breakpoint("md")`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
+const HomeTop = styled.div`
+  flex-shrink: 0;
+`;
+
+const HomeMapSlot = styled.div`
+  ${breakpoint("md")`
+    flex: 0 0 0;
+    height: 0;
+    overflow: visible;
+  `}
+`;
+
+/** Flex column under header; bottom gap under the category panel is on #list-categories--container */
+const HomeCategoriesColumn = styled.div`
+  ${breakpoint("md")`
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    box-sizing: border-box;
+    overflow: visible;
+  `}
+`;
+
 const Home = () => {
   const { setUrl } = useContext(UrlContext);
-  // const {url, setUrl} = useContext(UrlContext);
   const { setPrevUrl } = useContext(PrevUrlContext);
-  // const {prevUrl, setPrevUrl} = useContext(PrevUrlContext);
   const { setUrlParams } = useContext(UrlParamsContext);
-  // const {urlParams, setUrlParams} = useContext(UrlParamsContext);
   const { setPrevUrlParams } = useContext(PrevUrlParamsContext);
-  // const {prevUrlParams, setPrevUrlParams} = useContext(PrevUrlParamsContext);
   const [isLoading, setIsLoading] = useState(true);
   const paramsArray = [
     "category_explorer",
@@ -65,11 +96,9 @@ const Home = () => {
     if (currentSearch) {
       setUrl(currentSearch);
 
-      // setPrevUrl
       prevUrlArray.push(currentSearch);
       setPrevUrl(prevUrlArray);
 
-      // setPrevUrlParams
       createParamObj(currentSearch, paramsArray);
       prevUrlParamsArray.push(paramObj);
       setPrevUrlParams(prevUrlParamsArray);
@@ -85,7 +114,6 @@ const Home = () => {
     postcodeQuery = undefined;
   }
 
-  // keyword search
   async function submitForm({ service_search }) {
     if (isLoading) return;
 
@@ -99,7 +127,6 @@ const Home = () => {
     setUrlParams({ postcode: postcodeQuery, service_search: searchQuery });
   }
 
-  // category explorer
   const selectCategory = (e) => {
     navigate("?category_explorer=" + e + "&postcode=" + postcodeQuery);
     setUrlParams({ category_explorer: e, postcode: postcodeQuery });
@@ -110,27 +137,33 @@ const Home = () => {
     <AppLoading />
   ) : (
     <>
-      <div className="Home">
-        <Header />
-        <HomeHeader>
-          <form
-            id="fss--find-service"
-            onSubmit={handleSubmit(submitForm)}
-            data-testid="form"
-          >
-            <FormInputSubmit
-              id="fss--service-search"
-              label="Search for a service"
-              placeholder="Enter keyword or organisation"
-              name="service_search"
-              type="text"
-              register={register}
-            />
-          </form>
-        </HomeHeader>
-        <ListCategories onClick={selectCategory} />
-        <MapPlaceholder />
-      </div>
+      <HomeRoot className="Home">
+        <HomeTop>
+          <Header />
+          <HomeHeader>
+            <form
+              id="fss--find-service"
+              onSubmit={handleSubmit(submitForm)}
+              data-testid="form"
+            >
+              <FormInputSubmit
+                id="fss--service-search"
+                label="Search for a service"
+                placeholder="Enter keyword or organisation"
+                name="service_search"
+                type="text"
+                register={register}
+              />
+            </form>
+          </HomeHeader>
+        </HomeTop>
+        <HomeCategoriesColumn>
+          <ListCategories onClick={selectCategory} />
+        </HomeCategoriesColumn>
+        <HomeMapSlot>
+          <MapPlaceholder />
+        </HomeMapSlot>
+      </HomeRoot>
     </>
   );
 };

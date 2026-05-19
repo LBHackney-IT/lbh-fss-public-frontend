@@ -46,9 +46,37 @@ add_action(
 					wp_enqueue_style( 'erw', $base_url . ltrim( $asset_manifest['main.css'], '/' ) ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Version omitted; cache bust via build.
 					// Constrain FSS app when embedded in page (map + sidebar stay inside this box).
 					$embed_css = '
-                .fss-directory-embed { position: relative; height: calc(100vh - 120px); overflow: hidden; z-index: 0; padding: 0; margin: 0; }
-                .fss-directory-embed #root { position: relative; height: 100%; padding: 0; margin: 0; }
-                .fss-directory-embed #root .App { height: 100%; position: relative; }
+                /* flow-root contains floated sidebar; clip everything to this box (esp. inside .lbh-content) */
+                .lbh-content .fss-directory-embed,
+                .fss-directory-embed {
+                    position: relative;
+                    height: calc(100vh - 120px);
+                    max-height: calc(100vh - 120px);
+                    overflow: hidden !important;
+                    z-index: 0;
+                    padding: 0;
+                    margin: 0;
+                    display: flow-root;
+                    box-sizing: border-box;
+                }
+                .fss-directory-embed #root {
+                    position: relative;
+                    height: 100%;
+                    max-height: 100%;
+                    padding: 0;
+                    margin: 0;
+                    overflow: hidden !important;
+                    box-sizing: border-box;
+                }
+                .fss-directory-embed #root .App {
+                    height: 100%;
+                    max-height: 100%;
+                    position: relative;
+                    overflow: hidden !important;
+                    display: flow-root;
+                    min-height: 0;
+                    box-sizing: border-box;
+                }
                 /* Content after the embed (e.g. Highlights) stays on top of the map */
                 .fss-directory-embed + * { position: relative; z-index: 1; }
                 .fss-directory-embed ~ .lbh-container { position: relative; z-index: 1; }
