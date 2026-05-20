@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import CategoryCard from "./CategoryCard";
-import { CardContainer } from "../../util/styled-components/CardContainer";
 import styled from "styled-components";
 import breakpoint from "styled-components-breakpoint";
 import { light } from "../../settings";
@@ -11,11 +10,34 @@ export const ListCategoriesContainer = styled.div`
       position: relative;
       z-index: 2;
       background: ${light["white"]};
+      /* Shrink within column when list is long enough to scroll */
+      flex: 0 1 auto;
+      min-height: 0;
+      align-self: stretch;
+      width: 100%;
+      display: block;
+      box-sizing: border-box;
+      /* Always leave a strip of map below the white panel so it floats above the map */
+      margin-bottom: 50px;
+      max-height: calc(100% - 50px);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     `}
   h3 {
     font-weight: normal;
     font-size: 24px;
   }
+`;
+
+const HomeCategoriesScroll = styled.div`
+  padding: 0 15px 0;
+  ${breakpoint("md")`
+    padding: 10px 15px 20px;
+    position: relative;
+    z-index: 1;
+    background: ${light["white"]};
+  `}
 `;
 
 const ListCategories = ({ onClick }) => {
@@ -46,14 +68,14 @@ const ListCategories = ({ onClick }) => {
       {!data.length ? (
         <h2>No data Found</h2>
       ) : (
-        <CardContainer>
+        <HomeCategoriesScroll>
           <h3>Explore categories</h3>
           {data.map((category) => {
             return (
               <CategoryCard key={category.id} category={category} onClick={select} />
             );
           })}
-        </CardContainer>
+        </HomeCategoriesScroll>
       )}
     </ListCategoriesContainer>
   );
