@@ -179,6 +179,7 @@ jobs:
 
   sonar-scan:
     executor: node-executor
+    resource_class: medium+
     steps:
       - *attach_workspace
       - sonarcloud/scan
