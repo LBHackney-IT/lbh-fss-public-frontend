@@ -109,6 +109,55 @@ commands:
             terraform validate
             terraform plan -var="environment=<<parameters.environment>>"
 
+  sync-existing-resources:
+    description:
+      "Imports existing AWS resources into Terraform state before production deploy"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          name: Install AWS CLI
+          command: apk add --no-cache aws-cli
+      - run:
+          name: Sync existing resources into state
+          command: |
+            terraform init \
+              -backend-config="bucket=terraform-state-<<parameters.environment>>-apis" \
+              -backend-config="key=services/fss-public-frontend/terraform.tfstate"
+
+            BUCKET="fss-wordpress-plugin-<<parameters.environment>>"
+
+            if ! aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
+              echo "Bucket $BUCKET does not exist yet; nothing to import."
+              exit 0
+            fi
+
+            if ! terraform state show aws_s3_bucket.fss_wordpress_plugin 2>/dev/null; then
+              echo "Importing existing S3 bucket: $BUCKET"
+              terraform import -var="environment=<<parameters.environment>>" aws_s3_bucket.fss_wordpress_plugin "$BUCKET" || echo "S3 bucket import failed"
+            fi
+
+            if ! terraform state show aws_s3_bucket_public_access_block.fss_wordpress_plugin 2>/dev/null; then
+              echo "Importing S3 public access block: $BUCKET"
+              terraform import -var="environment=<<parameters.environment>>" aws_s3_bucket_public_access_block.fss_wordpress_plugin "$BUCKET" || echo "S3 public access block import failed"
+            fi
+
+            if ! terraform state show aws_s3_bucket_versioning.fss_wordpress_plugin 2>/dev/null; then
+              echo "Importing S3 bucket versioning: $BUCKET"
+              terraform import -var="environment=<<parameters.environment>>" aws_s3_bucket_versioning.fss_wordpress_plugin "$BUCKET" || echo "S3 bucket versioning import failed"
+            fi
+
+            if ! terraform state show aws_s3_bucket_server_side_encryption_configuration.fss_wordpress_plugin 2>/dev/null; then
+              echo "Importing S3 bucket encryption: $BUCKET"
+              terraform import -var="environment=<<parameters.environment>>" aws_s3_bucket_server_side_encryption_configuration.fss_wordpress_plugin "$BUCKET" || echo "S3 bucket encryption import failed"
+            fi
+      - run:
+          name: Show plan after sync
+          command: terraform plan -var="environment=<<parameters.environment>>"
+
   deploy-terraform:
     description: "Initializes and applies terraform configuration"
     parameters:
@@ -271,6 +320,12 @@ jobs:
       - deploy-terraform:
           environment: production
 
+  terraform-sync-production:
+    executor: docker-terraform
+    steps:
+      - sync-existing-resources:
+          environment: production
+
 workflows:
   continuous-delivery:
     jobs:
@@ -410,15 +465,20 @@ workflows:
       # Production terraform
       - assume-role-production:
           context: api-assume-role-production-context
-          requires: [terraform-init-and-apply-to-staging]
+          # requires: [terraform-init-and-apply-to-staging]
           filters:
             branches:
-              only: [master]
-      - preview-production-terraform:
+              only: [chore/sync-tf]
+      - terraform-sync-production:
           requires: [assume-role-production]
           filters:
             branches:
-              only: [master]
+              only: [chore/sync-tf]
+      - preview-production-terraform:
+          requires: [terraform-sync-production]
+          filters:
+            branches:
+              only: [chore/sync-tf]
       - permit-terraform-production-release:
           type: approval
           requires: [preview-production-terraform]
