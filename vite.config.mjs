@@ -4,13 +4,21 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import browserslistToEsbuild from "browserslist-to-esbuild";
+
+// First arg undefined so browserslist reads from .browserslistrc; env [production].
+const productionBuildTarget = browserslistToEsbuild(undefined, { env: "production" });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const sentryAuthOk =
   process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_ORG && process.env.SENTRY_PROJECT;
 
-/** CRA-style asset-manifest.json for WordPress (enqueue.php / shortcode.php). */
+/**
+ * Vite writes hashed assets into index.html only; it does not emit asset-manifest.json.
+ * The WordPress plugin (enqueue.php / shortcode.php) still loads JS/CSS by reading that
+ * CRA-era manifest (files.main.js, files.main.css), so we synthesize it after build.
+ */
 function craAssetManifestPlugin() {
   return {
     name: "cra-asset-manifest",
@@ -88,6 +96,7 @@ export default defineConfig(({ mode }) => {
       outDir: "build",
       sourcemap: true,
       chunkSizeWarningLimit: 1100,
+      target: productionBuildTarget,
     },
     server: {
       port: 3000,

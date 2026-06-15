@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Card } from "../../util/styled-components/Card";
+import { CategoryCardStyled } from "../../util/styled-components/Card";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { categoryIconMap } from "../../helpers/FontAwesome/fontawesome";
@@ -24,12 +24,7 @@ const CategoryCard = ({ category, onClick }) => {
   const categoryIcon = categoryIconMap[categoryIconName] || ["fas", "circle"];
 
   return (
-    <Card
-      modifiers="categoryCard"
-      id={category.id}
-      className="fss--card"
-      onClick={select}
-    >
+    <CategoryCardStyled id={category.id} className="fss--card" onClick={select}>
       <div
         className="fss--card--container category-icons"
         data-category-icon={categoryIconName}
@@ -45,7 +40,7 @@ const CategoryCard = ({ category, onClick }) => {
           <p className="card--description">{category.description}</p>
         </div>
       </div>
-    </Card>
+    </CategoryCardStyled>
   );
 };
 

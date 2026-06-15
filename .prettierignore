@@ -1,4 +1,5 @@
 # Config files
+.browserslistrc
 .circleci/config
 .github/CODEOWNERS
 .nvmrc
@@ -36,6 +37,7 @@ dist/
 *.svg
 *.ico
 *.pdf
+*.zip
 *.woff
 *.woff2
 *.ttf

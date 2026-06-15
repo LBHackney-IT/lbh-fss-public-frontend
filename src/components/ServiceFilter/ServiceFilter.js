@@ -1,21 +1,11 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { applyStyleModifiers } from "styled-components-modifiers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import UrlContext from "../../context/UrlContext/UrlContext";
 import UrlParamsContext from "../../context/UrlParamsContext/UrlParamsContext";
 import { useNavigate } from "react-router-dom";
 import { green, yellow, light } from "../../settings";
 import { lighten } from "polished";
-
-export const BAR_MODIFIERS = {
-  grey: () => `
-        background: ${lighten(0.01, light["greyBorder"])};
-        button {
-            color: ${green["main"]}
-        }
-    `,
-};
 
 export const ServiceFilterContainer = styled.div`
   background: ${lighten(0.03, green["main"])};
@@ -25,14 +15,14 @@ export const ServiceFilterContainer = styled.div`
   align-items: center;
   position: relative;
   z-index: 1;
-  ${applyStyleModifiers(BAR_MODIFIERS)};
 `;
 
-export const BUTTON_MODIFIERS = {
-  active: () => `
-        color: ${yellow["selected"]};
-    `,
-};
+export const ServiceFilterContainerGrey = styled(ServiceFilterContainer)`
+  background: ${lighten(0.01, light["greyBorder"])};
+  button {
+    color: ${green["main"]};
+  }
+`;
 
 const FilterButton = styled.button`
   color: ${light["white"]};
@@ -46,7 +36,10 @@ const FilterButton = styled.button`
   svg {
     margin-right: 10px;
   }
-  ${applyStyleModifiers(BUTTON_MODIFIERS)};
+`;
+
+const FilterButtonActive = styled(FilterButton)`
+  color: ${yellow["selected"]};
 `;
 
 const ClearButton = styled.button`
@@ -67,8 +60,8 @@ const ServiceFilter = () => {
 
   let showDemographicsButton = true;
   let showClearAllButton = false;
-  let style = "";
-  let grey = "";
+  let isActive = false;
+  let isGrey = false;
 
   const selectDemographicsEvent = () => {
     const selectDemographicsObj = [urlParams].find(
@@ -101,26 +94,29 @@ const ServiceFilter = () => {
 
   for (const [key, value] of Object.entries(urlParams)) {
     if (key == "category_explorer" && value !== "") {
-      grey = "grey";
+      isGrey = true;
     }
     if (key == "select_categories" && value === "true") {
       showDemographicsButton = false;
       showClearAllButton = true;
-      style = "active";
+      isActive = true;
     }
     if (key == "select_demographics" && value === "true") {
       showClearAllButton = true;
-      style = "active";
+      isActive = true;
     }
   }
 
+  const Container = isGrey ? ServiceFilterContainerGrey : ServiceFilterContainer;
+  const DemographicsButton = isActive ? FilterButtonActive : FilterButton;
+
   return (
-    <ServiceFilterContainer modifiers={grey}>
+    <Container>
       {showDemographicsButton ? (
-        <FilterButton modifiers={style} onClick={selectDemographicsEvent}>
+        <DemographicsButton onClick={selectDemographicsEvent}>
           <FontAwesomeIcon icon={["fas", "filter"]} />
           Filters
-        </FilterButton>
+        </DemographicsButton>
       ) : (
         ""
       )}
@@ -129,7 +125,7 @@ const ServiceFilter = () => {
       ) : (
         ""
       )}
-    </ServiceFilterContainer>
+    </Container>
   );
 };
 

@@ -9,7 +9,6 @@ import PrevUrlParamsContext from "../../context/PrevUrlParamsContext/PrevUrlPara
 import Button from "../Button/Button";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { applyStyleModifiers } from "styled-components-modifiers";
 import { useNavigate } from "react-router-dom";
 import { green, dark, light } from "../../settings";
 import { FilterContainer } from "../../util/styled-components/FilterContainer";
@@ -22,31 +21,29 @@ import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import CategoryCard from "../Category/CategoryCard";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 
-export const BUTTON_MODIFIERS = {
-  ghost: () => `
-        position: absolute;
-        top: -50px;
-        left: 180px;
-        width: auto;
-        padding: 8px;
-        color: ${green["main"]};
-        background: transparent;
-        border: 1px solid ${green["ghost"]};
-        font-size: 16px;
-        &:hover, &:focus {
-            color: ${light["white"]};
-        }
-        @media(min-width:768px) {
-            top: -44px;
-        }
-    `,
-};
-
 const StyledButton = styled(Button)`
   width: 100%;
   border-radius: 3px;
   border-bottom: 2px solid ${dark["black"]};
-  ${applyStyleModifiers(BUTTON_MODIFIERS)};
+`;
+
+const StyledGhostButton = styled(StyledButton)`
+  position: absolute;
+  top: -50px;
+  left: 180px;
+  width: auto;
+  padding: 8px;
+  color: ${green["main"]};
+  background: transparent;
+  border: 1px solid ${green["ghost"]};
+  font-size: 16px;
+  &:hover,
+  &:focus {
+    color: ${light["white"]};
+  }
+  @media (min-width: 768px) {
+    top: -44px;
+  }
 `;
 
 const ApplyButtonWrap = styled.div`
@@ -227,12 +224,7 @@ const SelectDemographics = () => {
         <ServiceFilter />
         <h2>Select filters</h2>
         <form onSubmit={handleSubmit(submitForm)} data-testid="form">
-          <StyledButton
-            modifiers="ghost"
-            type="submit"
-            label="Apply"
-            disabled={isLoading}
-          />
+          <StyledGhostButton type="submit" label="Apply" disabled={isLoading} />
           <CheckboxContainer>
             {data.map((demographic, index) => {
               const demographicIdString = demographic.id.toString();
