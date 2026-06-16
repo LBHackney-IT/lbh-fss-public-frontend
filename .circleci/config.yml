@@ -177,29 +177,10 @@ jobs:
           name: Run security audit (critical only)
           command: yarn audit-ci --critical
 
-  # sonar-scan:
-  #   executor: node-executor
-  # executor: docker-python
-  # resource_class: medium+
-  # steps:
-  #   - *attach_workspace
-  #   - sonarcloud/scan
-
   sonar-scan:
     executor: node-executor
-    resource_class: medium+
-    environment:
-      SONAR_SCANNER_OPTS: >-
-        -Dsonar.verbose=true -Dsonar.jasmin.internal.enable.stacktracing=true
-        -Dsonar.jasmin.internal.enable.metrics=true
     steps:
       - *attach_workspace
-      - run:
-          name: Keep alive during sonar scan
-          background: true
-          command:
-            while true; do echo "Sonar scan in progress $(date -u +%H:%M:%S)"; sleep 60;
-            done
       - sonarcloud/scan
 
   assume-role-development:
