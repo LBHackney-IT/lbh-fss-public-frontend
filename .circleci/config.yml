@@ -6,9 +6,6 @@ orbs:
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.1
 
 executors:
-  docker-python:
-    docker:
-      - image: cimg/python:3.11
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
@@ -180,13 +177,31 @@ jobs:
           name: Run security audit (critical only)
           command: yarn audit-ci --critical
 
+  # sonar-scan:
+  #   executor: node-executor
+  # executor: docker-python
+  # resource_class: medium+
+  # steps:
+  #   - *attach_workspace
+  #   - sonarcloud/scan
+
   sonar-scan:
-    # executor: node-executor
-    executor: docker-python
+    executor: node-executor
     resource_class: medium+
+    environment:
+      SONAR_SCANNER_OPTS: >-
+        -Dsonar.verbose=true -Dsonar.jasmin.internal.enable.stacktracing=true
+        -Dsonar.jasmin.internal.enable.metrics=true
     steps:
       - *attach_workspace
-      - sonarcloud/scan
+      - run:
+          name: Keep alive during sonar scan
+          background: true
+          command:
+            while true; do echo "Sonar scan in progress $(date -u +%H:%M:%S)"; sleep 60;
+            done
+      - sonarcloud/scan:
+          no_output_timeout: 45m
 
   assume-role-development:
     executor: node-executor
