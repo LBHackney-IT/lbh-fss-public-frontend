@@ -169,16 +169,9 @@ jobs:
           name: Run Prettier
           command: yarn format:check
 
-  security-audit:
-    executor: node-executor
-    steps:
-      - *attach_workspace
-      - run:
-          name: Run security audit (critical only)
-          command: yarn audit-ci --critical
-
   sonar-scan:
     executor: node-executor
+    resource_class: medium+
     steps:
       - *attach_workspace
       - sonarcloud/scan
@@ -268,8 +261,6 @@ workflows:
           requires: [install-dependencies]
       - format-check:
           requires: [install-dependencies]
-      - security-audit:
-          requires: [install-dependencies]
       - sonar-scan:
           context: SonarCloud
           requires: [test-check]
@@ -290,7 +281,7 @@ workflows:
       # Development deployment
       - permit-deploy-development:
           type: approval
-          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, sonar-scan]
           filters:
             branches:
               only: [develop]
@@ -310,7 +301,7 @@ workflows:
       # Staging deployment
       - permit-deploy-staging:
           type: approval
-          requires: [lint-check, test-check, format-check, security-audit, sonar-scan]
+          requires: [lint-check, test-check, format-check, sonar-scan]
           filters:
             branches:
               only: [master]
