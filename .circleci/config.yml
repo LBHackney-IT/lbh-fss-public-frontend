@@ -181,7 +181,9 @@ jobs:
           command: yarn audit-ci --critical
 
   sonar-scan:
+    # executor: node-executor
     executor: docker-python
+    resource_class: medium+
     steps:
       - *attach_workspace
       - sonarcloud/scan
