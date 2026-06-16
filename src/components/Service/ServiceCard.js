@@ -1,4 +1,4 @@
-import { Card } from "../../util/styled-components/Card";
+import { ServiceCardStyled } from "../../util/styled-components/Card";
 
 const ServiceCard = ({ service, onClick }) => {
   const storedPostcode = localStorage.getItem("postcode");
@@ -14,7 +14,7 @@ const ServiceCard = ({ service, onClick }) => {
   };
 
   return (
-    <Card modifiers="serviceCard" id={service.id} className="fss--card">
+    <ServiceCardStyled id={service.id} className="fss--card">
       <div onClick={select}>
         {hero.length ? (
           <div className="image-container">
@@ -49,7 +49,7 @@ const ServiceCard = ({ service, onClick }) => {
           ""
         );
       })}
-    </Card>
+    </ServiceCardStyled>
   );
 };
 

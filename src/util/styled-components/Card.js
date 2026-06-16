@@ -1,58 +1,6 @@
 import styled from "styled-components";
-import { applyStyleModifiers } from "styled-components-modifiers";
 import { pink, dark, light } from "../../settings";
 import arrowRight from "../../assets/arrow-right.svg";
-
-export const CARD_MODIFIERS = {
-  categoryCard: () => `
-        margin-bottom: 10px;
-        i {
-            background-color: ${pink[200]};
-            height: 50px;
-            width: 50px;
-            svg {
-                font-size: 30px;
-                color: ${light["white"]};
-            }
-        }
-        .fss--card--container {
-            display: flex;
-            flex-direction: row;
-            &::after {
-                content: url(${arrowRight});
-                align-self: center;
-                margin-left: auto;
-            }
-        }
-        .fss--card--content {
-            margin-right: 10px;
-        }
-    `,
-  serviceCard: () => `
-        h1, h2, h3, h4 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        p {
-            font-size: 16px;
-        }
-        .service--distance {
-            color: ${dark["black"]};
-            padding: 0 10px 15px;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        img {
-            width: 100%;
-            height: auto;
-        }
-    `,
-};
 
 export const Card = styled.div`
   background: ${light["grey"]};
@@ -82,6 +30,57 @@ export const Card = styled.div`
     font-size: 14px;
     color: ${dark["grey"]};
   }
+`;
 
-  ${applyStyleModifiers(CARD_MODIFIERS)};
+export const CategoryCardStyled = styled(Card)`
+  margin-bottom: 10px;
+  i {
+    background-color: ${pink[200]};
+    height: 50px;
+    width: 50px;
+    svg {
+      font-size: 30px;
+      color: ${light["white"]};
+    }
+  }
+  .fss--card--container {
+    display: flex;
+    flex-direction: row;
+    &::after {
+      content: url(${arrowRight});
+      align-self: center;
+      margin-left: auto;
+    }
+  }
+  .fss--card--content {
+    margin-right: 10px;
+  }
+`;
+
+export const ServiceCardStyled = styled(Card)`
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 16px;
+  }
+  .service--distance {
+    color: ${dark["black"]};
+    padding: 0 10px 15px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  img {
+    width: 100%;
+    height: auto;
+  }
 `;
