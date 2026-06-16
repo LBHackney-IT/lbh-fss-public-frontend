@@ -6,6 +6,9 @@ orbs:
   aws_assume_role: lbh-hackit/aws_assume_role@0.1.1
 
 executors:
+  docker-python:
+    docker:
+      - image: cimg/python:3.11
   node-executor:
     docker:
       - image: cimg/node:24.14-browsers
@@ -178,8 +181,7 @@ jobs:
           command: yarn audit-ci --critical
 
   sonar-scan:
-    executor: node-executor
-    resource_class: medium+
+    executor: docker-python
     steps:
       - *attach_workspace
       - sonarcloud/scan
