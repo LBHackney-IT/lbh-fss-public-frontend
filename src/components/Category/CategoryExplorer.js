@@ -147,7 +147,7 @@ const CategoryExplorer = ({ onClick }) => {
           <CategoryCardContainer>
             <CategoryCard key={categoryData.id} category={categoryData} />
           </CategoryCardContainer>
-          <ServiceFilter modifiers="grey" />
+          <ServiceFilter />
           <Mobile>
             <ToggleView />
             {showMap == "false" ? (
