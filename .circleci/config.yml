@@ -180,6 +180,9 @@ jobs:
   sonar-scan:
     executor: node-executor
     resource_class: medium+
+    environment:
+      SONAR_SCANNER_OPTS: >-
+        -Dsonar.jasmin.internal.disabled=true
     steps:
       - *attach_workspace
       - sonarcloud/scan
