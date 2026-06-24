@@ -329,13 +329,13 @@ const ServiceDetail = () => {
   let hasSocial = false;
 
   if (data.service) {
-    Object.keys(data.service.contact).forEach((key) => {
+    Object.keys(data.service.contact || {}).forEach((key) => {
       if (data.service.contact[key]) hasContact = true;
     });
-    Object.keys(data.service.referral).forEach((key) => {
+    Object.keys(data.service.referral || {}).forEach((key) => {
       if (data.service.referral[key]) hasReferral = true;
     });
-    Object.keys(data.service.social).forEach((key) => {
+    Object.keys(data.service.social || {}).forEach((key) => {
       if (data.service.social[key]) hasSocial = true;
     });
   }

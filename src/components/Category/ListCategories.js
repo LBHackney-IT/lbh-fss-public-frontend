@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AppLoading from "../../AppLoading";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import CategoryCard from "./CategoryCard";
 import styled from "styled-components";
@@ -56,7 +57,7 @@ const ListCategories = ({ onClick }) => {
   }, [setData, setIsLoading]);
 
   if (isLoading) {
-    return <span>Loading</span>;
+    return <AppLoading />;
   }
 
   const select = (e) => {

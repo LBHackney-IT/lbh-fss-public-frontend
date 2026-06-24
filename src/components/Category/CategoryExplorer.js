@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import GetTaxonomies from "../../services/GetTaxonomies/GetTaxonomies";
 import { CardContainer } from "../../util/styled-components/CardContainer";
@@ -120,7 +121,7 @@ const CategoryExplorer = ({ onClick }) => {
   });
 
   if (isLoading) {
-    return <span>Loading</span>;
+    return <AppLoading />;
   }
 
   const select = (e) => {

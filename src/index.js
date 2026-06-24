@@ -19,16 +19,19 @@ if (!document.getElementById(fontId)) {
 }
 
 const container = document.getElementById("root");
-const root = createRoot(container);
 
-root.render(
-  <BrowserRouter>
-    <Sentry.ErrorBoundary
-      fallback={<p role="alert">Something went wrong. Please refresh the page.</p>}
-    >
-      <App />
-    </Sentry.ErrorBoundary>
-  </BrowserRouter>,
-);
+if (container) {
+  const root = createRoot(container);
+
+  root.render(
+    <BrowserRouter>
+      <Sentry.ErrorBoundary
+        fallback={<p role="alert">Something went wrong. Please refresh the page.</p>}
+      >
+        <App />
+      </Sentry.ErrorBoundary>
+    </BrowserRouter>,
+  );
+}
 
 serviceWorker.unregister();

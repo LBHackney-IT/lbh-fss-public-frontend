@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import ServiceCard from "./ServiceCard";
 import { CardContainer } from "../../util/styled-components/CardContainer";
@@ -84,7 +85,7 @@ const ListServices = ({ onClick }) => {
   });
 
   if (isLoading) {
-    return <span>Loading</span>;
+    return <AppLoading />;
   }
 
   const select = (e) => {

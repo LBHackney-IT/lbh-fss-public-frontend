@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import { initAll } from "lbh-frontend";
 
 const CookieBannerDisplay = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      require("lbh-frontend").initAll();
+      initAll();
     }
   }, []);
   return (
