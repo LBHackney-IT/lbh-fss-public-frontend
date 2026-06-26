@@ -20,6 +20,7 @@ import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { light } from "../../settings";
 import { lighten } from "polished";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
+import breakpoint from "styled-components-breakpoint";
 
 export const FILTER_MODIFIER = {
   grey: () => `
@@ -47,6 +48,31 @@ export const CategoryCardContainer = styled.div`
   }
 `;
 
+const LoadingShell = styled.div`
+  ${breakpoint("md")`
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
+const LoadingContent = styled.div`
+  opacity: ${({ $isLoading }) => ($isLoading ? "0.55" : "1")};
+  transition: opacity 0.2s ease-in-out;
+  ${breakpoint("md")`
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
+const ResultsLayout = styled.div`
+  ${breakpoint("md")`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
 const CategoryExplorer = ({ onClick }) => {
   const [data, setData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
@@ -56,7 +82,6 @@ const CategoryExplorer = ({ onClick }) => {
   const { prevUrlParams, setPrevUrlParams } = useContext(PrevUrlParamsContext);
   const { mapToggle } = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
-  const [fetchOnce, setfetchOnce] = useState(false);
   const storedPostcode = localStorage.getItem("postcode");
 
   const Desktop = ({ children }) => {
@@ -70,7 +95,10 @@ const CategoryExplorer = ({ onClick }) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchData() {
+      setIsLoading(true);
       let taxonomyId = [];
       let categoryId = "";
       if (
@@ -93,16 +121,19 @@ const CategoryExplorer = ({ onClick }) => {
         taxonomyids: taxonomyId,
       });
 
-      setData(getServices || []);
+      if (!isMounted) return;
+
+      setData(getServices || { services: [] });
       // call getTaxonomy with categoryId param passed to return the category name and description
       const getCategories = await GetTaxonomies.getTaxonomy(categoryId);
-      setCategoryData(getCategories || []);
-      setIsLoading(false);
+
+      if (isMounted) {
+        setCategoryData(getCategories || {});
+        setIsLoading(false);
+      }
     }
-    if (fetchOnce == false) {
-      fetchData();
-      setfetchOnce(true);
-    }
+
+    fetchData();
 
     const setPrevUrlVals = handleSetPrevUrl({
       prevUrl,
@@ -112,79 +143,88 @@ const CategoryExplorer = ({ onClick }) => {
       setPrevUrl(setPrevUrlVals.prevUrlArray);
       setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
     }
+    return () => {
+      isMounted = false;
+    };
+  }, [urlParams, storedPostcode]);
 
+  useEffect(() => {
     if (mapToggle === "true") {
       setShowMap("true");
     } else {
       setShowMap("false");
     }
-  });
+  }, [mapToggle]);
 
-  if (isLoading) {
-    return <AppLoading />;
-  }
+  const hasCategoryData = Object.keys(categoryData).length !== 0;
+  const services = data.services || [];
 
   const select = (e) => {
     onClick(e);
   };
 
   return (
-    <div>
-      {Object.keys(categoryData).length === 0 ? (
-        <div>
-          <Header />
-          <div className="no-results">
-            <h2>No results found</h2>
-            <p>
-              Please use the &apos;Back&apos; button above to go back and select a
-              category.
-            </p>
+    <LoadingShell aria-busy={isLoading}>
+      {isLoading ? <AppLoading label="Updating results" overlay /> : null}
+      <LoadingContent $isLoading={isLoading}>
+        {!hasCategoryData ? (
+          <div>
+            <Header />
+            {!isLoading ? (
+              <div className="no-results">
+                <h2>No results found</h2>
+                <p>
+                  Please use the &apos;Back&apos; button above to go back and select a
+                  category.
+                </p>
+              </div>
+            ) : null}
+            <MapPlaceholder />
           </div>
-          <MapPlaceholder />
-        </div>
-      ) : (
-        <div>
-          <Header />
-          <CategoryCardContainer>
-            <CategoryCard key={categoryData.id} category={categoryData} />
-          </CategoryCardContainer>
-          <ServiceFilter />
-          <Mobile>
-            <ToggleView />
-            {showMap == "false" ? (
+        ) : (
+          <ResultsLayout>
+            <Header />
+            <CategoryCardContainer>
+              <CategoryCard key={categoryData.id} category={categoryData} />
+            </CategoryCardContainer>
+            <ServiceFilter />
+            <Mobile>
+              <ToggleView />
+              {showMap == "false" ? (
+                <CardContainer>
+                  {services.map((service, index) => {
+                    return <ServiceCard key={index} service={service} onClick={select} />;
+                  })}
+                </CardContainer>
+              ) : (
+                ""
+              )}
+            </Mobile>
+            <Desktop>
               <CardContainer>
-                {data.services.map((service, index) => {
+                {services.map((service, index) => {
                   return <ServiceCard key={index} service={service} onClick={select} />;
                 })}
               </CardContainer>
-            ) : (
-              ""
-            )}
-          </Mobile>
-          <Desktop>
-            <CardContainer>
-              {data.services.map((service, index) => {
-                return <ServiceCard key={index} service={service} onClick={select} />;
-              })}
-            </CardContainer>
-          </Desktop>
-          <Mobile>
-            {showMap == "true" ? (
+            </Desktop>
+            <Mobile>
+              {showMap == "true" ? (
+                <MapContainer>
+                  <HackneyMap data={data} />
+                </MapContainer>
+              ) : (
+                ""
+              )}
+            </Mobile>
+            <Desktop>
               <MapContainer>
                 <HackneyMap data={data} />
               </MapContainer>
-            ) : (
-              ""
-            )}
-          </Mobile>
-          <Desktop>
-            <MapContainer>
-              <HackneyMap data={data} />
-            </MapContainer>
-          </Desktop>
-        </div>
-      )}
-    </div>
+            </Desktop>
+          </ResultsLayout>
+        )}
+      </LoadingContent>
+    </LoadingShell>
   );
 };
 

@@ -9,13 +9,18 @@ const spin = keyframes`
 
 const LoadingRoot = styled.div`
   align-items: center;
+  background: ${({ $overlay }) =>
+    $overlay ? "rgba(255, 255, 255, 0.55)" : "transparent"};
   display: flex;
   flex-direction: column;
+  inset: ${({ $overlay }) => ($overlay ? "0" : "auto")};
   justify-content: center;
-  min-height: 240px;
+  min-height: ${({ $overlay }) => ($overlay ? "100%" : "240px")};
   padding: 40px 20px;
+  position: ${({ $overlay }) => ($overlay ? "absolute" : "static")};
   text-align: center;
   width: 100%;
+  z-index: ${({ $overlay }) => ($overlay ? "20" : "auto")};
 `;
 
 const Spinner = styled.div`
@@ -34,11 +39,11 @@ const LoadingText = styled.div`
   font-weight: 700;
 `;
 
-const AppLoading = () => {
+const AppLoading = ({ label = "Loading", overlay = false }) => {
   return (
-    <LoadingRoot role="status" aria-live="polite">
+    <LoadingRoot role="status" aria-live="polite" $overlay={overlay}>
       <Spinner aria-hidden="true" />
-      <LoadingText>Loading</LoadingText>
+      <LoadingText>{label}</LoadingText>
     </LoadingRoot>
   );
 };
