@@ -163,12 +163,22 @@ describe("GetServices", () => {
       expect(result).toEqual(mockService);
     });
 
-    it("returns default service with empty demographic on error", async () => {
+    it("returns default service fields on error", async () => {
       axios.get.mockRejectedValue(new Error("Not found"));
 
       const result = await GetServices.getService({ id: "999" });
 
-      expect(result).toEqual({ service: { demographic: [] } });
+      expect(result).toEqual({
+        service: {
+          categories: [],
+          contact: {},
+          demographic: [],
+          images: null,
+          locations: [],
+          referral: {},
+          social: {},
+        },
+      });
     });
   });
 });
