@@ -73,7 +73,15 @@ const GetServices = {
       console.error(error);
 
       return {
-        service: { demographic: [] },
+        service: {
+          categories: [],
+          contact: {},
+          demographic: [],
+          images: null,
+          locations: [],
+          referral: {},
+          social: {},
+        },
       };
     }
   },

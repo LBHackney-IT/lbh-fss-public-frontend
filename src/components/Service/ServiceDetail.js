@@ -22,16 +22,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Share from "../Share/Share";
 import { MapContainer } from "../../util/styled-components/MapContainer";
 import HackneyMap from "../HackneyMap/HackneyMap";
+import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import { useMediaQuery } from "react-responsive";
 import ReactToPrint from "react-to-print";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
 import { categoryIconMap } from "../../helpers/FontAwesome/fontawesome";
 
 export const DetailContainer = styled.div`
+  ${breakpoint("md")`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  `}
   .service-info {
     ${breakpoint("md")`
-            overflow-y: scroll;
-            height: calc(100vh - 100px);
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
             position: relative;
             z-index: 1;
             background: ${light["white"]};
@@ -137,6 +145,13 @@ export const InnerMapContainer = styled.div`
   .leaflet-container {
     height: 450px;
   }
+`;
+
+const LoadingShell = styled.div``;
+
+const LoadingContent = styled.div`
+  opacity: ${({ $isLoading }) => ($isLoading ? "0.55" : "1")};
+  transition: opacity 0.2s ease-in-out;
 `;
 
 const GreyInnerContainer = styled(InnerContainer)`
@@ -329,20 +344,30 @@ const ServiceDetail = () => {
   let hasSocial = false;
 
   if (data.service) {
-    Object.keys(data.service.contact).forEach((key) => {
+    Object.keys(data.service.contact || {}).forEach((key) => {
       if (data.service.contact[key]) hasContact = true;
     });
-    Object.keys(data.service.referral).forEach((key) => {
+    Object.keys(data.service.referral || {}).forEach((key) => {
       if (data.service.referral[key]) hasReferral = true;
     });
-    Object.keys(data.service.social).forEach((key) => {
+    Object.keys(data.service.social || {}).forEach((key) => {
       if (data.service.social[key]) hasSocial = true;
     });
   }
 
-  return isLoading ? (
-    <AppLoading />
-  ) : (
+  if (isLoading && !data.service) {
+    return (
+      <LoadingShell aria-busy={isLoading}>
+        <AppLoading label="Loading service" overlay />
+        <LoadingContent $isLoading={isLoading}>
+          <Header />
+          <MapPlaceholder />
+        </LoadingContent>
+      </LoadingShell>
+    );
+  }
+
+  return (
     <DetailContainer ref={componentRef}>
       <Desktop>
         <MapContainer>

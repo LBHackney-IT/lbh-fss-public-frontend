@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import AppLoading from "../../AppLoading";
 import GetServices from "../../services/GetServices/GetServices";
 import ServiceCard from "./ServiceCard";
 import { CardContainer } from "../../util/styled-components/CardContainer";
@@ -15,6 +16,33 @@ import HackneyMap from "../HackneyMap/HackneyMap";
 import MapPlaceholder from "../MapPlaceholder/MapPlaceholder";
 import ServiceSearch from "../ServiceSearch/ServiceSearch";
 import { handleSetPrevUrl } from "../../util/functions/handleSetPrevUrl";
+import styled from "styled-components";
+import breakpoint from "styled-components-breakpoint";
+
+const LoadingShell = styled.div`
+  ${breakpoint("md")`
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
+const LoadingContent = styled.div`
+  opacity: ${({ $isLoading }) => ($isLoading ? "0.55" : "1")};
+  transition: opacity 0.2s ease-in-out;
+  ${breakpoint("md")`
+    height: 100%;
+    min-height: 0;
+  `}
+`;
+
+const ResultsLayout = styled.div`
+  ${breakpoint("md")`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  `}
+`;
 
 const ListServices = ({ onClick }) => {
   const [data, setData] = useState([]);
@@ -24,7 +52,6 @@ const ListServices = ({ onClick }) => {
   const { prevUrlParams, setPrevUrlParams } = useContext(PrevUrlParamsContext);
   const { mapToggle } = useContext(MapToggleContext);
   const [showMap, setShowMap] = useState("false");
-  const [fetchOnce, setfetchOnce] = useState(false);
 
   const Desktop = ({ children }) => {
     const isDesktop = useMediaQuery({ minWidth: 768 });
@@ -37,7 +64,10 @@ const ListServices = ({ onClick }) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchData() {
+      setIsLoading(true);
       let postcode = "";
       let search = "";
       let taxonomyId = [];
@@ -59,13 +89,13 @@ const ListServices = ({ onClick }) => {
         taxonomyids: taxonomyId,
       });
 
-      setData(getServices || []);
-      setIsLoading(false);
+      if (isMounted) {
+        setData(getServices || { services: [] });
+        setIsLoading(false);
+      }
     }
-    if (fetchOnce == false) {
-      fetchData();
-      setfetchOnce(true);
-    }
+
+    fetchData();
 
     const setPrevUrlVals = handleSetPrevUrl({
       prevUrl,
@@ -75,78 +105,88 @@ const ListServices = ({ onClick }) => {
       setPrevUrl(setPrevUrlVals.prevUrlArray);
       setPrevUrlParams(setPrevUrlVals.prevUrlParamsArray);
     }
+    return () => {
+      isMounted = false;
+    };
+  }, [urlParams]);
 
+  useEffect(() => {
     if (mapToggle === "true") {
       setShowMap("true");
     } else {
       setShowMap("false");
     }
-  });
+  }, [mapToggle]);
 
-  if (isLoading) {
-    return <span>Loading</span>;
+  if (isLoading && !data.services) {
+    return <AppLoading />;
   }
+
+  const services = data.services || [];
 
   const select = (e) => {
     onClick(e);
   };
 
   return (
-    <div>
-      {!data.services.length ? (
-        <div>
-          <Header />
-          <div className="no-results">
-            <h2>No results found</h2>
-            <p>
-              Please use the &apos;Back&apos; button above to go back and try a different
-              search term.
-            </p>
+    <LoadingShell aria-busy={isLoading}>
+      {isLoading ? <AppLoading label="Updating results" overlay /> : null}
+      <LoadingContent $isLoading={isLoading}>
+        {!services.length ? (
+          <div>
+            <Header />
+            <div className="no-results">
+              <h2>No results found</h2>
+              <p>
+                Please use the &apos;Back&apos; button above to go back and try a
+                different search term.
+              </p>
+            </div>
+            <MapPlaceholder />
           </div>
-          <MapPlaceholder />
-        </div>
-      ) : (
-        <div>
-          <Header />
-          <ServiceSearch />
-          <ServiceFilter />
-          <Mobile>
-            <ToggleView />
-            {showMap == "false" ? (
+        ) : (
+          <ResultsLayout>
+            <Header />
+            <ServiceSearch />
+            <ServiceFilter />
+            <Mobile>
+              <ToggleView />
+              {showMap == "false" ? (
+                <CardContainer>
+                  {services.map((service, index) => {
+                    return <ServiceCard key={index} service={service} onClick={select} />;
+                  })}
+                </CardContainer>
+              ) : (
+                ""
+              )}
+            </Mobile>
+            <Desktop>
               <CardContainer>
-                {data.services.map((service, index) => {
+                {services.map((service, index) => {
                   return <ServiceCard key={index} service={service} onClick={select} />;
                 })}
               </CardContainer>
-            ) : (
-              ""
-            )}
-          </Mobile>
-          <Desktop>
-            <CardContainer>
-              {data.services.map((service, index) => {
-                return <ServiceCard key={index} service={service} onClick={select} />;
-              })}
-            </CardContainer>
-          </Desktop>
+            </Desktop>
 
-          <Mobile>
-            {showMap == "true" ? (
+            <Mobile>
+              {showMap == "true" ? (
+                <MapContainer>
+                  <HackneyMap data={data} />
+                </MapContainer>
+              ) : (
+                ""
+              )}
+            </Mobile>
+            <Desktop>
               <MapContainer>
                 <HackneyMap data={data} />
               </MapContainer>
-            ) : (
-              ""
-            )}
-          </Mobile>
-          <Desktop>
-            <MapContainer>
-              <HackneyMap data={data} />
-            </MapContainer>
-          </Desktop>
-        </div>
-      )}
-    </div>
+            </Desktop>
+          </ResultsLayout>
+        )}
+      </LoadingContent>
+    </LoadingShell>
   );
 };
 

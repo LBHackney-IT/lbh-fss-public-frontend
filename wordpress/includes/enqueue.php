@@ -17,8 +17,9 @@ add_action(
 				if ( ! preg_match( '/^erw-/', $handle ) ) {
 					return $tag;
 				}
-				// Use defer only (not async) so runtime and main load in order; async can break dependency order.
-				return str_replace( ' src', ' defer src', $tag );
+				// Vite emits ES modules. Loading them as classic scripts can leak top-level
+				// declarations into the page and fail if WordPress renders the bundle twice.
+				return str_replace( ' src', ' type="module" src', $tag );
 			},
 			10,
 			2
